@@ -17,12 +17,19 @@
 enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
+    UNIFORM_MODELVIEW_INV_TRANS,
     UNIFORM_NORMAL_MATRIX,
     UNIFORM_SAMPLER2D,
     UNIFORM_SAMPLER2D_L,
     UNIFORM_SAMPLER2D_R,
     UNIFORM_ISGRID,
-    NUM_UNIFORMS
+    NUM_UNIFORMS,
+    UNIFORM_LIGHT_POS,
+    UNIFORM_LIGHT_COLOR,
+    UNIFORM_MTL_AMB,
+    UNIFORM_MTL_DIFF,
+    UNIFORM_MET_SEPC,
+    UNIFORM_MET_SEPC_EXP
 };
 GLint uniforms[NUM_UNIFORMS];
 
@@ -92,9 +99,10 @@ GLfloat gQuadVertexData[] =
     
     
     GLKMatrix4 _modelViewProjectionMatrix[2];
+    GLKMatrix4 _modelViewMatrix[2];
     float _rotation;
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
-    
+    GLKMatrix4 _gridModelViewMatrix[2];
     
     GLuint _vertexArray;
     GLuint _vertexBuffer;
@@ -436,6 +444,9 @@ GLfloat gQuadVertexData[] =
     _modelViewProjectionMatrix[0] = GLKMatrix4Multiply(projectionMatrix, leftMVMat);
     _modelViewProjectionMatrix[1] = GLKMatrix4Multiply(projectionMatrix, rightMVMat);
     
+    _modelViewMatrix[0] = leftMVMat;
+    _modelViewMatrix[1] = rightMVMat;
+    
     _rotation += self.timeSinceLastUpdate * 0.5f;
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
@@ -451,7 +462,8 @@ GLfloat gQuadVertexData[] =
     _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply(projectionMatrix, leftMVMat);
     _gridModelViewProjectionMatrix[1] = GLKMatrix4Multiply(projectionMatrix, rightMVMat);
     
-    
+    _gridModelViewMatrix[0] = leftMVMat;
+    _gridModelViewMatrix[1] = rightMVMat;
     
 }
 
@@ -470,7 +482,11 @@ GLfloat gQuadVertexData[] =
     // render grid
     glBindVertexArrayOES(_gridVertexArray);
     glUseProgram(_program);
+    BOOL invertible = YES;
+
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[0].m);
+    GLKMatrix4 modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[0], &invertible);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i(uniforms[UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
@@ -484,7 +500,10 @@ GLfloat gQuadVertexData[] =
     glBindTexture(GL_TEXTURE_2D, mTextureID);
     // Render the object with ES2
     glUseProgram(_program);
+    
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[0].m);
+    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[0], &invertible);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
     glUniform1i(uniforms[UNIFORM_ISGRID], 0);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
@@ -503,6 +522,8 @@ GLfloat gQuadVertexData[] =
     glBindVertexArrayOES(_gridVertexArray);
     glUseProgram(_program);
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
+    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[1], &invertible);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i(uniforms[UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
@@ -515,7 +536,10 @@ GLfloat gQuadVertexData[] =
     glBindTexture(GL_TEXTURE_2D, mTextureID);
     // Render the object with ES2
     glUseProgram(_program);
+    
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[1].m);
+    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[1], &invertible);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
     glUniform1i(uniforms[UNIFORM_ISGRID], 0);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
@@ -580,6 +604,7 @@ GLfloat gQuadVertexData[] =
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "texCoord");
+    glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
     
     // Link program.
     if (![self linkProgram:_program]) {
@@ -603,8 +628,10 @@ GLfloat gQuadVertexData[] =
     
     // Get uniform locations.
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
+
     
     // Release vertex and fragment shaders.
     if (vertShader) {
