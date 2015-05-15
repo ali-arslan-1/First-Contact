@@ -27,12 +27,12 @@
 - (GLKMatrix4*) move:(GLKMatrix4)LviewMatrix rightEye:(GLKMatrix4)RviewMatix{
     GLKMatrix4 matrices[2];
     GLKMatrix4 oldMatrices[2] = {LviewMatrix, RviewMatix};
-    matrices[0] = GLKMatrix4Translate(LviewMatrix, 0.0, 0.0, 0.1);
-    matrices[1] = GLKMatrix4Translate(RviewMatix, 0.0, 0.0, 0.1);
-    if ([self detectCollision: matrices[0]])
+    matrices[0] = GLKMatrix4Translate(LviewMatrix, 0.0, 0.0, 0.05);
+    matrices[1] = GLKMatrix4Translate(RviewMatix, 0.0, 0.0, 0.05);
+  /*  if ([self detectCollision: matrices[0]])
         return oldMatrices;
     else if ([self detectCollision:matrices[1]])
-         return oldMatrices;
+         return oldMatrices;*/
     return matrices;
     
 }

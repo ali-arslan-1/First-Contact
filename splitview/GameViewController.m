@@ -151,7 +151,7 @@ GLfloat gQuadVertexData[] =
     objloader = [[ObjLoader alloc]init];
     // load Geometry
     NSLog(@"loading obj file...");
-    [objloader initWithPath:@"Bunny"];
+    [objloader initWithPath:@"EmptyRoom_v1"];
     //[objloader initWithPath:@"texturedeneme_triangulate"];
     //[objloader initWithPath:@"ball"];
     mVertexData = [objloader getVertexData];
@@ -277,7 +277,7 @@ GLfloat gQuadVertexData[] =
     
     glGenTextures(1, &mTextureID);
     // square texture
-    [self loadTextureFromImage:@"clownfishBunny" Type:@"png" TexID:mTextureID];
+    [self loadTextureFromImage:@"T_E_Metal" Type:@"jpg" TexID:mTextureID];
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
     
@@ -434,7 +434,7 @@ GLfloat gQuadVertexData[] =
     
     
     // Compute the model view matrix for the object rendered with ES2
-    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -4.0f, -12.0f);
+    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
     modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
