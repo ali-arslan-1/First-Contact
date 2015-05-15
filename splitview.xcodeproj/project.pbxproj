@@ -23,7 +23,7 @@
 		0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */; };
 		BBE5C2C31B0635ED00226E65 /* EmptyRoom_v1.obj in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C11B0635ED00226E65 /* EmptyRoom_v1.obj */; };
 		BBE5C2C41B0635ED00226E65 /* EmptyRoom_v1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C21B0635ED00226E65 /* EmptyRoom_v1.mtl */; };
-		BBE5C2C61B06360D00226E65 /* T_E_Metal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C51B06360D00226E65 /* T_E_Metal.jpg */; };
+		BBE5C2C81B063E8E00226E65 /* T_E_Metal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C71B063E8E00226E65 /* T_E_Metal.jpg */; };
 		BBE9B7E41B04F64100EDF814 /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE9B7E31B04F64100EDF814 /* Object.m */; };
 		BBE9B7E61B04F6DF00EDF814 /* HeadPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE9B7E51B04F6DF00EDF814 /* HeadPosition.m */; };
 /* End PBXBuildFile section */
@@ -50,7 +50,7 @@
 		0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = DistortTwoTexture.fsh; path = Shaders/DistortTwoTexture.fsh; sourceTree = "<group>"; };
 		BBE5C2C11B0635ED00226E65 /* EmptyRoom_v1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EmptyRoom_v1.obj; path = Geometry/EmptyRoom_v1.obj; sourceTree = "<group>"; };
 		BBE5C2C21B0635ED00226E65 /* EmptyRoom_v1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EmptyRoom_v1.mtl; path = Geometry/EmptyRoom_v1.mtl; sourceTree = "<group>"; };
-		BBE5C2C51B06360D00226E65 /* T_E_Metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = T_E_Metal.jpg; sourceTree = "<group>"; };
+		BBE5C2C71B063E8E00226E65 /* T_E_Metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = T_E_Metal.jpg; path = Geometry/T_E_Metal.jpg; sourceTree = "<group>"; };
 		BBE9B7E21B04F63900EDF814 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		BBE9B7E31B04F64100EDF814 /* Object.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Object.m; sourceTree = "<group>"; };
 		BBE9B7E51B04F6DF00EDF814 /* HeadPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadPosition.m; sourceTree = "<group>"; };
@@ -120,6 +120,7 @@
 		0A15DC771AB734870058C15E /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				BBE5C2C71B063E8E00226E65 /* T_E_Metal.jpg */,
 				BBE5C2C11B0635ED00226E65 /* EmptyRoom_v1.obj */,
 				BBE5C2C21B0635ED00226E65 /* EmptyRoom_v1.mtl */,
 				0A15DC801AB734F30058C15E /* Bunny.obj */,
@@ -130,7 +131,6 @@
 		0A15DC781AB734910058C15E /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				BBE5C2C51B06360D00226E65 /* T_E_Metal.jpg */,
 				0A15DC7E1AB734E80058C15E /* clownfishBunny.png */,
 			);
 			name = Texture;
@@ -217,7 +217,7 @@
 				0A15DC571AB734510058C15E /* Shader.vsh in Resources */,
 				0A15DC7F1AB734E80058C15E /* clownfishBunny.png in Resources */,
 				0A15DC551AB734510058C15E /* Shader.fsh in Resources */,
-				BBE5C2C61B06360D00226E65 /* T_E_Metal.jpg in Resources */,
+				BBE5C2C81B063E8E00226E65 /* T_E_Metal.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
