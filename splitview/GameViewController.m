@@ -420,13 +420,13 @@ GLfloat gQuadVertexData[] =
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     GLKMatrix4* viewMatrices;
-  /*
+  
     // Eyes have to move together for consistency
     viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
     _leftViewMatrix = viewMatrices[0];
     _rightViewMatrix = viewMatrices[1];
     
-    */
+    
     
     //rotates to right
     // leftViewMatrix = GLKMatrix4Rotate(leftViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
@@ -438,10 +438,11 @@ GLfloat gQuadVertexData[] =
     modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
     
-    [headPosition moveObject:@"empty_room" matrix:modelMatrix];
-    
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
     GLKMatrix4 rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, modelMatrix);
+    
+ //   [headPosition moveObject:@"empty_room" matrix:leftMVMat];
+    
     
     // mvp matrices for left and right view
     _modelViewProjectionMatrix[0] = GLKMatrix4Multiply(projectionMatrix, leftMVMat);
@@ -469,12 +470,12 @@ GLfloat gQuadVertexData[] =
     _gridModelViewMatrix[0] = leftMVMat;
     _gridModelViewMatrix[1] = rightMVMat;
     
-    
+    /**
     
     // Eyes have to move together for consistency
     viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
     _leftViewMatrix = viewMatrices[0];
-    _rightViewMatrix = viewMatrices[1];
+    _rightViewMatrix = viewMatrices[1];*/
     
 }
 
