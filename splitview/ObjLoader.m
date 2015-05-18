@@ -303,9 +303,9 @@
     return numFaces * numVertexPerFace;
 }
 
-- (Object*) getObject
+- (Object*) getObject:(NSString*) name
 {
-    Object* temp = [[Object alloc] init:minX minZ:minZ maxX:maxX maxZ:maxZ];
+    Object* temp = [[Object alloc] init:minX minZ:minZ maxX:maxX maxZ:maxZ name:name];
     return temp;
 }
 @end

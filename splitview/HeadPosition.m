@@ -50,11 +50,22 @@
   
     for(Object *obj in objects){
         float* coord = [obj getCoordinates];
-        //  NSLog(@"minX: %f, minZ: %f, maxX: %f, maxZ: %f",coord[0], coord[1], coord[2], coord[3]);
+          NSLog(@"minX: %f, minZ: %f, maxX: %f, maxZ: %f",coord[0], coord[1], coord[2], coord[3]);
         // x < minX or x > maxX or z < minZ or z > maxZ
         if(x < coord[0] || x > coord[2] || z < coord[1] || z > coord[3])
             return YES;
     }
     return NO;
+}
+
+- (void) moveObject:(NSString *)name matrix:(GLKMatrix4)matrix{
+    for(Object *obj in objects){
+        if([obj.getName isEqualToString:name]){
+            float changeX = matrix.m30;
+            float changeZ = matrix.m32;
+            float* coord = [obj getCoordinates];
+            [obj setCoordinates:coord[0]+changeX minZ:coord[1]+changeZ maxX:coord[2]+changeX maxZ:coord[3]+changeZ];
+        }
+    }
 }
 @end

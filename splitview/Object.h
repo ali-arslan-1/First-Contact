@@ -18,10 +18,13 @@
 @interface Object : NSObject{
 
     float *coordinates;
+    NSString *name;
 }
--(id) init:(float)minX minZ: (float) minZ maxX: (float) maxX maxZ: (float) maxZ;
+-(id) init:(float)minX minZ: (float) minZ maxX: (float) maxX maxZ: (float) maxZ name: (NSString*) Nname;
 -(void) dealloc;
 -(float*) getCoordinates;
+-(void) setCoordinates:(float)minX minZ: (float) minZ maxX: (float) maxX maxZ: (float) maxZ;
+-(NSString*) getName;
 
 @end
 

@@ -46,5 +46,5 @@
 - (uint)getByteSizeOfVertexData;
 - (uint)getNumVertices;
 
--(Object*)getObject;
+-(Object*)getObject:(NSString*) name;
 @end

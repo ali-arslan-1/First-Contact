@@ -157,13 +157,13 @@ GLfloat gQuadVertexData[] =
     mVertexData = [objloader getVertexData];
     mByteSizeOfVertexData = [objloader getByteSizeOfVertexData];
     mNumTriangles = [objloader getNumVertices];
-    Object* newObj = [objloader getObject];
+    Object* empty_room = [objloader getObject:@"empty_room"];
     
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
     
     headPosition = [[HeadPosition alloc] init];
-    [headPosition addObject:newObj];
+    [headPosition addObject:empty_room];
     
     _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
     _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
@@ -420,13 +420,13 @@ GLfloat gQuadVertexData[] =
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     GLKMatrix4* viewMatrices;
-    
+  /*
     // Eyes have to move together for consistency
     viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
     _leftViewMatrix = viewMatrices[0];
     _rightViewMatrix = viewMatrices[1];
     
-    
+    */
     
     //rotates to right
     // leftViewMatrix = GLKMatrix4Rotate(leftViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
@@ -437,6 +437,9 @@ GLfloat gQuadVertexData[] =
     GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
     modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
+    
+    [headPosition moveObject:@"empty_room" matrix:modelMatrix];
+    
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
     GLKMatrix4 rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, modelMatrix);
     
@@ -455,6 +458,7 @@ GLfloat gQuadVertexData[] =
     //_leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
     //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
     
+    
     leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, gridModelMat);
     rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, gridModelMat);
     
@@ -464,6 +468,13 @@ GLfloat gQuadVertexData[] =
     
     _gridModelViewMatrix[0] = leftMVMat;
     _gridModelViewMatrix[1] = rightMVMat;
+    
+    
+    
+    // Eyes have to move together for consistency
+    viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
+    _leftViewMatrix = viewMatrices[0];
+    _rightViewMatrix = viewMatrices[1];
     
 }
 
