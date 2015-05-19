@@ -27,12 +27,12 @@
 - (GLKMatrix4*) move:(GLKMatrix4)LviewMatrix rightEye:(GLKMatrix4)RviewMatix{
     GLKMatrix4 matrices[2];
     GLKMatrix4 oldMatrices[2] = {LviewMatrix, RviewMatix};
-    matrices[0] = GLKMatrix4Translate(LviewMatrix, 0.0, 0.0, 0.05);
-    matrices[1] = GLKMatrix4Translate(RviewMatix, 0.0, 0.0, 0.05);
- /*  if ([self detectCollision: matrices[0]])
+    matrices[0] = GLKMatrix4Translate(LviewMatrix, 0.0, 0.0, 0.5);
+    matrices[1] = GLKMatrix4Translate(RviewMatix, 0.0, 0.0, 0.5);
+   if ([self detectCollision: matrices[0]])
         return oldMatrices;
     else if ([self detectCollision:matrices[1]])
-         return oldMatrices;*/
+         return oldMatrices;
     return matrices;
   
     
@@ -51,9 +51,9 @@
   
     for(Object *obj in objects){
         float* coord = [obj getCoordinates];
-          NSLog(@"minX: %f, minZ: %f, maxX: %f, maxZ: %f",coord[0], coord[1], coord[2], coord[3]);
-        // x < minX or x > maxX or z < minZ or z > maxZ
-        if(x < coord[0] || x > coord[2] || z < coord[1] || z > coord[3])
+      //    NSLog(@"minX: %f, minZ: %f, maxX: %f, maxZ: %f",coord[0], coord[1], coord[2], coord[3]);
+        // x > -maxX or x < -minX or z > -maxZ or z < -minZ   --> because camera moves +z direction and object moves -z direction is the same.
+        if(x > -coord[2] && x < -coord[0] && z >= -coord[3] && z < -coord[1])
             return YES;
     }
     return NO;

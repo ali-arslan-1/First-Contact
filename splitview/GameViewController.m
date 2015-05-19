@@ -117,6 +117,8 @@ GLfloat gQuadVertexData[] =
     GLKMatrix4 _leftViewMatrix;
     GLKMatrix4 _rightViewMatrix;
     
+    BOOL init;
+    
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -136,7 +138,7 @@ GLfloat gQuadVertexData[] =
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    init = true;
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
@@ -420,7 +422,21 @@ GLfloat gQuadVertexData[] =
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     GLKMatrix4* viewMatrices;
-  
+
+    
+    //rotates to right
+    // leftViewMatrix = GLKMatrix4Rotate(leftViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
+        
+    
+    // Compute the model view matrix for the object rendered with ES2
+    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
+    // modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
+    modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
+    if(init){
+        [headPosition moveObject:@"empty_room" matrix:modelMatrix];
+        init = false;
+    }
+    
     // Eyes have to move together for consistency
     viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
     _leftViewMatrix = viewMatrices[0];
@@ -428,20 +444,8 @@ GLfloat gQuadVertexData[] =
     
     
     
-    //rotates to right
-    // leftViewMatrix = GLKMatrix4Rotate(leftViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    
-    
-    
-    // Compute the model view matrix for the object rendered with ES2
-    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
-    modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
-    
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
     GLKMatrix4 rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, modelMatrix);
-    
- //   [headPosition moveObject:@"empty_room" matrix:leftMVMat];
     
     
     // mvp matrices for left and right view
