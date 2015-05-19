@@ -170,7 +170,8 @@ GLfloat gQuadVertexData[] =
     _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
     _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
     
-    
+    _leftViewMatrix = GLKMatrix4RotateY(_leftViewMatrix, -1.57f);
+    _rightViewMatrix = GLKMatrix4RotateY(_rightViewMatrix, -1.57f);
     [self setupGL];
     
 }
@@ -429,7 +430,7 @@ GLfloat gQuadVertexData[] =
         
     
     // Compute the model view matrix for the object rendered with ES2
-    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
+    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(-12.0f, -1.0f, 0.0f);
     // modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
     if(init){
