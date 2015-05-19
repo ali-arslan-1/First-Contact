@@ -53,7 +53,7 @@
         float* coord = [obj getCoordinates];
       //    NSLog(@"minX: %f, minZ: %f, maxX: %f, maxZ: %f",coord[0], coord[1], coord[2], coord[3]);
         // x > -maxX or x < -minX or z > -maxZ or z < -minZ   --> because camera moves +z direction and object moves -z direction is the same.
-        if(x > -coord[2] && x < -coord[0] && z >= -coord[3] && z < -coord[1])
+        if(x >= -coord[2] && x < -coord[0] && z >= -coord[3] && z < -coord[1])
             return YES;
     }
     return NO;
