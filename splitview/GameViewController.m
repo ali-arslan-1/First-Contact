@@ -170,8 +170,8 @@ GLfloat gQuadVertexData[] =
     _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
     _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
     
-    _leftViewMatrix = GLKMatrix4RotateY(_leftViewMatrix, -1.57f);
-    _rightViewMatrix = GLKMatrix4RotateY(_rightViewMatrix, -1.57f);
+    // _leftViewMatrix = GLKMatrix4RotateY(_leftViewMatrix, -1.57f);
+    // _rightViewMatrix = GLKMatrix4RotateY(_rightViewMatrix, -1.57f);
     [self setupGL];
     
 }
@@ -423,14 +423,10 @@ GLfloat gQuadVertexData[] =
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     GLKMatrix4* viewMatrices;
-
     
-    //rotates to right
-    // leftViewMatrix = GLKMatrix4Rotate(leftViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-        
     
     // Compute the model view matrix for the object rendered with ES2
-    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(-12.0f, -1.0f, 0.0f);
+    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, -1.0f, -12.0f);
     // modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
     if(init){
@@ -458,12 +454,9 @@ GLfloat gQuadVertexData[] =
     
     _rotation += self.timeSinceLastUpdate * 0.5f;
     
+    //Compute the model view matrix for the grid
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
-    
-    //_leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
-    //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
-    
     
     leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, gridModelMat);
     rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, gridModelMat);
@@ -474,14 +467,7 @@ GLfloat gQuadVertexData[] =
     
     _gridModelViewMatrix[0] = leftMVMat;
     _gridModelViewMatrix[1] = rightMVMat;
-    
-    /**
-    
-    // Eyes have to move together for consistency
-    viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
-    _leftViewMatrix = viewMatrices[0];
-    _rightViewMatrix = viewMatrices[1];*/
-    
+        
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -500,7 +486,7 @@ GLfloat gQuadVertexData[] =
     glBindVertexArrayOES(_gridVertexArray);
     glUseProgram(_program);
     BOOL invertible = YES;
-
+    
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[0].m);
     GLKMatrix4 modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[0], &invertible);
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
@@ -648,7 +634,7 @@ GLfloat gQuadVertexData[] =
     uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
-
+    
     
     // Release vertex and fragment shaders.
     if (vertShader) {
