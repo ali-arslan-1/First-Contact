@@ -15,6 +15,6 @@
 
 -(GLKMatrix4*)move:(GLKMatrix4)LviewMatrix rightEye: (GLKMatrix4) RviewMatix ;
 - (void) addObject :(Object*) object ;
-- (void) moveObject : (NSString*) name matrix: (GLKMatrix4) matrix;
+
 @end
 

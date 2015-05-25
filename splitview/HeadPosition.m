@@ -48,16 +48,16 @@
 - (BOOL) detectCollision: (GLKMatrix4) matrix{
     
     for(Object *obj in objects){
-        float* coord = [obj getCoordinates];
-        GLKVector4 BboxMin = GLKVector4Make(coord[2], 0.0f, coord[3], 1.0f);
-        GLKVector4 BboxMax = GLKVector4Make(coord[0], 0.0f, coord[1], 1.0f);
+        //float* coord = [obj getCoordinates];
+        GLKVector4 BboxMin = GLKVector4Make(obj.maxX, 0.0f, obj.maxZ, 1.0f);
+        GLKVector4 BboxMax = GLKVector4Make(obj.minX, 0.0f, obj.minZ, 1.0f);
         
         //Compute the camera coordinates of Bbox
         BboxMin = GLKMatrix4MultiplyVector4(matrix, BboxMin);
         BboxMax = GLKMatrix4MultiplyVector4(matrix, BboxMax);
         
         //check at the camera coordinates if the object hits to camera
-        if(BboxMin.z >= 0 || BboxMax.z >= 0)
+        if((BboxMin.z >= 0 && BboxMin.z < 1) || (BboxMax.z >= 0 && BboxMax.z < 1))
             return YES;
         
     }
@@ -65,15 +65,5 @@
 }
 
 
-//transform object only translate wise. No rotation no scaling!
-- (void) moveObject:(NSString *)name matrix:(GLKMatrix4)matrix{
-    for(Object *obj in objects){
-        if([obj.getName isEqualToString:name]){
-            float changeX = matrix.m30;
-            float changeZ = matrix.m32;
-            float* coord = [obj getCoordinates];
-            [obj setCoordinates:coord[0]+changeX minZ:coord[1]+changeZ maxX:coord[2]+changeX maxZ:coord[3]+changeZ];
-        }
-    }
-}
+
 @end

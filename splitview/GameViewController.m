@@ -23,13 +23,13 @@ enum
     UNIFORM_SAMPLER2D_L,
     UNIFORM_SAMPLER2D_R,
     UNIFORM_ISGRID,
-    NUM_UNIFORMS,
     UNIFORM_LIGHT_POS,
     UNIFORM_LIGHT_COLOR,
     UNIFORM_MTL_AMB,
     UNIFORM_MTL_DIFF,
     UNIFORM_MET_SEPC,
-    UNIFORM_MET_SEPC_EXP
+    UNIFORM_MET_SEPC_EXP,
+    NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
 
@@ -156,10 +156,10 @@ GLfloat gQuadVertexData[] =
     [objloader initWithPath:@"EmptyRoom_v1"];
     //[objloader initWithPath:@"texturedeneme_triangulate"];
     //[objloader initWithPath:@"ball"];
-    mVertexData = [objloader getVertexData];
-    mByteSizeOfVertexData = [objloader getByteSizeOfVertexData];
-    mNumTriangles = [objloader getNumVertices];
-    Object* empty_room = [objloader getObject:@"empty_room"];
+    mVertexData = [objloader.object getVertexData];
+    mByteSizeOfVertexData = objloader.object.bytesize_vertexdata;
+    mNumTriangles = [objloader.object getNumVertices];
+    Object* empty_room = objloader.object;
     
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
@@ -430,7 +430,8 @@ GLfloat gQuadVertexData[] =
     // modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
     if(init){
-        [headPosition moveObject:@"empty_room" matrix:modelMatrix];
+        
+        [objloader.object moveObject:@"empty_room" matrix:modelMatrix];
         init = false;
     }
     
