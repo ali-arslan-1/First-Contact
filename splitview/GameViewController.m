@@ -13,89 +13,9 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
-// Uniform index.
-enum
-{
-    UNIFORM_MODELVIEWPROJECTION_MATRIX,
-    UNIFORM_MODELVIEW_INV_TRANS,
-    UNIFORM_NORMAL_MATRIX,
-    UNIFORM_SAMPLER2D,
-    UNIFORM_SAMPLER2D_L,
-    UNIFORM_SAMPLER2D_R,
-    UNIFORM_ISGRID,
-    UNIFORM_LIGHT_POS,
-    UNIFORM_LIGHT_COLOR,
-    UNIFORM_MTL_AMB,
-    UNIFORM_MTL_DIFF,
-    UNIFORM_MET_SEPC,
-    UNIFORM_MET_SEPC_EXP,
-    NUM_UNIFORMS
-};
-GLint uniforms[NUM_UNIFORMS];
 
-GLfloat gGridVertexData[] =
-{   //v(x,y,z)
-    -5.0f, -5.0f, 0.0f,
-    5.0f, -5.0f, 0.0f,
-    -5.0f, -4.0f, 0.0f,
-    5.0f, -4.0f, 0.0f,
-    -5.0f, -3.0f, 0.0f,
-    5.0f, -3.0f, 0.0f,
-    -5.0f, -2.0f, 0.0f,
-    5.0f, -2.0f, 0.0f,
-    -5.0f, -1.0f, 0.0f,
-    5.0f, -1.0f, 0.0f,
-    -5.0f,  0.0f, 0.0f,
-    5.0f,  0.0f, 0.0f,
-    -5.0f,  1.0f, 0.0f,
-    5.0f,  1.0f, 0.0f,
-    -5.0f,  2.0f, 0.0f,
-    5.0f,  2.0f, 0.0f,
-    -5.0f,  3.0f, 0.0f,
-    5.0f,  3.0f, 0.0f,
-    -5.0f,  4.0f, 0.0f,
-    5.0f,  4.0f, 0.0f,
-    -5.0f,  5.0f, 0.0f,
-    5.0f,  5.0f, 0.0f,
-    
-    -5.0f, -5.0f, 0.0f,
-    -5.0f,  5.0f, 0.0f,
-    -4.0f, -5.0f, 0.0f,
-    -4.0f,  5.0f, 0.0f,
-    -3.0f, -5.0f, 0.0f,
-    -3.0f,  5.0f, 0.0f,
-    -2.0f, -5.0f, 0.0f,
-    -2.0f,  5.0f, 0.0f,
-    -1.0f, -5.0f, 0.0f,
-    -1.0f,  5.0f, 0.0f,
-    0.0f, -5.0f, 0.0f,
-    0.0f,  5.0f, 0.0f,
-    1.0f, -5.0f, 0.0f,
-    1.0f,  5.0f, 0.0f,
-    2.0f, -5.0f, 0.0f,
-    2.0f,  5.0f, 0.0f,
-    3.0f, -5.0f, 0.0f,
-    3.0f,  5.0f, 0.0f,
-    4.0f, -5.0f, 0.0f,
-    4.0f,  5.0f, 0.0f,
-    5.0f, -5.0f, 0.0f,
-    5.0f,  5.0f, 0.0f,
-    
-    
-};
-
-
-GLfloat gQuadVertexData[] =
-{   //v(x,y,z),vn(x,y,z),vt(u,v)
-    1.0f, 1.0f, 0.0f,    0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-    -1.0f, 1.0f, 0.0f,    0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-    1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-    -1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f
-};
 
 @interface GameViewController () {
-    GLuint _program;
-    GLuint _ppProgram;
     
     
     GLKMatrix4 _modelViewProjectionMatrix[2];
@@ -126,11 +46,7 @@ GLfloat gQuadVertexData[] =
 - (void)setupGL;
 - (void)tearDownGL;
 
-- (BOOL)loadShaders;
-- (BOOL)loadMyShaders;
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
-- (BOOL)linkProgram:(GLuint)prog;
-- (BOOL)validateProgram:(GLuint)prog;
+
 @end
 
 @implementation GameViewController
@@ -151,6 +67,8 @@ GLfloat gQuadVertexData[] =
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
     objloader = [[ObjLoader alloc]init];
+    shaderLoader = [[ShaderLoader alloc] init];
+    
     // load Geometry
     NSLog(@"loading obj file...");
     [objloader initWithPath:@"EmptyRoom_v1"];
@@ -271,8 +189,8 @@ GLfloat gQuadVertexData[] =
 {
     [EAGLContext setCurrentContext:self.context];
     
-    [self loadShaders];
-    [self loadMyShaders];
+    [shaderLoader loadShaders];
+    [shaderLoader loadMyShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
@@ -363,14 +281,7 @@ GLfloat gQuadVertexData[] =
     
     self.effect = nil;
     
-    if (_program) {
-        glDeleteProgram(_program);
-        _program = 0;
-    }
-    if (_ppProgram) {
-        glDeleteProgram(_ppProgram);
-        _ppProgram = 0;
-    }
+    
 }
 
 #pragma mark - Texture
@@ -485,13 +396,13 @@ GLfloat gQuadVertexData[] =
     
     // render grid
     glBindVertexArrayOES(_gridVertexArray);
-    glUseProgram(_program);
+    glUseProgram(shaderLoader._program);
     BOOL invertible = YES;
     
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[0].m);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[0].m);
     GLKMatrix4 modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[0], &invertible);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i(uniforms[UNIFORM_ISGRID], 1);
+    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -503,13 +414,13 @@ GLfloat gQuadVertexData[] =
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTextureID);
     // Render the object with ES2
-    glUseProgram(_program);
+    glUseProgram(shaderLoader._program);
     
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[0].m);
+    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[0].m);
     modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[0], &invertible);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
-    glUniform1i(uniforms[UNIFORM_ISGRID], 0);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -524,11 +435,11 @@ GLfloat gQuadVertexData[] =
     
     // render grid
     glBindVertexArrayOES(_gridVertexArray);
-    glUseProgram(_program);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
+    glUseProgram(shaderLoader._program);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
     modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[1], &invertible);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i(uniforms[UNIFORM_ISGRID], 1);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -539,13 +450,13 @@ GLfloat gQuadVertexData[] =
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTextureID);
     // Render the object with ES2
-    glUseProgram(_program);
+    glUseProgram(shaderLoader._program);
     
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[1].m);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[1].m);
     modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[1], &invertible);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
-    glUniform1i(uniforms[UNIFORM_ISGRID], 0);
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -566,241 +477,17 @@ GLfloat gQuadVertexData[] =
     // draw full screen quad
     glBindVertexArrayOES(_quadVertexArray);
     // Render the object with ES2
-    glUseProgram(_ppProgram);
-    glUniform1i(uniforms[UNIFORM_SAMPLER2D_L], 0);
-    glUniform1i(uniforms[UNIFORM_SAMPLER2D_R], 1);
+    glUseProgram(shaderLoader._ppProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_L], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_R], 1);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
 }
 
-#pragma mark -  OpenGL ES 2 shader compilation
-
-- (BOOL)loadShaders
-{
-    GLuint vertShader, fragShader;
-    NSString *vertShaderPathname, *fragShaderPathname;
-    
-    // Create shader program.
-    _program = glCreateProgram();
-    
-    // Create and compile vertex shader.
-    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
-    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
-        NSLog(@"Failed to compile vertex shader");
-        return NO;
-    }
-    
-    // Create and compile fragment shader.
-    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
-    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
-        NSLog(@"Failed to compile fragment shader");
-        return NO;
-    }
-    
-    // Attach vertex shader to program.
-    glAttachShader(_program, vertShader);
-    
-    // Attach fragment shader to program.
-    glAttachShader(_program, fragShader);
-    
-    // Bind attribute locations.
-    // This needs to be done prior to linking.
-    glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
-    glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "texCoord");
-    glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
-    
-    // Link program.
-    if (![self linkProgram:_program]) {
-        NSLog(@"Failed to link program: %d", _program);
-        
-        if (vertShader) {
-            glDeleteShader(vertShader);
-            vertShader = 0;
-        }
-        if (fragShader) {
-            glDeleteShader(fragShader);
-            fragShader = 0;
-        }
-        if (_program) {
-            glDeleteProgram(_program);
-            _program = 0;
-        }
-        
-        return NO;
-    }
-    
-    // Get uniform locations.
-    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
-    uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
-    uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
-    uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
-    
-    
-    // Release vertex and fragment shaders.
-    if (vertShader) {
-        glDetachShader(_program, vertShader);
-        glDeleteShader(vertShader);
-    }
-    if (fragShader) {
-        glDetachShader(_program, fragShader);
-        glDeleteShader(fragShader);
-    }
-    
-    return YES;
-}
-
-- (BOOL)loadMyShaders
-{
-    GLuint vertShader, fragShader;
-    NSString *vertShaderPathname, *fragShaderPathname;
-    
-    // Create shader program.
-    _ppProgram = glCreateProgram();
-    
-    // Create and compile vertex shader.
-    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"post" ofType:@"vsh"];
-    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
-        NSLog(@"Failed to compile vertex shader");
-        return NO;
-    }
-    
-    // Create and compile fragment shader.
-    //fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"DistortTwoTexture" ofType:@"fsh"];
-    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"post" ofType:@"fsh"];
-    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
-        NSLog(@"Failed to compile fragment shader");
-        return NO;
-    }
-    
-    // Attach vertex shader to program.
-    glAttachShader(_ppProgram, vertShader);
-    
-    // Attach fragment shader to program.
-    glAttachShader(_ppProgram, fragShader);
-    
-    // Bind attribute locations.
-    // This needs to be done prior to linking.
-    glBindAttribLocation(_ppProgram, GLKVertexAttribPosition, "position");
-    glBindAttribLocation(_ppProgram, GLKVertexAttribTexCoord0, "texCoord");
-    
-    // Link program.
-    if (![self linkProgram:_ppProgram]) {
-        NSLog(@"Failed to link program: %d", _ppProgram);
-        
-        if (vertShader) {
-            glDeleteShader(vertShader);
-            vertShader = 0;
-        }
-        if (fragShader) {
-            glDeleteShader(fragShader);
-            fragShader = 0;
-        }
-        if (_ppProgram) {
-            glDeleteProgram(_ppProgram);
-            _ppProgram = 0;
-        }
-        
-        return NO;
-    }
-    
-    // Release vertex and fragment shaders.
-    if (vertShader) {
-        glDetachShader(_ppProgram, vertShader);
-        glDeleteShader(vertShader);
-    }
-    if (fragShader) {
-        glDetachShader(_ppProgram, fragShader);
-        glDeleteShader(fragShader);
-    }
-    
-    // Get uniform locations.
-    uniforms[UNIFORM_SAMPLER2D_L] = glGetUniformLocation(_ppProgram, "uSamplerL");
-    uniforms[UNIFORM_SAMPLER2D_R] = glGetUniformLocation(_ppProgram, "uSamplerR");
-    
-    return YES;
-}
 
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file
-{
-    GLint status;
-    const GLchar *source;
-    
-    source = (GLchar *)[[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
-    if (!source) {
-        NSLog(@"Failed to load vertex shader");
-        return NO;
-    }
-    
-    *shader = glCreateShader(type);
-    glShaderSource(*shader, 1, &source, NULL);
-    glCompileShader(*shader);
-    
-#if defined(DEBUG)
-    GLint logLength;
-    glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetShaderInfoLog(*shader, logLength, &logLength, log);
-        NSLog(@"Shader compile log:\n%s", log);
-        free(log);
-    }
-#endif
-    
-    glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
-    if (status == 0) {
-        glDeleteShader(*shader);
-        return NO;
-    }
-    
-    return YES;
-}
 
-- (BOOL)linkProgram:(GLuint)prog
-{
-    GLint status;
-    glLinkProgram(prog);
-    
-#if defined(DEBUG)
-    GLint logLength;
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program link log:\n%s", log);
-        free(log);
-    }
-#endif
-    
-    glGetProgramiv(prog, GL_LINK_STATUS, &status);
-    if (status == 0) {
-        return NO;
-    }
-    
-    return YES;
-}
-
-- (BOOL)validateProgram:(GLuint)prog
-{
-    GLint logLength, status;
-    
-    glValidateProgram(prog);
-    glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-    if (logLength > 0) {
-        GLchar *log = (GLchar *)malloc(logLength);
-        glGetProgramInfoLog(prog, logLength, &logLength, log);
-        NSLog(@"Program validate log:\n%s", log);
-        free(log);
-    }
-    
-    glGetProgramiv(prog, GL_VALIDATE_STATUS, &status);
-    if (status == 0) {
-        return NO;
-    }
-    
-    return YES;
-}
 
 
 @end

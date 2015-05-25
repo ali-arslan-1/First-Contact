@@ -13,6 +13,8 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
+
+
 enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
@@ -37,11 +39,18 @@ enum
 @property( nonatomic ) GLuint _program;
 @property( nonatomic ) GLuint _ppProgram;
 
+#pragma mark -  OpenGL ES 2 shader compilation
 - (BOOL)loadShaders;
 - (BOOL)loadMyShaders;
+- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
+- (BOOL)linkProgram:(GLuint)prog;
+- (BOOL)validateProgram:(GLuint)prog;
+
 
 +(GLint) uniforms:(int) position;
 +(void) setUniforms:(int) position value: (GLint) val;
+
+
 
 @end
 
