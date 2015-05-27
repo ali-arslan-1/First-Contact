@@ -95,6 +95,8 @@ GLfloat gQuadVertexData[] =
     HeadPosition *headPosition;
     
 }
+- (IBAction)textFieldDidChange:(UITextField *)sender;
 
+@property (weak, nonatomic) IBOutlet UITextField *inputTextField;
 
 @end

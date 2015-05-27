@@ -51,6 +51,10 @@
 
 @implementation GameViewController
 
+@synthesize inputTextField;
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -92,7 +96,14 @@
     // _rightViewMatrix = GLKMatrix4RotateY(_rightViewMatrix, -1.57f);
     [self setupGL];
     
+    [inputTextField addTarget:self
+                  action:@selector(textFieldDidChange:)
+        forControlEvents:UIControlEventEditingChanged];
+ 
+    //[inputTextField setHidden:YES];
+    [inputTextField becomeFirstResponder];
 }
+
 
 - (void)dealloc
 {
@@ -333,7 +344,6 @@
     
     self.effect.transform.projectionMatrix = projectionMatrix;
     
-    GLKMatrix4* viewMatrices;
     
     
     // Compute the model view matrix for the object rendered with ES2
@@ -347,10 +357,8 @@
     }
     
     // Eyes have to move together for consistency
-    viewMatrices = [headPosition move:_leftViewMatrix rightEye:_rightViewMatrix];
-    _leftViewMatrix = viewMatrices[0];
-    _rightViewMatrix = viewMatrices[1];
-    
+    //[headPosition moveLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
+
     
     
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
@@ -381,6 +389,7 @@
     _gridModelViewMatrix[1] = rightMVMat;
         
 }
+
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
@@ -485,10 +494,23 @@
     
 }
 
-
-
-
-
+-(void)textFieldDidChange:(UITextField *)sender{
+    
+    int asciiCode = [sender.text characterAtIndex:[sender.text length]-1];
+    NSString *input = [NSString stringWithFormat:@"%c", asciiCode];
+    //NSLog( @"text changed: %@", input);
+    
+    if([input  isEqual: @"a"]){
+        [headPosition moveLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"d"]){
+        [headPosition moveRight:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"w"]){
+        [headPosition moveForward:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"s"]){
+        [headPosition moveBackward:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }
+    
+}
 
 @end
 

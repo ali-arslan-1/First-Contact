@@ -13,7 +13,10 @@
 
 -(id)init;
 
--(GLKMatrix4*)move:(GLKMatrix4)LviewMatrix rightEye: (GLKMatrix4) RviewMatix ;
+-(void)moveForward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveBackward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveLeft:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveRight:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
 - (void) addObject :(Object*) object ;
 
 @end
