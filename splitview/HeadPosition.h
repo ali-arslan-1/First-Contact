@@ -13,12 +13,16 @@
 
 -(id)init;
 
--(void)moveForward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
--(void)moveBackward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
--(void)moveLeft:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
--(void)moveRight:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
--(void)moveDown:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
--(void)moveUp:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveForward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+-(void)moveBackward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+-(void)moveLeft:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+-(void)moveRight:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+-(void)moveDown:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+-(void)moveUp:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
+- (void)lookDown:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
+- (void)lookUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
+- (void)lookLeft:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
+- (void)lookRight:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
 - (void) addObject :(Object*) object ;
 
 @end

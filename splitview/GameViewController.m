@@ -464,7 +464,7 @@
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _rightViewMatrix.m30, _rightViewMatrix.m31+2, _rightViewMatrix.m32-5);
+    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _rightViewMatrix.m30, _rightViewMatrix.m31+1, _rightViewMatrix.m32-2);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -507,13 +507,21 @@
         [headPosition moveForward:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }else if([input  isEqual: @"s"]){
         [headPosition moveBackward:&_leftViewMatrix rightEye:&_rightViewMatrix];
-    }else if([input  isEqual: @"q"]){
-        [headPosition moveUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }else if([input  isEqual: @"e"]){
+        [headPosition moveUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"q"]){
         [headPosition moveDown:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"t"]){
+        [headPosition lookUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"g"]){
+        [headPosition lookDown:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"f"]){
+        [headPosition lookLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"h"]){
+        [headPosition lookRight:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }
 
-    NSLog(@"camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
+   // NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
 
