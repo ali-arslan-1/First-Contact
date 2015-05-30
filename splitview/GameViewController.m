@@ -75,7 +75,7 @@
     
     // load Geometry
     NSLog(@"loading obj file...");
-    [objloader initWithPath:@"EmptyRoom_v1"];
+    [objloader initWithPath:@"PodRoom"];
     //[objloader initWithPath:@"texturedeneme_triangulate"];
     //[objloader initWithPath:@"ball"];
     mVertexData = [objloader.object getVertexData];
@@ -209,7 +209,7 @@
     
     glGenTextures(1, &mTextureID);
     // square texture
-    [self loadTextureFromImage:@"T_E_Metal" Type:@"jpg" TexID:mTextureID];
+    [self loadTextureFromImage:@"T_E_Atlas_01" Type:@"png" TexID:mTextureID];
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
     
@@ -356,9 +356,6 @@
         init = false;
     }
     
-    // Eyes have to move together for consistency
-    //[headPosition moveLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
-
     
     
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
@@ -430,6 +427,7 @@
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _leftViewMatrix.m30, _leftViewMatrix.m31 + 2, _leftViewMatrix.m32 -5);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -466,6 +464,7 @@
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _rightViewMatrix.m30, _rightViewMatrix.m31+2, _rightViewMatrix.m32-5);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -508,7 +507,13 @@
         [headPosition moveForward:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }else if([input  isEqual: @"s"]){
         [headPosition moveBackward:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"q"]){
+        [headPosition moveUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
+    }else if([input  isEqual: @"e"]){
+        [headPosition moveDown:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }
+
+    NSLog(@"camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
 

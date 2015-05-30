@@ -38,11 +38,11 @@
     GLKMatrix4 _newRigntviewMatix = GLKMatrix4Translate(*RviewMatix, disp.x,disp.y,disp.z);
     
     
-    if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRigntviewMatix] ){
+    //if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRigntviewMatix] ){
         *LviewMatrix = _newLeftViewMatrix;
         *RviewMatix = _newRigntviewMatix;
         
-    }
+   // }
     
 }
 
@@ -84,6 +84,27 @@
     
     
     GLKVector3 displacement = GLKVector3Make(-displacementFactor, 0.0f, 0.0f);
+    
+    [self move:LviewMatrix rightEye:RviewMatix displacement:displacement];
+    
+}
+
+- (void) moveDown:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatix{
+    
+    
+    
+    GLKVector3 displacement = GLKVector3Make(0.0f, displacementFactor, 0.0f);
+    
+    [self move:LviewMatrix rightEye:RviewMatix displacement:displacement];
+    
+}
+
+
+- (void) moveUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatix{
+    
+    
+    
+    GLKVector3 displacement = GLKVector3Make(0.0f, -displacementFactor, 0.0f);
     
     [self move:LviewMatrix rightEye:RviewMatix displacement:displacement];
     

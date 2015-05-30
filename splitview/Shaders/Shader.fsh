@@ -16,7 +16,7 @@ uniform int       isGrid;
 
 varying mediump vec2 vTexCoord;
 
-vec3 uLightPosition = vec3(0.0, 0.0, 11.0);
+uniform vec3 uLightPosition ;//= vec3(0.0, 0.0, 11.0);
 vec3 uLightColor = vec3(1.0, 1.0, 1.0);
 
 mat3 uAmbientMaterial = mat3(

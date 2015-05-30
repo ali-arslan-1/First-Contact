@@ -76,6 +76,7 @@ static GLint uniforms[NUM_UNIFORMS];
     glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "texCoord");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
     
+    
     // Link program.
     if (![self linkProgram:_program]) {
         NSLog(@"Failed to link program: %d", _program);
@@ -101,6 +102,7 @@ static GLint uniforms[NUM_UNIFORMS];
     uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
+    uniforms[UNIFORM_LIGHT_POS] = glGetUniformLocation(_program, "uLightPosition");
     
     
     // Release vertex and fragment shaders.

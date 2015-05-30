@@ -17,6 +17,8 @@
 -(void)moveBackward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
 -(void)moveLeft:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
 -(void)moveRight:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveDown:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
+-(void)moveUp:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatix ;
 - (void) addObject :(Object*) object ;
 
 @end
