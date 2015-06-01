@@ -89,8 +89,8 @@
     headPosition = [[HeadPosition alloc] init];
     [headPosition addObject:empty_room];
     
-    _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 0.0);
-    _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 0.0);
+    _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, 0.0, 12.0);
+    _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, 0.0, 12.0);
     
     // _leftViewMatrix = GLKMatrix4RotateY(_leftViewMatrix, -1.57f);
     // _rightViewMatrix = GLKMatrix4RotateY(_rightViewMatrix, -1.57f);
@@ -340,8 +340,9 @@
 - (void)update
 {
     float aspect = fabsf(mFrameWidth / 2.0 / mFrameHeight);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
-    
+    //GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(115.0f), aspect, 0.1f, 10000.0f);
+
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     

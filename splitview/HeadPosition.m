@@ -39,12 +39,11 @@
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(*LviewMatrix, disp.x,disp.y,disp.z);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(*RviewMatrix, disp.x,disp.y,disp.z);
     
-    
-    //if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
+ 
+ //   if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
         *LviewMatrix = _newLeftViewMatrix;
         *RviewMatrix = _newRightviewMatix;
-        
-   // }
+  // }
     
 }
 
@@ -57,10 +56,17 @@
     *LviewMatrix = GLKMatrix4TranslateWithVector3(*LviewMatrix , lTranslationVec);
     *RviewMatrix = GLKMatrix4TranslateWithVector3(*RviewMatrix , rTranslationVec);
     */
+
+
     
-    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Rotate(*LviewMatrix, factor, axis.x, axis.y, axis.z);
-    GLKMatrix4 _newRightviewMatix = GLKMatrix4Rotate(*RviewMatrix, factor, axis.x, axis.y, axis.z);
+    GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
+    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, *LviewMatrix);
+    GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, *RviewMatrix);
+
+    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Rotate(*LviewMatrix, factor, axis.x, axis.y, axis.z);
+    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Rotate(*RviewMatrix, factor, axis.x, axis.y, axis.z);
     
+
     
     
     /*
@@ -72,11 +78,11 @@
     
     //GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(*RviewMatrix,GLKMatrix4MakeYRotation(rotationFactor));
     
-    //if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
+//  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
     *LviewMatrix = _newLeftViewMatrix;
     *RviewMatrix = _newRightviewMatix;
-    
-    // }
+//   }
+
     
 }
 
