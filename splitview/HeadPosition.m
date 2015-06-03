@@ -40,7 +40,7 @@
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(*RviewMatrix, disp.x,disp.y,disp.z);
     
  
- //   if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
+  //  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
         *LviewMatrix = _newLeftViewMatrix;
         *RviewMatrix = _newRightviewMatix;
   // }
@@ -81,10 +81,47 @@
 //  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
     *LviewMatrix = _newLeftViewMatrix;
     *RviewMatrix = _newRightviewMatix;
-//   }
+  // }
 
     
 }
+
+- (BOOL) detectCollision: (GLKMatrix4) matrix{
+    
+    for(Object *obj in objects){
+        //float* coord = [obj getCoordinates];
+        GLKVector4 BboxMin = GLKVector4Make(obj.maxX, 0.0f, obj.maxZ, 1.0f);
+        GLKVector4 BboxMax = GLKVector4Make(obj.minX, 0.0f, obj.minZ, 1.0f);
+        GLKVector4 BboxMin2 = BboxMin;
+        GLKVector4 BboxMax2 = BboxMax;
+        
+        //Compute the camera coordinates of Bbox
+        BboxMin = GLKMatrix4MultiplyVector4(matrix, BboxMin);
+        BboxMax = GLKMatrix4MultiplyVector4(matrix, BboxMax);
+        
+        GLKMatrix4 rot = GLKMatrix4MakeRotation(GLKMathDegreesToRadians(90.0f),0.0,1.0,0.0);
+        GLKMatrix4 horizontalMatrix = GLKMatrix4Multiply(rot, matrix);
+        
+        BboxMin2 = GLKMatrix4MultiplyVector4(horizontalMatrix, BboxMin2);
+        BboxMax2 = GLKMatrix4MultiplyVector4(horizontalMatrix, BboxMax2);
+        
+        
+        //check at the camera coordinates if the object hits to camera
+        if((BboxMin.z >= -0.2 && BboxMin.z < 0.2) || (BboxMax.z >= -0.2 && BboxMax.z < 0.2))
+            return YES;
+        
+      /*  if((BboxMin.x >= -1.0 && BboxMin.x < 1.0) || (BboxMax.x >= -1.0 && BboxMax.x < 1.0))
+            return YES;*/
+        if((BboxMin2.z >= -0.2 && BboxMin2.z < 0.2) || (BboxMax2.z >= -0.2 && BboxMax2.z < 0.2))
+            return YES;
+        
+        
+        
+        
+    }
+    return NO;
+}
+
 
 
 - (void) moveForward:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
@@ -196,24 +233,6 @@
     [objects addObject:object];
 }
 
-- (BOOL) detectCollision: (GLKMatrix4) matrix{
-    
-    for(Object *obj in objects){
-        //float* coord = [obj getCoordinates];
-        GLKVector4 BboxMin = GLKVector4Make(obj.maxX, 0.0f, obj.maxZ, 1.0f);
-        GLKVector4 BboxMax = GLKVector4Make(obj.minX, 0.0f, obj.minZ, 1.0f);
-        
-        //Compute the camera coordinates of Bbox
-        BboxMin = GLKMatrix4MultiplyVector4(matrix, BboxMin);
-        BboxMax = GLKMatrix4MultiplyVector4(matrix, BboxMax);
-        
-        //check at the camera coordinates if the object hits to camera
-        if((BboxMin.z >= 0 && BboxMin.z < 1) || (BboxMax.z >= 0 && BboxMax.z < 1))
-            return YES;
-        
-    }
-    return NO;
-}
 
 
 
