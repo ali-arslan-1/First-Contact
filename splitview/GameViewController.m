@@ -88,7 +88,7 @@
     
     headPosition = [[HeadPosition alloc] init];
     [headPosition addObject:empty_room];
-    GLKVector3 initialPos = GLKVector3Make(5.5, 1.0, 0.0);
+    GLKVector3 initialPos = GLKVector3Make(3.5, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(1, 1, 0);
     
     _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
@@ -427,6 +427,7 @@
     // Render the object with ES2
     glUseProgram(shaderLoader._program);
     
+    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, _modelViewMatrix[0].m);
     glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[0].m);
     modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[0], &invertible);
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
@@ -464,6 +465,7 @@
     // Render the object with ES2
     glUseProgram(shaderLoader._program);
     
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_MATRIX], 1, 0, _modelViewMatrix[1].m);
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[1].m);
     modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[1], &invertible);
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);

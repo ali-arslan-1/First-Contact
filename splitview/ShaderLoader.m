@@ -99,6 +99,7 @@ static GLint uniforms[NUM_UNIFORMS];
     
     // Get uniform locations.
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_MODELVIEW_MATRIX] = glGetUniformLocation(_program, "modelViewMatrix");
     uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");

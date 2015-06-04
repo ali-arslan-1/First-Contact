@@ -13,6 +13,7 @@ attribute vec3 normal;
 
 varying lowp vec2 vTexCoord;
 
+uniform mat4 modelViewMatrix;
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 modelViewInvTransMatrix;
 
@@ -25,7 +26,7 @@ void main()
     // pass to fragment shader
     vTexCoord = texCoord;
     
-    vPosition = modelViewProjectionMatrix * position;
+    vPosition = modelViewMatrix * position;
     vNormal = vec3(modelViewInvTransMatrix * vec4(normal, 0.0));
     
     gl_Position = modelViewProjectionMatrix * position;

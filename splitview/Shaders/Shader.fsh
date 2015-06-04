@@ -20,15 +20,15 @@ uniform vec3 uLightPosition ;
 vec3 uLightColor = vec3(1.0, 1.0, 1.0);
 
 mat3 uAmbientMaterial = mat3(
-                             5.0, 0.0, 0.0,
-                             0.0, 5.0, 0.0,
-                             0.0, 0.0, 5.0
+                             4.0, 0.0, 0.0,
+                             0.0, 4.0, 0.0,
+                             0.0, 0.0, 4.0
                              );
 
 mat3 uSpecularMaterial = mat3(
-                              0.95, 0.0, 0.0,
-                              0.0, 0.95, 0.0,
-                              0.0, 0.0, 0.95
+                              0.15, 0.0, 0.0,
+                              0.0, 0.15, 0.0,
+                              0.0, 0.0, 0.15
                               );
 float uSpecularityExponent = 60.0;
 
@@ -45,7 +45,7 @@ vec3 diffuse() {
     vec3 pl = normalize(uLightPosition - vec3(vPosition));
     float cosAngle = max(dot(pl, normalize(vNormal)), 0.0);
     
-    return uLightColor * vec3(texCol) * cosAngle;
+    return vec3((uLightColor * vec3(texCol)) * cosAngle);
 }
 
 vec3 specular() {
@@ -62,5 +62,5 @@ void main()
     if (isGrid == 1)
         gl_FragData[0] = vec4(0.0, 1.0, 0.0, 1.0);
     else
-        gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);//vec4(texCol.rgba);
+        gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);;
 }
