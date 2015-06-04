@@ -16,24 +16,21 @@ uniform int       isGrid;
 
 varying mediump vec2 vTexCoord;
 
-uniform vec3 uLightPosition ;//= vec3(0.0, 0.0, 11.0);
+uniform vec3 uLightPosition ;
 vec3 uLightColor = vec3(1.0, 1.0, 1.0);
 
 mat3 uAmbientMaterial = mat3(
-                             4.0, 0.0, 0.0,
-                             0.0, 4.0, 0.0,
-                             0.0, 0.0, 4.0
+                             5.0, 0.0, 0.0,
+                             0.0, 5.0, 0.0,
+                             0.0, 0.0, 5.0
                              );
-mat3 uDiffuseMaterial = mat3(
-                             7.0, 5.0, -4.0,
-                             3.0, 7.0, 4.0,
-                             0.0, 0.0, 7.0);
+
 mat3 uSpecularMaterial = mat3(
                               0.95, 0.0, 0.0,
                               0.0, 0.95, 0.0,
                               0.0, 0.0, 0.95
                               );
-float uSpecularityExponent = 70.0;
+float uSpecularityExponent = 60.0;
 
 
 vec3 ambient() {

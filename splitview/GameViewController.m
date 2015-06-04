@@ -88,9 +88,15 @@
     
     headPosition = [[HeadPosition alloc] init];
     [headPosition addObject:empty_room];
+    GLKVector3 initialPos = GLKVector3Make(5.5, 1.0, 0.0);
+    GLKVector3 initialViewDir = GLKVector3Make(1, 1, 0);
     
-    _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
-    _rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
+    _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+    
+    _rightViewMatrix = GLKMatrix4MakeLookAt(initialPos.x-0.5, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+    
+   // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
+    //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
     
    [self setupGL];
     
@@ -426,7 +432,7 @@
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _leftViewMatrix.m30, _leftViewMatrix.m31 + 2, _leftViewMatrix.m32 -5);
+    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -463,7 +469,7 @@
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], _rightViewMatrix.m30, _rightViewMatrix.m31+1, _rightViewMatrix.m32-2);
+    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
     /*****************************
@@ -520,7 +526,7 @@
         [headPosition lookRight:&_leftViewMatrix rightEye:&_rightViewMatrix];
     }
 
-   // NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
+   NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
 
