@@ -11,14 +11,15 @@
 @implementation ObjLoader
 
 @synthesize object;
+@synthesize objects;
 
 - (void)initWithPath:(NSString *)path {
     
     NSLog(@"path name : %@", path);
     
     // init Arrays for saving Data
-    
-    object = [[Object alloc] init];
+    objects = [NSMutableArray array];
+    object = NULL;
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:path ofType:@"obj"];
     NSLog(@"%@", filePath);
@@ -28,8 +29,6 @@
                                                          error:NULL];
         if (content)
         {
-            
-            
             // separate by new line
             NSArray* allLines = [content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
             
@@ -40,7 +39,25 @@
                 NSArray* singleLineStrs = [strInEachLine componentsSeparatedByCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@" "]];
                 NSString *firstSymbol = [singleLineStrs objectAtIndex:0];
                 
-                if ([firstSymbol isEqualToString:@"v"]){
+                if([firstSymbol isEqualToString:@"o"] || [firstSymbol isEqualToString:@"g"]){
+                    if(object == NULL)
+                        object = [[Object alloc] init];
+                    else{
+                        [objects addObject:object];
+                        
+                        if ([object.vIndices count] != [object.tcIndices count] || [object.vIndices count] != [object.nIndices count] || [object.nIndices count] != [object.tcIndices count])
+                            NSLog(@"Error: face indices unequal!");
+                        object.numFaces = (float)[object.vIndices count] / object.numVertexPerFace;
+                        NSLog(@"face counting : %.2f", (float)[object.vIndices count] / object.numVertexPerFace);
+                        NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
+                        NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
+                        NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
+                        
+                        free((__bridge void *)(object));
+                        object = [[Object alloc] init];
+                    }
+                }
+                else if ([firstSymbol isEqualToString:@"v"]){
                     object.positionDim = (uint)[singleLineStrs count] - 1;
                     // NSLog(@"posDim : %d", object.positionDim);
                     [self addVertexFromString:singleLineStrs];
@@ -72,18 +89,11 @@
                     NSLog(@"warning: unhandled symbol : %@", firstSymbol);
                 }
             }
-            if ([object.vIndices count] != [object.tcIndices count] || [object.vIndices count] != [object.nIndices count] || [object.nIndices count] != [object.tcIndices count])
-                NSLog(@"Error: face indices unequal!");
-            object.numFaces = (float)[object.vIndices count] / object.numVertexPerFace;
-            NSLog(@"face counting : %.2f", (float)[object.vIndices count] / object.numVertexPerFace);
-            NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
-            NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
-            NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
+            
             
         }
         
     }
-    
 }
 
 - (void)dealloc {
