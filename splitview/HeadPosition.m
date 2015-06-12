@@ -228,9 +228,10 @@
 }
 
 
-- (void) addObject :(Object*) object{
-    
-    [objects addObject:object];
+- (void) addObjects :(NSMutableArray*) newObjects{
+    for(Object *obj in newObjects){
+        [objects addObject:obj];
+    }
 }
 
 

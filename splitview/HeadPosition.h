@@ -23,7 +23,7 @@
 - (void)lookUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
 - (void)lookLeft:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
 - (void)lookRight:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
-- (void) addObject :(Object*) object ;
+- (void)addObjects :(NSMutableArray*) newObjects;
 
 @end
 

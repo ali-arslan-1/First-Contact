@@ -24,8 +24,8 @@
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
     GLKMatrix4 _gridModelViewMatrix[2];
     
-    GLuint _vertexArray;
-    GLuint _vertexBuffer;
+    GLuint _vertexArray[10];
+    GLuint _vertexBuffer[10];
     
     GLuint _quadVertexArray;
     GLuint _quadVertexBuffer;
@@ -75,19 +75,22 @@
     
     // load Geometry
     NSLog(@"loading obj file...");
-    [objloader initWithPath:@"PodRoom"];
+    [objloader initWithPath:@"cubes"]; //to test multiple object loader
+    //[objloader initWithPath:@"PodRoom"];
     //[objloader initWithPath:@"texturedeneme_triangulate"];
     //[objloader initWithPath:@"ball"];
+    /*
     mVertexData = [objloader.object getVertexData];
     mByteSizeOfVertexData = objloader.object.bytesize_vertexdata;
     mNumTriangles = [objloader.object getNumVertices];
     Object* empty_room = objloader.object;
-    
+    */
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
     
     headPosition = [[HeadPosition alloc] init];
-    [headPosition addObject:empty_room];
+    //[headPosition addObject:empty_room];
+    [headPosition addObjects:objloader.objects];
     GLKVector3 initialPos = GLKVector3Make(3.5, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(1, 1, 0);
     
@@ -229,22 +232,30 @@
 
 - (void)initLoadedGeometry
 {
-    glGenVertexArraysOES(1, &_vertexArray);
-    glBindVertexArrayOES(_vertexArray);
-    
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, mByteSizeOfVertexData, mVertexData, GL_STATIC_DRAW);
-    
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(GLKVertexAttribNormal);
-    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(12));
-    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
-    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(24));
-    
-    glBindVertexArrayOES(0);
-    
+    int i=0;
+    for(Object* geometry in objloader.objects){
+        mVertexData = [geometry getVertexData];
+        mByteSizeOfVertexData = geometry.bytesize_vertexdata;
+       // mNumTriangles = [geometry getNumVertices];
+        glGenVertexArraysOES(1, &_vertexArray[i]);
+        glBindVertexArrayOES(_vertexArray[i]);
+        
+        glGenBuffers(1, &_vertexBuffer[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer[i]);
+        glBufferData(GL_ARRAY_BUFFER, mByteSizeOfVertexData, mVertexData, GL_STATIC_DRAW);
+        
+        glEnableVertexAttribArray(GLKVertexAttribPosition);
+        glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(0));
+        glEnableVertexAttribArray(GLKVertexAttribNormal);
+        glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(12));
+        glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+        glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(24));
+        
+        glBindVertexArrayOES(0);
+        i++;
+    }
+    _vertexArray[i] = 0;
+    _vertexBuffer[i] = 0;
 }
 
 - (void)initQuadGeometry
@@ -285,8 +296,10 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
-    glDeleteBuffers(1, &_vertexBuffer);
-    glDeleteVertexArraysOES(1, &_vertexArray);
+    for(int i = 0; _vertexArray[i] == 0; i++){
+    glDeleteBuffers(1, &_vertexBuffer[i]);
+    glDeleteVertexArraysOES(1, &_vertexArray[i]);
+    }
     
     glDeleteBuffers(1, &_quadVertexBuffer);
     glDeleteVertexArraysOES(1, &_quadVertexArray);
@@ -418,8 +431,9 @@
     
     glClear(GL_DEPTH_BUFFER_BIT);
     
-    // render loaded geometry
-    glBindVertexArrayOES(_vertexArray);
+    // render loaded geometries
+    for(int i = 0; _vertexArray[i] != 0; i++){
+    glBindVertexArrayOES(_vertexArray[i]);
     // bind a texture
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
@@ -434,8 +448,11 @@
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
     glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
-    glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     
+    Object *loaded = [objloader.objects objectAtIndex:i];
+    mNumTriangles = [loaded getNumVertices];
+    glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    }
     /*****************************
      *2nd render pass, use FBO[1], render right view
      *****************************/
@@ -457,7 +474,9 @@
     
     glClear(GL_DEPTH_BUFFER_BIT);
     
-    glBindVertexArrayOES(_vertexArray);
+    // render loaded geometries
+    for(int i = 0; _vertexArray[i] != 0; i++){
+    glBindVertexArrayOES(_vertexArray[i]);
     // bind a texture
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
@@ -472,8 +491,11 @@
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
     glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        
+    Object *loaded = [objloader.objects objectAtIndex:i];
+    mNumTriangles = [loaded getNumVertices];
     glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
-    
+    }
     /*****************************
      * 3rd render pass, use default FBO
      *****************************/

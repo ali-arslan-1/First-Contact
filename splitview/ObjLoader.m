@@ -52,9 +52,6 @@
                         NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
                         NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
                         NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
-                        
-                        free((__bridge void *)(object));
-                        object = [[Object alloc] init];
                     }
                 }
                 else if ([firstSymbol isEqualToString:@"v"]){
@@ -89,8 +86,14 @@
                     NSLog(@"warning: unhandled symbol : %@", firstSymbol);
                 }
             }
-            
-            
+            [objects addObject:object];
+            if ([object.vIndices count] != [object.tcIndices count] || [object.vIndices count] != [object.nIndices count] || [object.nIndices count] != [object.tcIndices count])
+                NSLog(@"Error: face indices unequal!");
+            object.numFaces = (float)[object.vIndices count] / object.numVertexPerFace;
+            NSLog(@"face counting : %.2f", (float)[object.vIndices count] / object.numVertexPerFace);
+            NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
+            NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
+            NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
         }
         
     }
