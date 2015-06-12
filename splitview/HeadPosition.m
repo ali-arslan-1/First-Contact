@@ -40,7 +40,7 @@
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(*RviewMatrix, disp.x,disp.y,disp.z);
     
  
-  //  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
+   // if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
         *LviewMatrix = _newLeftViewMatrix;
         *RviewMatrix = _newRightviewMatix;
   // }
@@ -112,9 +112,9 @@
         
       /*  if((BboxMin.x >= -1.0 && BboxMin.x < 1.0) || (BboxMax.x >= -1.0 && BboxMax.x < 1.0))
             return YES;*/
-        if((BboxMin2.z >= -0.2 && BboxMin2.z < 0.2) || (BboxMax2.z >= -0.2 && BboxMax2.z < 0.2))
+       /* if((BboxMin2.z >= -0.2 && BboxMin2.z < 0.2) || (BboxMax2.z >= -0.2 && BboxMax2.z < 0.2))
             return YES;
-        
+       */
         
         
         
@@ -228,9 +228,10 @@
 }
 
 
-- (void) addObject :(Object*) object{
-    
-    [objects addObject:object];
+- (void) addObjects :(NSMutableArray*) newObjects{
+    for(Object *obj in newObjects){
+        [objects addObject:obj];
+    }
 }
 
 

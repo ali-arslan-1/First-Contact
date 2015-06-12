@@ -13,7 +13,7 @@
 @interface ObjLoader : NSObject
 
 @property( nonatomic, retain ) Object * object;
-
+@property( nonatomic, retain)  NSMutableArray *objects;
 - (void)initWithPath:(NSString *)path;
 
 @end
