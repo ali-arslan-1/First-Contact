@@ -18,6 +18,7 @@
     if(self = [super init:name Type:Door_]){
         self->openDoorDistLimit = 5.0;
         self->closed = true;
+        self->partialOpen = false;
         self->zAligned = _zAligned;
         self->speed = 0.05;
     }
@@ -55,6 +56,8 @@
         width = abs(self.maxX) - abs(self.minX);
     }
     
+    initialWorldCenter = GLKMatrix4MultiplyVector4(GLKMatrix4Multiply([HeadPosition lView], [self initialModelMatrix]), self->center);
+    
     
 }
 
@@ -66,7 +69,7 @@
 }
 
 -(void)changeStateIfRequired{
-    if (closed && [self distanceFromCamera] < self->openDoorDistLimit) {
+    if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit) { //open
         GLKMatrix4 translationMatrix;
         if(self->zAligned){
             translationMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, self->speed);
@@ -76,15 +79,14 @@
         
         self.modelMatrix = GLKMatrix4Multiply(self.modelMatrix, translationMatrix);
         
-        
-        GLKVector4 initialWorldCenter = GLKMatrix4MultiplyVector4(GLKMatrix4Multiply([HeadPosition lView], [self initialModelMatrix]), self->center);
-        
+        partialOpen = true;
 
-        
-        if((fabsf(worldCenter.x) - fabsf(initialWorldCenter.x))> width*1.8)
+        if((fabsf(worldCenter.x) - fabsf(initialWorldCenter.x))> width*2.5){
             closed = false;
+            partialOpen = false;
+        }
         
-    }else if (!closed && [self distanceFromCamera] > self->openDoorDistLimit){
+    }else if ((!closed || partialOpen) && [self distanceFromCamera] > self->openDoorDistLimit){ //close
         GLKMatrix4 translationMatrix;
         if(self->zAligned){
             translationMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -self->speed);
@@ -94,13 +96,12 @@
         
         self.modelMatrix = GLKMatrix4Multiply(self.modelMatrix, translationMatrix);
         
+        partialOpen = true;
         
-        GLKVector4 initialWorldCenter = GLKMatrix4MultiplyVector4(GLKMatrix4Multiply([HeadPosition lView], [self initialModelMatrix]), self->center);
-        
-        
-        
-        if((fabsf(worldCenter.x) - fabsf(initialWorldCenter.x))< width*0.02)
+        if((worldCenter.x - fabsf(initialWorldCenter.x))< width-0.25){
             closed = true;
+            partialOpen = false;
+        }
     
     }
     

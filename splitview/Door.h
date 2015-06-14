@@ -15,6 +15,7 @@
 
 @interface Door : Object{
     BOOL closed;
+    BOOL partialOpen;
     float distanceFromCamera;
     GLKVector4 center;
     GLKVector4 worldCenter;
@@ -22,6 +23,7 @@
     float speed;
     float width;
     BOOL zAligned;
+    GLKVector4 initialWorldCenter;
 }
 
 -(void)calculateAttributes;
