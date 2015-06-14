@@ -14,13 +14,20 @@
 
 
 @interface Door : Object{
+    BOOL closed;
     float distanceFromCamera;
     GLKVector4 center;
+    GLKVector4 worldCenter;
+    float openDoorDistLimit;
+    float speed;
+    float width;
+    BOOL zAligned;
 }
 
--(void)calculateCenter;
+-(void)calculateAttributes;
 -(float)distanceFromCamera;
--(void)open;
+-(void)changeStateIfRequired;
+-(id)init:(NSString *)name Alignment :(BOOL)_zAligned;
 
 @end
 

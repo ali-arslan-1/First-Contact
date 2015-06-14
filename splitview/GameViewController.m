@@ -361,8 +361,8 @@
 - (void)update
 {
     for (Object *object in objloader.objects) {
-        if([object isKindOfClass:[Door class]] && [(Door*)object distanceFromCamera] < 5){
-            [(Door*)object open];
+        if([object isKindOfClass:[Door class]]){
+            [(Door*)object changeStateIfRequired];
         }
     }
     

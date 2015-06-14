@@ -42,7 +42,7 @@
                     
                     if(object!=NULL){
                         if ([object isKindOfClass:[Door class]]) {
-                            [(Door*)object calculateCenter];
+                            [(Door*)object calculateAttributes];
                         }
                         [self addObject:object];
                     }
@@ -63,7 +63,7 @@
                             object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Door"]){
                             name = [comps objectAtIndex:1];
-                            object = [[Door alloc] init:name Type:type];
+                            object = [[Door alloc] init:name Alignment:YES];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Room"]){
                             type = Room;
                             name = [comps objectAtIndex:1];
@@ -140,8 +140,13 @@
 
 -(void)addVertexFromString:(NSArray *)stringArray
 {
-    if(object.vertice == nil)
+    if(object.vertice == nil){
         object.vertice = [[NSMutableArray alloc]init];
+        object.minX = [[stringArray objectAtIndex:1] floatValue];
+        object.maxX = [[stringArray objectAtIndex:1] floatValue];
+        object.minZ = [[stringArray objectAtIndex:3] floatValue];
+        object.maxZ = [[stringArray objectAtIndex:3] floatValue];
+    }
     for (int i = 0; i < [stringArray count]; i++) {
         if (i == 0)
             continue;

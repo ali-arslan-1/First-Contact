@@ -22,6 +22,7 @@ enum ObjectType{
     Room,
     Prop,
     DoorFrame,
+    Door_,
     Light
 };
 
@@ -76,6 +77,7 @@ enum Eye{
 @property GLuint* vertexArray;
 @property GLuint* vertexBuffer;
 @property GLKMatrix4 modelMatrix;
+@property GLKMatrix4 initialModelMatrix;
 @end
 
 #endif

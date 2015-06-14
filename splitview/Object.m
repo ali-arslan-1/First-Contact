@@ -34,6 +34,7 @@
 @synthesize vertexArray;
 @synthesize vertexBuffer;
 @synthesize modelMatrix;
+@synthesize initialModelMatrix;
 
 -(id) init : (NSString*) name Type :(enum ObjectType) type{
 
@@ -45,7 +46,6 @@
     self.minZ = 0;
     self.maxZ = 0;
     
-    self.vertice = [[NSMutableArray alloc] init];
     self.texCoord = [[NSMutableArray alloc] init];
     self.normal = [[NSMutableArray alloc] init];
     self.vIndices = [[NSMutableArray alloc] init];
@@ -60,8 +60,8 @@
     self.texcoordDim = 0;
     self.vertexArray = &_vertexArray;
     self.vertexBuffer = &_vertexBuffer;
-    
-    self.modelMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
+    self.initialModelMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
+    self.modelMatrix = initialModelMatrix;
     return self;
 }
 
@@ -168,6 +168,8 @@
 
     return matrix;
 }
+
+
 
 -(GLKMatrix4)getModelViewProjection:(enum Eye) eye{
     GLKMatrix4 matrix;
