@@ -10,7 +10,7 @@
 #import <OpenGLES/ES2/glext.h>
 #import <OpenGLES/ES3/glext.h>
 #import "UniformContainer.h"
-
+#import "Door.h"
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
@@ -86,8 +86,8 @@
     headPosition = [[HeadPosition alloc] init];
     //[headPosition addObject:empty_room];
     [headPosition addObjects:objloader.objects];
-    GLKVector3 initialPos = GLKVector3Make(3.5, 1.0, 0.0);
-    GLKVector3 initialViewDir = GLKVector3Make(1, 1, 0);
+    GLKVector3 initialPos = GLKVector3Make(-4, 1.0, 0.0);
+    GLKVector3 initialViewDir = GLKVector3Make(4, 1, 0);
     
     GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     
@@ -360,7 +360,11 @@
 
 - (void)update
 {
-
+    for (Object *object in objloader.objects) {
+        if([object isKindOfClass:[Door class]] && [(Door*)object distanceFromCamera] < 5){
+            [(Door*)object open];
+        }
+    }
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);

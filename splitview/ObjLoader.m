@@ -41,7 +41,9 @@
                 if([firstSymbol isEqualToString:@"o"] || [firstSymbol isEqualToString:@"g"]){
                     
                     if(object!=NULL){
-                        
+                        if ([object isKindOfClass:[Door class]]) {
+                            [(Door*)object calculateCenter];
+                        }
                         [self addObject:object];
                     }
                     
@@ -54,24 +56,28 @@
                         if([[comps objectAtIndex:0] isEqualToString:@"Prop"]){
                             type  = Prop;
                             name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
+                            object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"DoorFrame"]){
                             type = DoorFrame;
                             name = [comps objectAtIndex:1];
+                            object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Door"]){
-                            type = Door;
                             name = [comps objectAtIndex:1];
+                            object = [[Door alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Room"]){
                             type = Room;
                             name = [comps objectAtIndex:1];
+                            object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Light"]){
                             type  = Light;
                             name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
+                            object = [[Object alloc] init:name Type:type];
                         }else{
                             [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];
                         }
                      
                     
-                         object = [[Object alloc] init:name Type:type];
+                         
                      }@catch (NSException * e) {
                          NSLog(@"Exception while setting name and type of object: %@", e);
                          [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];

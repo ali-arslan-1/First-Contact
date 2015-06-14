@@ -22,7 +22,6 @@ enum ObjectType{
     Room,
     Prop,
     DoorFrame,
-    Door,
     Light
 };
 

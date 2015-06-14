@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/ES2/gl.h>
 #import "Object.h"
+#import "Door.h"
 
 @interface ObjLoader : NSObject{
 
