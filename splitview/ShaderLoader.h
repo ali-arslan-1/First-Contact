@@ -12,27 +12,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+#include "UniformContainer.h"
 
 
-
-enum
-{
-    UNIFORM_MODELVIEWPROJECTION_MATRIX,
-    UNIFORM_MODELVIEW_MATRIX,
-    UNIFORM_MODELVIEW_INV_TRANS,
-    UNIFORM_NORMAL_MATRIX,
-    UNIFORM_SAMPLER2D,
-    UNIFORM_SAMPLER2D_L,
-    UNIFORM_SAMPLER2D_R,
-    UNIFORM_ISGRID,
-    UNIFORM_LIGHT_POS,
-    UNIFORM_LIGHT_COLOR,
-    UNIFORM_MTL_AMB,
-    UNIFORM_MTL_DIFF,
-    UNIFORM_MET_SEPC,
-    UNIFORM_MET_SEPC_EXP,
-    NUM_UNIFORMS
-};
 
 @interface ShaderLoader : NSObject
 

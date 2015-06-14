@@ -24,12 +24,14 @@
 		6ED166BA1B2AF65700C3B66B /* cubes.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6ED166B91B2AF65700C3B66B /* cubes.obj */; };
 		BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */ = {isa = PBXBuildFile; fileRef = BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */; };
 		BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */ = {isa = PBXBuildFile; fileRef = BB771D061B18EEBD00988B7C /* PodRoom.obj */; };
+		BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD21C931B2CBD0E006056FA /* Renderer.m */; };
 		BBD622291B13476100CA1418 /* ShaderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD622281B13476100CA1418 /* ShaderLoader.m */; };
 		BBE5C2C31B0635ED00226E65 /* EmptyRoom_v1.obj in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C11B0635ED00226E65 /* EmptyRoom_v1.obj */; };
 		BBE5C2C41B0635ED00226E65 /* EmptyRoom_v1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C21B0635ED00226E65 /* EmptyRoom_v1.mtl */; };
 		BBE5C2C81B063E8E00226E65 /* T_E_Metal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BBE5C2C71B063E8E00226E65 /* T_E_Metal.jpg */; };
 		BBE9B7E41B04F64100EDF814 /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE9B7E31B04F64100EDF814 /* Object.m */; };
 		BBE9B7E61B04F6DF00EDF814 /* HeadPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE9B7E51B04F6DF00EDF814 /* HeadPosition.m */; };
+		BBF0EC9F1B2D916B00D44D89 /* UniformContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0EC9E1B2D916B00D44D89 /* UniformContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +57,8 @@
 		6ED166B91B2AF65700C3B66B /* cubes.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cubes.obj; path = Geometry/cubes.obj; sourceTree = "<group>"; };
 		BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Atlas_01.png; path = Geometry/T_E_Atlas_01.png; sourceTree = "<group>"; };
 		BB771D061B18EEBD00988B7C /* PodRoom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PodRoom.obj; path = Geometry/PodRoom.obj; sourceTree = "<group>"; };
+		BBD21C911B2C9458006056FA /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		BBD21C931B2CBD0E006056FA /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		BBD622271B13460A00CA1418 /* ShaderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderLoader.h; sourceTree = "<group>"; };
 		BBD622281B13476100CA1418 /* ShaderLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShaderLoader.m; sourceTree = "<group>"; };
 		BBE5C2C11B0635ED00226E65 /* EmptyRoom_v1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EmptyRoom_v1.obj; path = Geometry/EmptyRoom_v1.obj; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 		BBE9B7E31B04F64100EDF814 /* Object.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Object.m; sourceTree = "<group>"; };
 		BBE9B7E51B04F6DF00EDF814 /* HeadPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadPosition.m; sourceTree = "<group>"; };
 		BBE9B7E71B04F72500EDF814 /* HeadPosition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeadPosition.h; sourceTree = "<group>"; };
+		BBF0EC9D1B2D909D00D44D89 /* UniformContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UniformContainer.h; sourceTree = "<group>"; };
+		BBF0EC9E1B2D916B00D44D89 /* UniformContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UniformContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +121,10 @@
 				0A15DC5E1AB734510058C15E /* Images.xcassets */,
 				0A15DC601AB734510058C15E /* LaunchScreen.xib */,
 				0A15DC4D1AB734510058C15E /* Supporting Files */,
+				BBD21C911B2C9458006056FA /* Renderer.h */,
+				BBD21C931B2CBD0E006056FA /* Renderer.m */,
+				BBF0EC9D1B2D909D00D44D89 /* UniformContainer.h */,
+				BBF0EC9E1B2D916B00D44D89 /* UniformContainer.m */,
 			);
 			path = splitview;
 			sourceTree = "<group>";
@@ -249,6 +259,8 @@
 				0A15DC841AB735730058C15E /* ObjLoader.m in Sources */,
 				0A15DC531AB734510058C15E /* AppDelegate.m in Sources */,
 				0A15DC5A1AB734510058C15E /* GameViewController.m in Sources */,
+				BBF0EC9F1B2D916B00D44D89 /* UniformContainer.m in Sources */,
+				BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */,
 				BBD622291B13476100CA1418 /* ShaderLoader.m in Sources */,
 				BBE9B7E41B04F64100EDF814 /* Object.m in Sources */,
 				0A15DC501AB734510058C15E /* main.m in Sources */,

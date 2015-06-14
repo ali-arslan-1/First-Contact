@@ -18,12 +18,26 @@
 
 //Only X and Z coordinates, because the actor does not move at Y axis.
 
+enum ObjectType{
+    Room,
+    Prop,
+    DoorFrame,
+    Door,
+    Light
+};
+
+enum Eye{
+    Left,
+    Right
+};
+
 @interface Object : NSObject{
-    
+    GLuint _vertexArray;
+    GLuint _vertexBuffer;
     float *coordinates;
-    NSString *name;
+
 }
--(id) init;
+-(id) init : (NSString*) name Type :(enum ObjectType) type;
 -(void) dealloc;
 
 
@@ -33,6 +47,9 @@
 - (void) moveObject : (NSString*) name matrix: (GLKMatrix4) matrix;
 - (GLfloat *)getVertexData;
 - (uint)getNumVertices;
+-(GLKMatrix4) getModelView:(enum Eye)eye;
+-(GLKMatrix4) getModelViewProjection:(enum Eye)eye;
+-(GLKMatrix4) getModelViewInverseTranspose:(enum Eye)eye;
 
 @property( nonatomic, retain ) NSMutableArray *vertice;
 @property( nonatomic, retain ) NSMutableArray *texCoord;
@@ -54,7 +71,12 @@
 @property( nonatomic ) int maxX;
 @property( nonatomic ) int minZ;
 @property( nonatomic ) int maxZ;
-
+@property( nonatomic ) NSString* name ;
+@property( nonatomic ) NSString* parent ;
+@property (nonatomic) enum ObjectType type;
+@property GLuint* vertexArray;
+@property GLuint* vertexBuffer;
+@property GLKMatrix4 modelMatrix;
 @end
 
 #endif

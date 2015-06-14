@@ -10,9 +10,11 @@
 #import <OpenGLES/ES2/gl.h>
 #import "Object.h"
 
-@interface ObjLoader : NSObject
+@interface ObjLoader : NSObject{
 
-@property( nonatomic, retain ) Object * object;
+    Object * object;
+}
+
 @property( nonatomic, retain)  NSMutableArray *objects;
 - (void)initWithPath:(NSString *)path;
 

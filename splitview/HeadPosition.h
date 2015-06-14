@@ -13,17 +13,28 @@
 
 -(id)init;
 
--(void)moveForward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
--(void)moveBackward:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
--(void)moveLeft:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
--(void)moveRight:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
--(void)moveDown:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
--(void)moveUp:(GLKMatrix4*)LviewMatrix rightEye: (GLKMatrix4*) RviewMatrix ;
-- (void)lookDown:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
-- (void)lookUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
-- (void)lookLeft:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
-- (void)lookRight:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix;
+-(void)moveForward ;
+-(void)moveBackward;
+-(void)moveLeft;
+-(void)moveRight;
+-(void)moveDown;
+-(void)moveUp;
+- (void)lookDown;
+- (void)lookUp;
+- (void)lookLeft;
+- (void)lookRight;
 - (void)addObjects :(NSMutableArray*) newObjects;
 
++ (GLKMatrix4)lView;
+
++ (GLKMatrix4)rView;
+
++ (void)setLView:(GLKMatrix4) val;
+
++ (void)setRView:(GLKMatrix4) val;
+
++ (GLKMatrix4) projection;
+
++ (void)setProjection:(GLKMatrix4) val;
 @end
 

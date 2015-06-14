@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #include "Object.h"
+#include "HeadPosition.h"
 
 @implementation Object
 
@@ -30,9 +31,15 @@
 @synthesize maxX;
 @synthesize minZ;
 @synthesize maxZ;
+@synthesize vertexArray;
+@synthesize vertexBuffer;
+@synthesize modelMatrix;
 
--(id) init{
+-(id) init : (NSString*) name Type :(enum ObjectType) type{
 
+    self.type  = type;
+    self.name  = name;
+    
     self.minX = 0;
     self.maxX = 0;
     self.minZ = 0;
@@ -51,7 +58,10 @@
     self.positionDim = 0;
     self.normalDim = 0;
     self.texcoordDim = 0;
+    self.vertexArray = &_vertexArray;
+    self.vertexBuffer = &_vertexBuffer;
     
+    self.modelMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
     return self;
 }
 
@@ -73,6 +83,9 @@
         [nIndices removeAllObjects];
     if (vertexData)
         free(vertexData);
+    
+    glDeleteBuffers(1, &(_vertexBuffer));
+    glDeleteBuffers(1, &(_vertexArray));
 }
 
 - (uint)getNumVertices
@@ -142,6 +155,37 @@
         
     }
     return vertexData;
+}
+
+-(GLKMatrix4)getModelView:(enum Eye) eye{
+    GLKMatrix4 matrix;
+    
+    if(eye == Left){
+        matrix = GLKMatrix4Multiply([HeadPosition lView], modelMatrix);
+    }else{
+        matrix = GLKMatrix4Multiply([HeadPosition rView], modelMatrix);
+    }
+
+    return matrix;
+}
+
+-(GLKMatrix4)getModelViewProjection:(enum Eye) eye{
+    GLKMatrix4 matrix;
+
+    matrix = GLKMatrix4Multiply([HeadPosition projection], [self getModelView:eye]);
+    
+    
+    return matrix;
+}
+-(GLKMatrix4) getModelViewInverseTranspose:(enum Eye)eye{
+    
+    GLKMatrix4 matrix;
+    BOOL invertible = YES;
+    
+    matrix = GLKMatrix4InvertAndTranspose([self getModelView:eye], &invertible);
+    
+    return matrix;
+
 }
 
 @end

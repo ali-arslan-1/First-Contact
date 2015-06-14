@@ -11,7 +11,7 @@
 //
 
 #import "HeadPosition.h"
-
+#import <GLKit/GLKit.h>
 
 @implementation HeadPosition{
     NSMutableArray *objects;
@@ -19,6 +19,47 @@
     GLKMatrix4 oldMatrices[2];
     float displacementFactor;
     float rotationFactor;
+}
+
+static GLKMatrix4 lView;
+static GLKMatrix4 rView;
+static GLKMatrix4 projection;
+
++ (GLKMatrix4)lView{
+    @synchronized(self) {
+        return lView;
+    }
+}
+
++ (GLKMatrix4)rView{
+    @synchronized(self) {
+        return rView;
+    }
+}
+
++ (GLKMatrix4)projection{
+    @synchronized(self) {
+        return projection;
+    }
+}
+
++ (void)setLView:(GLKMatrix4) val{
+    @synchronized(self) {
+        lView= val;
+    }
+    
+}
+
++ (void)setRView:(GLKMatrix4) val{
+    @synchronized(self) {
+        rView= val;
+    }
+}
+
++ (void)setProjection:(GLKMatrix4) val{
+    @synchronized(self) {
+        projection = val;
+    }
 }
 
 - (id) init{
@@ -33,38 +74,38 @@
     //TO DO deallocate the array somehow || is the array allocated?
 }
 
-- (void) move:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix displacement: (GLKVector3) disp{
+- (void) move:(GLKVector3) disp{
     
     
-    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(*LviewMatrix, disp.x,disp.y,disp.z);
-    GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(*RviewMatrix, disp.x,disp.y,disp.z);
+    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(lView, disp.x,disp.y,disp.z);
+    GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(rView, disp.x,disp.y,disp.z);
     
  
    // if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
-        *LviewMatrix = _newLeftViewMatrix;
-        *RviewMatrix = _newRightviewMatix;
+        lView = _newLeftViewMatrix;
+        rView = _newRightviewMatix;
   // }
     
 }
 
 
-- (void) rotate:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix axis: (GLKVector3) axis factor : (float)factor{
+- (void) rotate:(GLKVector3) axis factor : (float)factor{
     
     /*GLKVector3 lTranslationVec = GLKVector3Make(LviewMatrix->m30, LviewMatrix->m31, LviewMatrix->m32);
     GLKVector3 rTranslationVec = GLKVector3Make(RviewMatrix->m30, RviewMatrix->m31, RviewMatrix->m32);
 
-    *LviewMatrix = GLKMatrix4TranslateWithVector3(*LviewMatrix , lTranslationVec);
-    *RviewMatrix = GLKMatrix4TranslateWithVector3(*RviewMatrix , rTranslationVec);
+    lView = GLKMatrix4TranslateWithVector3(lView , lTranslationVec);
+    rView = GLKMatrix4TranslateWithVector3(rView , rTranslationVec);
     */
 
 
     
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
-    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, *LviewMatrix);
-    GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, *RviewMatrix);
+    GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, lView);
+    GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, rView);
 
-    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Rotate(*LviewMatrix, factor, axis.x, axis.y, axis.z);
-    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Rotate(*RviewMatrix, factor, axis.x, axis.y, axis.z);
+    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Rotate(lView, factor, axis.x, axis.y, axis.z);
+    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Rotate(rView, factor, axis.x, axis.y, axis.z);
     
 
     
@@ -74,13 +115,13 @@
     _newRightviewMatix = GLKMatrix4Translate(_newRightviewMatix , -rTranslationVec.x, -rTranslationVec.y, -rTranslationVec.z);
 
     */
-    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(*LviewMatrix,GLKMatrix4MakeYRotation(rotationFactor));
+    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(lView,GLKMatrix4MakeYRotation(rotationFactor));
     
-    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(*RviewMatrix,GLKMatrix4MakeYRotation(rotationFactor));
+    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rView,GLKMatrix4MakeYRotation(rotationFactor));
     
 //  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
-    *LviewMatrix = _newLeftViewMatrix;
-    *RviewMatrix = _newRightviewMatix;
+    lView = _newLeftViewMatrix;
+    rView = _newRightviewMatix;
   // }
 
     
@@ -124,106 +165,106 @@
 
 
 
-- (void) moveForward:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveForward{
     
     
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, displacementFactor);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
 
 }
 
 
-- (void) moveBackward:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveBackward{
     
     
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, -displacementFactor);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
     
 }
 
-- (void) moveLeft:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveLeft{
     
     
     
     GLKVector3 displacement = GLKVector3Make(displacementFactor, 0.0f, 0.0f);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
     
 }
 
 
-- (void) moveRight:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveRight{
     
     
     
     GLKVector3 displacement = GLKVector3Make(-displacementFactor, 0.0f, 0.0f);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
     
 }
 
-- (void) moveDown:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveDown{
     
     
     
     GLKVector3 displacement = GLKVector3Make(0.0f, displacementFactor, 0.0f);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
     
 }
 
 
-- (void) moveUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) moveUp{
     
     
     
     GLKVector3 displacement = GLKVector3Make(0.0f, -displacementFactor, 0.0f);
     
-    [self move:LviewMatrix rightEye:RviewMatrix displacement:displacement];
+    [self move:displacement];
     
 }
 
-- (void) lookUp:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) lookUp{
     
     
     
     GLKVector3 axis = GLKVector3Make(0.1f, 0.0f, 0.0f);
     
-    [self rotate:LviewMatrix rightEye:RviewMatrix axis:axis factor:-rotationFactor];
+    [self rotate:axis factor:-rotationFactor];
     
 }
 
-- (void) lookDown:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) lookDown{
     
     
     
     GLKVector3 axis = GLKVector3Make(0.1f, 0.0f, 0.0f);
     
-    [self rotate:LviewMatrix rightEye:RviewMatrix axis:axis factor:rotationFactor];
+    [self rotate:axis factor:rotationFactor];
     
 }
 
-- (void) lookLeft:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) lookLeft{
     
     
     
     GLKVector3 axis = GLKVector3Make(0.0f, 0.1f, 0.0f);
     
-    [self rotate:LviewMatrix rightEye:RviewMatrix axis:axis factor:-rotationFactor];
+    [self rotate:axis factor:-rotationFactor];
     
 }
 
-- (void) lookRight:(GLKMatrix4*)LviewMatrix rightEye:(GLKMatrix4*)RviewMatrix{
+- (void) lookRight{
     
     
     
     GLKVector3 axis = GLKVector3Make(0.0f, 0.1f, 0.0f);
     
-    [self rotate:LviewMatrix rightEye:RviewMatrix axis:axis factor:rotationFactor];
+    [self rotate:axis factor:rotationFactor];
     
 }
 

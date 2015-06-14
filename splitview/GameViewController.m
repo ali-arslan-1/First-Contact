@@ -9,6 +9,7 @@
 #import "GameViewController.h"
 #import <OpenGLES/ES2/glext.h>
 #import <OpenGLES/ES3/glext.h>
+#import "UniformContainer.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -18,14 +19,10 @@
 @interface GameViewController () {
     
     
-    GLKMatrix4 _modelViewProjectionMatrix[2];
-    GLKMatrix4 _modelViewMatrix[2];
     float _rotation;
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
     GLKMatrix4 _gridModelViewMatrix[2];
-    
-    GLuint _vertexArray[10];
-    GLuint _vertexBuffer[10];
+
     
     GLuint _quadVertexArray;
     GLuint _quadVertexBuffer;
@@ -34,8 +31,6 @@
     GLuint _gridVertexBuffer;
     
     
-    GLKMatrix4 _leftViewMatrix;
-    GLKMatrix4 _rightViewMatrix;
     
     BOOL init;
     
@@ -75,8 +70,8 @@
     
     // load Geometry
     NSLog(@"loading obj file...");
-    [objloader initWithPath:@"cubes"]; //to test multiple object loader
-    //[objloader initWithPath:@"PodRoom"];
+    //[objloader initWithPath:@"cubes"]; //to test multiple object loader
+    [objloader initWithPath:@"PodRoom"];
     //[objloader initWithPath:@"texturedeneme_triangulate"];
     //[objloader initWithPath:@"ball"];
     /*
@@ -94,11 +89,20 @@
     GLKVector3 initialPos = GLKVector3Make(3.5, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(1, 1, 0);
     
-    _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+    GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     
-    _rightViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+    GLKMatrix4 _rightViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     
-   // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
+    [HeadPosition setLView:_leftViewMatrix];
+    [HeadPosition setRView:_rightViewMatrix];
+    
+    float aspect = fabsf(mFrameWidth / 2.0 / mFrameHeight);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
+    
+    [HeadPosition setProjection:projectionMatrix];
+    
+    
+    // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
     //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
     
    [self setupGL];
@@ -232,30 +236,33 @@
 
 - (void)initLoadedGeometry
 {
+    //Object * object0 = objloader.objects[0];
+    
+    //Object * object1 = objloader.objects[1];
+    
+   // [objloader.objects removeObject: object0];
     int i=0;
     for(Object* geometry in objloader.objects){
         mVertexData = [geometry getVertexData];
         mByteSizeOfVertexData = geometry.bytesize_vertexdata;
        // mNumTriangles = [geometry getNumVertices];
-        glGenVertexArraysOES(1, &_vertexArray[i]);
-        glBindVertexArrayOES(_vertexArray[i]);
+        glGenVertexArraysOES(1, geometry.vertexArray);
+        glBindVertexArrayOES(*(geometry.vertexArray));
         
-        glGenBuffers(1, &_vertexBuffer[i]);
-        glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer[i]);
+        glGenBuffers(1, geometry.vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, *geometry.vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, mByteSizeOfVertexData, mVertexData, GL_STATIC_DRAW);
         
         glEnableVertexAttribArray(GLKVertexAttribPosition);
         glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(0));
         glEnableVertexAttribArray(GLKVertexAttribNormal);
-        glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(12));
-        glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+        glVertexAttribPointer(GLKVertexAttribNormal , 3, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(12));
+        glEnableVertexAttribArray(GLKVertexAttribTexCoord0 );
         glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(24));
         
         glBindVertexArrayOES(0);
         i++;
     }
-    _vertexArray[i] = 0;
-    _vertexBuffer[i] = 0;
 }
 
 - (void)initQuadGeometry
@@ -296,10 +303,7 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
-    for(int i = 0; _vertexArray[i] == 0; i++){
-    glDeleteBuffers(1, &_vertexBuffer[i]);
-    glDeleteVertexArraysOES(1, &_vertexArray[i]);
-    }
+
     
     glDeleteBuffers(1, &_quadVertexBuffer);
     glDeleteVertexArraysOES(1, &_quadVertexArray);
@@ -356,49 +360,17 @@
 
 - (void)update
 {
-    float aspect = fabsf(mFrameWidth / 2.0 / mFrameHeight);
-    //GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
 
-    self.effect.transform.projectionMatrix = projectionMatrix;
     
-    
-    
-    // Compute the model view matrix for the object rendered with ES2
-    GLKMatrix4 modelMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
-    // modelMatrix = GLKMatrix4Rotate(modelMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    modelMatrix = GLKMatrix4Scale(modelMatrix, 1.0, 1.0, 1.0);
-    if(init){
-        
-        [objloader.object moveObject:@"empty_room" matrix:modelMatrix];
-        init = false;
-    }
-    
-    
-    
-    GLKMatrix4 leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, modelMatrix);
-    GLKMatrix4 rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, modelMatrix);
-    
-    
-    // mvp matrices for left and right view
-    _modelViewProjectionMatrix[0] = GLKMatrix4Multiply(projectionMatrix, leftMVMat);
-    _modelViewProjectionMatrix[1] = GLKMatrix4Multiply(projectionMatrix, rightMVMat);
-    
-    _modelViewMatrix[0] = leftMVMat;
-    _modelViewMatrix[1] = rightMVMat;
-    
-    _rotation += self.timeSinceLastUpdate * 0.5f;
-    
-    //Compute the model view matrix for the grid
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
     
-    leftMVMat = GLKMatrix4Multiply(_leftViewMatrix, gridModelMat);
-    rightMVMat = GLKMatrix4Multiply(_rightViewMatrix, gridModelMat);
+    GLKMatrix4 leftMVMat = GLKMatrix4Multiply([HeadPosition lView], gridModelMat);
+    GLKMatrix4 rightMVMat = GLKMatrix4Multiply([HeadPosition rView], gridModelMat);
     
     // mvp matrices for left and right view
-    _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply(projectionMatrix, leftMVMat);
-    _gridModelViewProjectionMatrix[1] = GLKMatrix4Multiply(projectionMatrix, rightMVMat);
+    _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply([HeadPosition projection], leftMVMat);
+    _gridModelViewProjectionMatrix[1] = GLKMatrix4Multiply([HeadPosition projection], rightMVMat);
     
     _gridModelViewMatrix[0] = leftMVMat;
     _gridModelViewMatrix[1] = rightMVMat;
@@ -421,41 +393,35 @@
     // render grid
     glBindVertexArrayOES(_gridVertexArray);
     glUseProgram(shaderLoader._program);
-    BOOL invertible = YES;
     
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[0].m);
-    GLKMatrix4 modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[0], &invertible);
-    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // render loaded geometries
-    for(int i = 0; _vertexArray[i] != 0; i++){
-    glBindVertexArrayOES(_vertexArray[i]);
-    // bind a texture
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
-    // Render the object with ES2
-    glUseProgram(shaderLoader._program);
-    
-    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, _modelViewMatrix[0].m);
-    glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[0].m);
-    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[0], &invertible);
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
-    
-    Object *loaded = [objloader.objects objectAtIndex:i];
-    mNumTriangles = [loaded getNumVertices];
-    glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    for(int i = 0; i< objloader.objects.count; i++){
+        Object *loaded = [objloader.objects objectAtIndex:i];
+        
+        glBindVertexArrayOES(*(loaded.vertexArray));
+        // bind a texture
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureID);
+        // Render the object with ES2
+        glUseProgram(shaderLoader._program);
+        
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+        glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        
+        mNumTriangles = [loaded getNumVertices];
+        glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
-    /*****************************
-     *2nd render pass, use FBO[1], render right view
-     *****************************/
     
     glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[1] );
     glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
@@ -463,39 +429,46 @@
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    // render loaded geometries
+    for(int i = 0; i< objloader.objects.count; i++){
+        Object *loaded = [objloader.objects objectAtIndex:i];
+        glBindVertexArrayOES(*(loaded.vertexArray));
+        // bind a texture
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureID);
+        // Render the object with ES2
+        glUseProgram(shaderLoader._program);
+        
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Right].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection:Right].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Right].m);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+        glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        
+        
+        mNumTriangles = [loaded getNumVertices];
+        glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    }
+    
+    
+    /*****************************
+     *2nd render pass, use FBO[1], render right view
+     *****************************/
+    
+    
+    
     // render grid
     glBindVertexArrayOES(_gridVertexArray);
     glUseProgram(shaderLoader._program);
     glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
-    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_gridModelViewMatrix[1], &invertible);
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
     glClear(GL_DEPTH_BUFFER_BIT);
     
-    // render loaded geometries
-    for(int i = 0; _vertexArray[i] != 0; i++){
-    glBindVertexArrayOES(_vertexArray[i]);
-    // bind a texture
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
-    // Render the object with ES2
-    glUseProgram(shaderLoader._program);
-    
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_MATRIX], 1, 0, _modelViewMatrix[1].m);
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix[1].m);
-    modelViewInvTrans = GLKMatrix4InvertAndTranspose(_modelViewMatrix[1], &invertible);
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, modelViewInvTrans.m);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-    glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
-        
-    Object *loaded = [objloader.objects objectAtIndex:i];
-    mNumTriangles = [loaded getNumVertices];
-    glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
-    }
+
     /*****************************
      * 3rd render pass, use default FBO
      *****************************/
@@ -529,28 +502,28 @@
     //NSLog( @"text changed: %@", input);
     
     if([input  isEqual: @"a"]){
-        [headPosition moveLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveLeft];
     }else if([input  isEqual: @"d"]){
-        [headPosition moveRight:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveRight];
     }else if([input  isEqual: @"w"]){
-        [headPosition moveForward:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveForward];
     }else if([input  isEqual: @"s"]){
-        [headPosition moveBackward:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveBackward];
     }else if([input  isEqual: @"e"]){
-        [headPosition moveUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveUp];
     }else if([input  isEqual: @"q"]){
-        [headPosition moveDown:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition moveDown];
     }else if([input  isEqual: @"t"]){
-        [headPosition lookUp:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition lookUp];
     }else if([input  isEqual: @"g"]){
-        [headPosition lookDown:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition lookDown];
     }else if([input  isEqual: @"f"]){
-        [headPosition lookLeft:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
-        [headPosition lookRight:&_leftViewMatrix rightEye:&_rightViewMatrix];
+        [headPosition lookRight];
     }
 
-   NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
+   //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
 

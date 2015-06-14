@@ -10,7 +10,6 @@
 
 @implementation ObjLoader
 
-@synthesize object;
 @synthesize objects;
 
 - (void)initWithPath:(NSString *)path {
@@ -40,19 +39,43 @@
                 NSString *firstSymbol = [singleLineStrs objectAtIndex:0];
                 
                 if([firstSymbol isEqualToString:@"o"] || [firstSymbol isEqualToString:@"g"]){
-                    if(object == NULL)
-                        object = [[Object alloc] init];
-                    else{
-                        [objects addObject:object];
+                    
+                    if(object!=NULL){
                         
-                        if ([object.vIndices count] != [object.tcIndices count] || [object.vIndices count] != [object.nIndices count] || [object.nIndices count] != [object.tcIndices count])
-                            NSLog(@"Error: face indices unequal!");
-                        object.numFaces = (float)[object.vIndices count] / object.numVertexPerFace;
-                        NSLog(@"face counting : %.2f", (float)[object.vIndices count] / object.numVertexPerFace);
-                        NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
-                        NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
-                        NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
+                        [self addObject:object];
                     }
+                    
+                     @try {
+                        NSString *typeAndNameStr = [singleLineStrs objectAtIndex:1];
+                        NSArray* comps = [typeAndNameStr componentsSeparatedByCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"_"]];
+                        
+                        NSString * name;
+                        enum ObjectType type;
+                        if([[comps objectAtIndex:0] isEqualToString:@"Prop"]){
+                            type  = Prop;
+                            name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
+                        }else if ([[comps objectAtIndex:0] isEqualToString:@"DoorFrame"]){
+                            type = DoorFrame;
+                            name = [comps objectAtIndex:1];
+                        }else if ([[comps objectAtIndex:0] isEqualToString:@"Door"]){
+                            type = Door;
+                            name = [comps objectAtIndex:1];
+                        }else if ([[comps objectAtIndex:0] isEqualToString:@"Room"]){
+                            type = Room;
+                            name = [comps objectAtIndex:1];
+                        }else if ([[comps objectAtIndex:0] isEqualToString:@"Light"]){
+                            type  = Light;
+                            name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
+                        }else{
+                            [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];
+                        }
+                     
+                    
+                         object = [[Object alloc] init:name Type:type];
+                     }@catch (NSException * e) {
+                         NSLog(@"Exception while setting name and type of object: %@", e);
+                         [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];
+                     }
                 }
                 else if ([firstSymbol isEqualToString:@"v"]){
                     object.positionDim = (uint)[singleLineStrs count] - 1;
@@ -86,17 +109,23 @@
                     NSLog(@"warning: unhandled symbol : %@", firstSymbol);
                 }
             }
-            [objects addObject:object];
-            if ([object.vIndices count] != [object.tcIndices count] || [object.vIndices count] != [object.nIndices count] || [object.nIndices count] != [object.tcIndices count])
-                NSLog(@"Error: face indices unequal!");
-            object.numFaces = (float)[object.vIndices count] / object.numVertexPerFace;
-            NSLog(@"face counting : %.2f", (float)[object.vIndices count] / object.numVertexPerFace);
-            NSLog(@"vertices counting : %.2f", (float)[object.vertice count] / 3);
-            NSLog(@"object.normal counting : %.2f", (float)[object.normal count] / 3);
-            NSLog(@"texcoord counting : %.2f", (float)[object.texCoord count] / 2);
+            
+            [self addObject:object];
         }
         
     }
+}
+
+-(void) addObject : (Object*) _object{
+    
+    if ([_object.vIndices count] != [_object.tcIndices count] || [_object.vIndices count] != [_object.nIndices count] || [_object.nIndices count] != [_object.tcIndices count])
+        NSLog(@"Error: face indices unequal!");
+    _object.numFaces = (float)[_object.vIndices count] / _object.numVertexPerFace;
+    NSLog(@"face counting : %.2f", (float)[_object.vIndices count] / _object.numVertexPerFace);
+    NSLog(@"vertices counting : %.2f", (float)[_object.vertice count] / 3);
+    NSLog(@"object.normal counting : %.2f", (float)[_object.normal count] / 3);
+    NSLog(@"texcoord counting : %.2f", (float)[_object.texCoord count] / 2);
+    [objects addObject:_object];
 }
 
 - (void)dealloc {
