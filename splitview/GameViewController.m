@@ -83,11 +83,13 @@
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
     
-    headPosition = [[HeadPosition alloc] init];
-    //[headPosition addObject:empty_room];
-    [headPosition addObjects:objloader.objects];
+   
     GLKVector3 initialPos = GLKVector3Make(-4, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(4, 1, 0);
+    
+    headPosition = [[HeadPosition alloc] initWithPos:initialPos];
+    //[headPosition addObject:empty_room];
+    [headPosition addObjects:objloader.objects];
     
     GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     

@@ -12,6 +12,7 @@
 @interface HeadPosition : NSObject
 
 -(id)init;
+- (id)initWithPos:(GLKVector3)pos;
 
 -(void)moveForward ;
 -(void)moveBackward;

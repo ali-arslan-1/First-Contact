@@ -12,6 +12,7 @@
 
 #import "HeadPosition.h"
 #import <GLKit/GLKit.h>
+#import "Door.h"
 
 @implementation HeadPosition{
     NSMutableArray *objects;
@@ -20,7 +21,7 @@
     float displacementFactor;
     float rotationFactor;
 }
-
+GLKVector3 headPos;
 static GLKMatrix4 lView;
 static GLKMatrix4 rView;
 static GLKMatrix4 projection;
@@ -69,6 +70,17 @@ static GLKMatrix4 projection;
     rotationFactor = 0.1f;
     return self;
 }
+- (id)initWithPos:(GLKVector3)pos{
+    self = [super init];
+    headPos.x = pos.x;
+    headPos.y = pos.y;
+    headPos.z = pos.z;
+    objects = [NSMutableArray array];
+    displacementFactor = 0.1f;
+    rotationFactor = 0.1f;
+    return self;
+}
+
 
 - (void) dealloc{
     //TO DO deallocate the array somehow || is the array allocated?
@@ -81,10 +93,10 @@ static GLKMatrix4 projection;
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(rView, disp.x,disp.y,disp.z);
     
  
-   // if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
+    if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-  // }
+   }
     
 }
 
@@ -127,40 +139,48 @@ static GLKMatrix4 projection;
     
 }
 
-- (BOOL) detectCollision: (GLKMatrix4) matrix{
-    
+- (BOOL) detectCollision: (GLKVector3) disp{
+    GLKVector3 oldHeadPos = headPos;
+    headPos.x = headPos.x - disp.x;
+    headPos.z = headPos.z + disp.z;
     for(Object *obj in objects){
         //float* coord = [obj getCoordinates];
-        GLKVector4 BboxMin = GLKVector4Make(obj.maxX, 0.0f, obj.maxZ, 1.0f);
-        GLKVector4 BboxMax = GLKVector4Make(obj.minX, 0.0f, obj.minZ, 1.0f);
-        GLKVector4 BboxMin2 = BboxMin;
-        GLKVector4 BboxMax2 = BboxMax;
+        GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
+        GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
         
-        //Compute the camera coordinates of Bbox
-        BboxMin = GLKMatrix4MultiplyVector4(matrix, BboxMin);
-        BboxMax = GLKMatrix4MultiplyVector4(matrix, BboxMax);
-        
-        GLKMatrix4 rot = GLKMatrix4MakeRotation(GLKMathDegreesToRadians(90.0f),0.0,1.0,0.0);
-        GLKMatrix4 horizontalMatrix = GLKMatrix4Multiply(rot, matrix);
-        
-        BboxMin2 = GLKMatrix4MultiplyVector4(horizontalMatrix, BboxMin2);
-        BboxMax2 = GLKMatrix4MultiplyVector4(horizontalMatrix, BboxMax2);
-        
-        
-        //check at the camera coordinates if the object hits to camera
-        if((BboxMin.z >= -0.2 && BboxMin.z < 0.2) || (BboxMax.z >= -0.2 && BboxMax.z < 0.2))
-            return YES;
-        
-      /*  if((BboxMin.x >= -1.0 && BboxMin.x < 1.0) || (BboxMax.x >= -1.0 && BboxMax.x < 1.0))
-            return YES;*/
-       /* if((BboxMin2.z >= -0.2 && BboxMin2.z < 0.2) || (BboxMax2.z >= -0.2 && BboxMax2.z < 0.2))
-            return YES;
-       */
-        
-        
-        
+        if(obj.type == Room){
+            if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
+                headPos = oldHeadPos;
+                return YES;
+            }
+        }else if(obj.type == Door_){
+            if(![(Door *) obj isClosed] && [self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                /* WE HAVE TO SWITCH TO NEXT ROOM OBJECTS*/
+                return NO;
+            }
+        }else if(obj.type == Light || obj.type == DoorFrame){}
+        else{
+            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                headPos = oldHeadPos;
+                return YES;
+            }
+        }
     }
     return NO;
+}
+
+-(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max{
+    if((headPos.x>= min.x && headPos.x <= max.x) && (headPos.z >= min.z && headPos.z <= max.z)){
+        return YES;
+    } else
+        return NO;
+}
+-(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
+    if((headPos.x <(min.x+0.5)|| headPos.x > (max.x-0.5)) || (headPos.z <(min.z + 0.5)|| headPos.z > (max.z-0.5))){
+        return YES;
+    }
+    else
+        return NO;
 }
 
 

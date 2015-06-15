@@ -16,7 +16,7 @@
 -(id)init:(NSString *)name Alignment :(BOOL)_zAligned{
     
     if(self = [super init:name Type:Door_]){
-        self->openDoorDistLimit = 5.0;
+        self->openDoorDistLimit = 3.0;
         self->closed = true;
         self->partialOpen = false;
         self->zAligned = _zAligned;
@@ -126,6 +126,9 @@
         
     }
     
+}
+-(BOOL) isClosed{
+    return closed;
 }
 
 @end

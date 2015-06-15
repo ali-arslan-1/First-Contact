@@ -29,6 +29,7 @@
 -(float)distanceFromCamera;
 -(void)changeStateIfRequired;
 -(id)init:(NSString *)name Alignment :(BOOL)_zAligned;
+-(BOOL)isClosed;
 
 @end
 
