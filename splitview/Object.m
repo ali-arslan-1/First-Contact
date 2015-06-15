@@ -41,10 +41,10 @@
     self.type  = type;
     self.name  = name;
     
-    self.minX = 0;
-    self.maxX = 0;
-    self.minZ = 0;
-    self.maxZ = 0;
+    self.minX = 0.0f;
+    self.maxX = 0.0f;
+    self.minZ = 0.0f;
+    self.maxZ = 0.0f;
     
     self.texCoord = [[NSMutableArray alloc] init];
     self.normal = [[NSMutableArray alloc] init];

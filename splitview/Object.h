@@ -70,10 +70,10 @@ enum Eye{
 @property( nonatomic ) uint texcoordDim;
 @property( nonatomic ) uint faceindiceDim;
 @property( nonatomic ) uint bytesize_vertexdata;
-@property( nonatomic ) int minX;
-@property( nonatomic ) int maxX;
-@property( nonatomic ) int minZ;
-@property( nonatomic ) int maxZ;
+@property( nonatomic ) float minX;
+@property( nonatomic ) float maxX;
+@property( nonatomic ) float minZ;
+@property( nonatomic ) float maxZ;
 @property( nonatomic ) NSString* name ;
 @property( nonatomic ) NSString* parent ;
 @property (nonatomic) enum ObjectType type;
