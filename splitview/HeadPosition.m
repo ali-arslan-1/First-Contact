@@ -158,7 +158,7 @@ static GLKMatrix4 projection;
                 /* WE HAVE TO SWITCH TO NEXT ROOM OBJECTS*/
                 return NO;
             }
-        }else if(obj.type == Light || obj.type == DoorFrame){}
+        }else if(obj.type == Light_ || obj.type == DoorFrame){}
         else{
             if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
                 headPos = oldHeadPos;

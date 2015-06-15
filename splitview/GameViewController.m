@@ -75,7 +75,10 @@
 
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
-    
+    headPosition = [[HeadPosition alloc] init];
+    //[headPosition addObject:empty_room];
+    [headPosition addObjects:objloader.objects];
+
     GLKVector3 initialPos = GLKVector3Make(-4, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(4, 1, 0);
     
