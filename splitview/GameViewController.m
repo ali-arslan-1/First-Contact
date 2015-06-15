@@ -22,7 +22,7 @@
     float _rotation;
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
     GLKMatrix4 _gridModelViewMatrix[2];
-
+    NSMutableArray * lights;
     
     GLuint _quadVertexArray;
     GLuint _quadVertexBuffer;
@@ -66,25 +66,18 @@
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
     objloader = [[ObjLoader alloc]init];
-    shaderLoader = [[ShaderLoader alloc] init];
+
     
     // load Geometry
     NSLog(@"loading obj file...");
-    //[objloader initWithPath:@"cubes"]; //to test multiple object loader
+
     [objloader initWithPath:@"PodRoom"];
-    //[objloader initWithPath:@"texturedeneme_triangulate"];
-    //[objloader initWithPath:@"ball"];
-    /*
-    mVertexData = [objloader.object getVertexData];
-    mByteSizeOfVertexData = objloader.object.bytesize_vertexdata;
-    mNumTriangles = [objloader.object getNumVertices];
-    Object* empty_room = objloader.object;
-    */
+
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
     
     headPosition = [[HeadPosition alloc] init];
-    //[headPosition addObject:empty_room];
+
     [headPosition addObjects:objloader.objects];
     GLKVector3 initialPos = GLKVector3Make(-4, 1.0, 0.0);
     GLKVector3 initialViewDir = GLKVector3Make(4, 1, 0);
@@ -96,7 +89,7 @@
     [HeadPosition setLView:_leftViewMatrix];
     [HeadPosition setRView:_rightViewMatrix];
     
-    float aspect = fabsf(mFrameWidth / 2.0 / mFrameHeight);
+    float aspect = fabs(mFrameWidth / 2.0 / mFrameHeight);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
     
     [HeadPosition setProjection:projectionMatrix];
@@ -211,6 +204,8 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
+    shaderLoader = [[ShaderLoader alloc] init:objloader.objects];
+    
     [shaderLoader loadShaders];
     [shaderLoader loadMyShaders];
     
@@ -241,6 +236,7 @@
     //Object * object1 = objloader.objects[1];
     
    // [objloader.objects removeObject: object0];
+    lights = [NSMutableArray array];
     int i=0;
     for(Object* geometry in objloader.objects){
         mVertexData = [geometry getVertexData];
@@ -261,6 +257,11 @@
         glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(24));
         
         glBindVertexArrayOES(0);
+        
+        if([geometry isKindOfClass:[Light class]]){
+            [lights addObject:geometry];
+        }
+        
         i++;
     }
 }
@@ -421,7 +422,13 @@
         glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
         glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
         glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-        glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        //1.071f, 3.264f, -1.882f
+        for (Light* light in lights) {
+            glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+            
+        }
+        
+        
         
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
@@ -449,8 +456,12 @@
         glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Right].m);
         glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
         glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-        glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        //glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
         
+        for (Light* light in lights) {
+            glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+            
+        }
         
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);

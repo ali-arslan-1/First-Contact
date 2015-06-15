@@ -62,6 +62,7 @@
     self.vertexBuffer = &_vertexBuffer;
     self.initialModelMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
     self.modelMatrix = initialModelMatrix;
+    
     return self;
 }
 
@@ -91,6 +92,32 @@
 - (uint)getNumVertices
 {
     return numFaces * numVertexPerFace;
+}
+
+-(void)calculateCenter{
+
+    float avgX = 0;
+    float avgY = 0;
+    float avgZ = 0;
+    
+    
+    for (int i=0; i<self.vertice.count; i++) {
+        if(i%3 == 0){
+            avgX+=[[self.vertice objectAtIndex:i] floatValue];
+        }else if(i%3==1){
+            avgY+=[[self.vertice objectAtIndex:i] floatValue];
+        }else{
+            avgZ+=[[self.vertice objectAtIndex:i] floatValue];
+        }
+    }
+    
+    
+    
+    avgX = avgX/(self.vertice.count/3);
+    avgY = avgY/(self.vertice.count/3);
+    avgZ = avgZ/(self.vertice.count/3);
+    
+    self->center = GLKVector4Make(avgX, avgY, avgZ,1.0);
 }
 
 //transform object only translate wise. No rotation no scaling!

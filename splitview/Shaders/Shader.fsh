@@ -16,7 +16,7 @@ uniform int       isGrid;
 
 varying mediump vec2 vTexCoord;
 
-uniform vec3 uLightPosition ;
+uniform vec3 PodRoom_01 ;
 vec3 uLightColor = vec3(1.0, 1.0, 1.0);
 
 mat3 uAmbientMaterial = mat3(
@@ -42,7 +42,7 @@ vec3 diffuse() {
     
     lowp vec4 texCol = texture2D(uSampler, vTexCoord);
     
-    vec3 pl = normalize(uLightPosition - vec3(vPosition));
+    vec3 pl = normalize(PodRoom_01 - vec3(vPosition));
     float cosAngle = max(dot(pl, normalize(vNormal)), 0.0);
     
     return vec3((uLightColor * vec3(texCol)) * cosAngle);
@@ -50,7 +50,7 @@ vec3 diffuse() {
 
 vec3 specular() {
     
-    vec3 bisector = normalize(normalize(-vec3(vPosition)) + normalize((uLightPosition - vec3(vPosition))));
+    vec3 bisector = normalize(normalize(-vec3(vPosition)) + normalize((PodRoom_01 - vec3(vPosition))));
     
     float cosAngle = max(dot(bisector, normalize(vNormal)), 0.0);
     

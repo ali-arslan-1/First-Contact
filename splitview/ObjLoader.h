@@ -10,6 +10,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import "Object.h"
 #import "Door.h"
+#import "Light.h"
 
 @interface ObjLoader : NSObject{
 

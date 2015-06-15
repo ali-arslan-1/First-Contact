@@ -28,6 +28,11 @@ static GLint uniforms[NUM_UNIFORMS];
     
 }
 
+-(id)init:(NSMutableArray *)_objects{
+    self->objects = _objects;
+    return self;
+}
+
 -(void)dealloc{
 
     if (_program) {
@@ -103,7 +108,15 @@ static GLint uniforms[NUM_UNIFORMS];
     uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
-    uniforms[UNIFORM_LIGHT_POS] = glGetUniformLocation(_program, "uLightPosition");
+    //uniforms[UNIFORM_LIGHT_POS] = glGetUniformLocation(_program, "uLightPosition");
+    
+    for (Object *object in objects) {
+        if([object isKindOfClass:[Light class]]){
+            Light* light = (Light*)object;
+            light.uniformLocation = glGetUniformLocation(_program,[light.name UTF8String]);
+            NSLog(@"light name %s",[light.name UTF8String]);
+        }
+    }
     
     
     // Release vertex and fragment shaders.

@@ -23,7 +23,7 @@ enum ObjectType{
     Prop,
     DoorFrame,
     Door_,
-    Light
+    Light_
 };
 
 enum Eye{
@@ -36,6 +36,7 @@ enum Eye{
     GLuint _vertexBuffer;
     float *coordinates;
 
+    GLKVector4 center;
 }
 -(id) init : (NSString*) name Type :(enum ObjectType) type;
 -(void) dealloc;
@@ -50,6 +51,8 @@ enum Eye{
 -(GLKMatrix4) getModelView:(enum Eye)eye;
 -(GLKMatrix4) getModelViewProjection:(enum Eye)eye;
 -(GLKMatrix4) getModelViewInverseTranspose:(enum Eye)eye;
+-(void) calculateCenter;
+
 
 @property( nonatomic, retain ) NSMutableArray *vertice;
 @property( nonatomic, retain ) NSMutableArray *texCoord;

@@ -13,16 +13,21 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 #include "UniformContainer.h"
+#include "Object.h"
+#include "Light.h"
 
 
-
-@interface ShaderLoader : NSObject
+@interface ShaderLoader : NSObject{
+    NSMutableArray * objects;
+}
 
 
 @property( nonatomic ) GLuint _program;
 @property( nonatomic ) GLuint _ppProgram;
 
 #pragma mark -  OpenGL ES 2 shader compilation
+-(id)init:(NSMutableArray*)_objects;
+
 - (BOOL)loadShaders;
 - (BOOL)loadMyShaders;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;

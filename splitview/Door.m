@@ -11,7 +11,11 @@
 #import "Door.h"
 #import "HeadPosition.h"
 
-@implementation Door
+@implementation Door{
+    GLKVector4 worldViewCenter;
+    float dotViewDir;
+    float dotUpDir;
+}
 
 -(id)init:(NSString *)name Alignment :(BOOL)_zAligned{
     
@@ -27,28 +31,8 @@
 
 -(void)calculateAttributes{
     
-    float avgX = 0;
-    float avgY = 0;
-    float avgZ = 0;
-    
-    
-    for (int i=0; i<self.vertice.count; i++) {
-        if(i%3 == 0){
-            avgX+=[[self.vertice objectAtIndex:i] floatValue];
-        }else if(i%2==0){
-            avgZ+=[[self.vertice objectAtIndex:i] floatValue];
-        }else{
-            avgY+=[[self.vertice objectAtIndex:i] floatValue];
-        }
-    }
-    
-    
+    [self calculateCenter];
 
-    avgX = avgX/(self.vertice.count/3);
-    avgY = avgY/(self.vertice.count/3);
-    avgZ = avgZ/(self.vertice.count/3);
-
-    self->center = GLKVector4Make(avgX, avgY, avgZ,1.0);
     
     if (zAligned) {
         width = abs(self.maxZ) - abs(self.minZ);
@@ -63,13 +47,17 @@
 
 -(float)distanceFromCamera{
     GLKMatrix4 modelView = [self getModelView:Left];
-    GLKVector4 worldViewCenter = GLKMatrix4MultiplyVector4(modelView, self->center);
+    worldViewCenter = GLKMatrix4MultiplyVector4(modelView, self->center);
+    GLKVector4 cameraForward =GLKMatrix4MultiplyVector4([HeadPosition lView], GLKVector4Make(0, 0, 1, 0));
+    GLKVector4 cameraUp =GLKMatrix4MultiplyVector4([HeadPosition lView], GLKVector4Make(0, 1, 0, 0));
+    dotViewDir = GLKVector4DotProduct(cameraForward, self->center);
+    dotUpDir = GLKVector4DotProduct(cameraUp, self->center);
     self->distanceFromCamera = fabsf(worldViewCenter.z);
     return self->distanceFromCamera;
 }
 
 -(void)changeStateIfRequired{
-    if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit) { //open
+    if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit  && dotViewDir>4 && dotUpDir>0.80) { //open
         GLKMatrix4 translationMatrix;
         if(self->zAligned){
             translationMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, self->speed);

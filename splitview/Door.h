@@ -17,7 +17,6 @@
     BOOL closed;
     BOOL partialOpen;
     float distanceFromCamera;
-    GLKVector4 center;
     float openDoorDistLimit;
     float speed;
     float width;

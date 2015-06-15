@@ -55,7 +55,7 @@
                         enum ObjectType type;
                         if([[comps objectAtIndex:0] isEqualToString:@"Prop"]){
                             type  = Prop;
-                            name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
+                            name = [NSString stringWithFormat:@"%@%@%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
                             object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"DoorFrame"]){
                             type = DoorFrame;
@@ -69,9 +69,8 @@
                             name = [comps objectAtIndex:1];
                             object = [[Object alloc] init:name Type:type];
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Light"]){
-                            type  = Light;
-                            name = [NSString stringWithFormat:@"%@/%@/%@", [comps objectAtIndex:2], @"_", [comps objectAtIndex:1]];
-                            object = [[Object alloc] init:name Type:type];
+                            name = [NSString stringWithFormat:@"%@%@%@", [comps objectAtIndex:1], @"_", [comps objectAtIndex:2]];
+                            object = [[Light alloc] init:name];
                         }else{
                             [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];
                         }
