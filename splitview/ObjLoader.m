@@ -8,7 +8,14 @@
 
 #import "ObjLoader.h"
 
-@implementation ObjLoader
+@implementation ObjLoader{
+    NSMutableArray *PodRoom;
+    NSMutableArray *AirLock;
+    NSMutableArray *Hallway;
+    
+    //temprorary solution to be quick for the presentation. This will be erased when Object loading implemented for rendering only the current room that we are in.
+    NSMutableArray *categorizedObjects;
+}
 
 @synthesize objects;
 
@@ -17,7 +24,17 @@
     NSLog(@"path name : %@", path);
     
     // init Arrays for saving Data
-    objects = [NSMutableArray array];
+    categorizedObjects = [NSMutableArray array];
+    
+    PodRoom = [NSMutableArray array];
+    AirLock = [NSMutableArray array];
+    Hallway = [NSMutableArray array];
+    
+    [categorizedObjects addObject:Hallway];
+    [categorizedObjects addObject:PodRoom];
+    [categorizedObjects addObject:AirLock];
+ 
+    
     object = NULL;
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:path ofType:@"obj"];
@@ -119,6 +136,10 @@
         }
         
     }
+    objects = [NSMutableArray arrayWithArray:Hallway];
+    [objects addObjectsFromArray: PodRoom];
+    [objects addObjectsFromArray:AirLock];
+
 }
 
 -(void) addObject : (Object*) _object{
@@ -130,7 +151,10 @@
     NSLog(@"vertices counting : %.2f", (float)[_object.vertice count] / 3);
     NSLog(@"object.normal counting : %.2f", (float)[_object.normal count] / 3);
     NSLog(@"texcoord counting : %.2f", (float)[_object.texCoord count] / 2);
-    [objects addObject:_object];
+    
+    if([_object.name isEqualToString:@"PodRoom"]){[PodRoom addObject:_object];}
+    else if([_object.name isEqualToString:@"AirLock"]){[AirLock addObject:_object];}
+    else if([_object.name isEqualToString:@"Hallway"]){[Hallway addObject:_object];}
 }
 
 - (void)dealloc {
@@ -236,6 +260,10 @@
         
     }
 }
+- (NSMutableArray*) getCategorizedObjects{
+    return categorizedObjects;
+}
+
 
 
 

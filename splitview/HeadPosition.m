@@ -16,11 +16,19 @@
 
 @implementation HeadPosition{
     NSMutableArray *objects;
+    NSMutableArray *currentRoomObjects;
     GLKMatrix4 matrices[2];
     GLKMatrix4 oldMatrices[2];
     float displacementFactor;
     float rotationFactor;
 }
+
+enum RoomType{
+    Hallway,
+    PodRoom,
+    AirLock
+};
+
 GLKVector3 headPos;
 static GLKMatrix4 lView;
 static GLKMatrix4 rView;
@@ -96,54 +104,25 @@ static GLKMatrix4 projection;
     if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-   }
+  }
     
 }
 
 
 - (void) rotate:(GLKVector3) axis factor : (float)factor{
     
-    /*GLKVector3 lTranslationVec = GLKVector3Make(LviewMatrix->m30, LviewMatrix->m31, LviewMatrix->m32);
-    GLKVector3 rTranslationVec = GLKVector3Make(RviewMatrix->m30, RviewMatrix->m31, RviewMatrix->m32);
-
-    lView = GLKMatrix4TranslateWithVector3(lView , lTranslationVec);
-    rView = GLKMatrix4TranslateWithVector3(rView , rTranslationVec);
-    */
-
-
-    
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, lView);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, rView);
-
-    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Rotate(lView, factor, axis.x, axis.y, axis.z);
-    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Rotate(rView, factor, axis.x, axis.y, axis.z);
-    
-
-    
-    
-    /*
-    _newLeftViewMatrix = GLKMatrix4Translate(_newLeftViewMatrix , -lTranslationVec.x, -lTranslationVec.y, -lTranslationVec.z);
-    _newRightviewMatix = GLKMatrix4Translate(_newRightviewMatix , -rTranslationVec.x, -rTranslationVec.y, -rTranslationVec.z);
-
-    */
-    //GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(lView,GLKMatrix4MakeYRotation(rotationFactor));
-    
-    //GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rView,GLKMatrix4MakeYRotation(rotationFactor));
-    
-//  if (![self detectCollision: _newLeftViewMatrix] && ![self detectCollision:_newRightviewMatix] ){
-    lView = _newLeftViewMatrix;
+   lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
-  // }
-
-    
 }
 
 - (BOOL) detectCollision: (GLKVector3) disp{
     GLKVector3 oldHeadPos = headPos;
     headPos.x = headPos.x - disp.x;
     headPos.z = headPos.z + disp.z;
-    for(Object *obj in objects){
+    for(Object *obj in currentRoomObjects){
         //float* coord = [obj getCoordinates];
         GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
         GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
@@ -176,7 +155,7 @@ static GLKMatrix4 projection;
         return NO;
 }
 -(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
-    if((headPos.x <(min.x+0.5)|| headPos.x > (max.x-0.5)) || (headPos.z <(min.z + 0.5)|| headPos.z > (max.z-0.5))){
+    if((headPos.x <(min.x+0.5)|| headPos.x > (max.x-0.5)) || (headPos.z <(min.z+0.5)|| headPos.z > (max.z-0.5))){
         return YES;
     }
     else
@@ -293,6 +272,7 @@ static GLKMatrix4 projection;
     for(Object *obj in newObjects){
         [objects addObject:obj];
     }
+    currentRoomObjects = [objects objectAtIndex:PodRoom];
 }
 
 

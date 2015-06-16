@@ -20,4 +20,6 @@
 @property( nonatomic, retain)  NSMutableArray *objects;
 - (void)initWithPath:(NSString *)path;
 
+//temp solution
+- (NSMutableArray*) getCategorizedObjects;
 @end
