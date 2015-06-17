@@ -192,6 +192,8 @@ static GLKMatrix4 projection;
                     headPos =oldHeadPos;
                     return  YES;
                 }
+            } else if(obj.type == Light_){
+                //Do nothing
             }
             else{
                 //other props here
