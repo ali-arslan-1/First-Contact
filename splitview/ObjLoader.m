@@ -155,6 +155,8 @@
     if([_object.name isEqualToString:@"PodRoom"]){[PodRoom addObject:_object];}
     else if([_object.name isEqualToString:@"AirLock"]){[AirLock addObject:_object];}
     else if([_object.name isEqualToString:@"Hallway"]){[Hallway addObject:_object];}
+    
+    if(_object.type == DoorFrame){[Hallway addObject:_object];}
 }
 
 - (void)dealloc {

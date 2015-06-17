@@ -21,6 +21,10 @@
     GLKMatrix4 oldMatrices[2];
     float displacementFactor;
     float rotationFactor;
+    //when room number is changed, change this also
+    BOOL inDoorFrame;
+    Object* currentDoor;
+    Object* rooms[3];
 }
 
 enum RoomType{
@@ -82,10 +86,11 @@ static GLKMatrix4 projection;
     self = [super init];
     headPos.x = pos.x;
     headPos.y = pos.y;
-    headPos.z = pos.z;
+    headPos.z = -pos.z; //Z coordinates are flipped at the obj file.
     objects = [NSMutableArray array];
     displacementFactor = 0.1f;
     rotationFactor = 0.1f;
+    inDoorFrame = NO;
     return self;
 }
 
@@ -121,30 +126,138 @@ static GLKMatrix4 projection;
 - (BOOL) detectCollision: (GLKVector3) disp{
     GLKVector3 oldHeadPos = headPos;
     headPos.x = headPos.x - disp.x;
-    headPos.z = headPos.z + disp.z;
-    for(Object *obj in currentRoomObjects){
-        //float* coord = [obj getCoordinates];
-        GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
-        GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
-        
-        if(obj.type == Room){
-            if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
-                headPos = oldHeadPos;
-                return YES;
-            }
-        }else if(obj.type == Door_){
-            if(![(Door *) obj isClosed] && [self isHeadInside:BboxMin BBoxMax:BboxMax]){
-                /* WE HAVE TO SWITCH TO NEXT ROOM OBJECTS*/
+    headPos.z = headPos.z - disp.z;
+    BOOL inRoom = YES;
+    int type = 0;
+    if(inDoorFrame){
+        GLKVector3 BboxMax = GLKVector3Make(currentDoor.maxX, 0.0f, currentDoor.maxZ);
+        GLKVector3 BboxMin = GLKVector3Make(currentDoor.minX, 0.0f, currentDoor.minZ);
+        if([self isHeadInside:BboxMin BBoxMax:BboxMax])
+            return NO;
+        else{
+            Object* room = rooms[Hallway];
+            GLKVector3 BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
+            GLKVector3 BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
+            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                inDoorFrame = NO;
+                currentRoomObjects = [objects objectAtIndex:Hallway];
                 return NO;
             }
-        }else if(obj.type == Light_ || obj.type == DoorFrame){}
-        else{
+            
+            if([currentDoor.name isEqualToString:@"PodRoom"]){
+                type = PodRoom;
+                room = rooms[PodRoom];
+            }
+            else if([currentDoor.name isEqualToString:@"AirLock"]){
+                type = AirLock;
+                room = rooms[AirLock];
+            }
+             BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
+             BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
             if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
-                headPos = oldHeadPos;
-                return YES;
+                inDoorFrame = NO;
+                currentRoomObjects = [objects objectAtIndex:type];
+                return NO;
+            }
+            headPos = oldHeadPos;
+            return YES;
+        }
+    }
+    else{
+        for(Object *obj in currentRoomObjects){
+            GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
+            GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
+            if(obj.type == Room){
+                if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
+                    inRoom = NO;
+                }
+            }
+            else if(obj.type == DoorFrame){
+                int deltaX = abs( BboxMax.x - BboxMin.x);
+                int deltaZ = abs (BboxMax.z - BboxMin.z);
+                if(deltaX>deltaZ){
+                    BboxMin.z = BboxMin.z - 0.6;
+                    BboxMax.z = BboxMax.z + 0.6;
+                }
+                else{
+                    BboxMin.x = BboxMin.x - 0.6;
+                    BboxMax.x = BboxMax.x + 0.6;
+                }
+                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                    inDoorFrame = YES;
+                    currentDoor = obj;
+                }
+            }else if(obj.type == Door_){
+                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                    headPos =oldHeadPos;
+                    return  YES;
+                }
+            }
+            else{
+                //other props here
+                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                    headPos = oldHeadPos;
+                    return YES;
+                }
+            }
+        }
+        
+        if(!inRoom && !inDoorFrame){
+            headPos = oldHeadPos;
+            return YES;
+        }
+    }
+ /*   for(int i = 0; i < 3; i++){
+        if(activeRooms[i]){
+            countOfActives ++;
+            for(Object *obj in [objects objectAtIndex:i]){
+                GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
+                GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
+                
+                if(obj.type == Room){
+                    if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
+                        headPos = oldHeadPos;
+                        if(inDoorFrame){
+                            inRoom = NO;
+                        } else {
+                            [self deactivateRooms];
+                            if([obj.name isEqualToString:@"PodRoom"])
+                                activeRooms[PodRoom] = YES;
+                            else if([obj.name isEqualToString:@"AirLock"])
+                                activeRooms[AirLock] = YES;
+                            else if([obj.name isEqualToString:@"Hallway"])
+                                activeRooms[Hallway] = YES;
+                            return NO;
+                        }
+                    }
+                }else if(obj.type == Door_){
+                    if(![(Door *) obj isClosed] && [self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                        return NO;
+                   }
+                }else if(obj.type == Light_){}
+                else if (obj.type == DoorFrame){
+                    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                        activeRooms[Hallway] =YES;
+                        if([obj.name isEqualToString:@"PodRoom"])
+                            activeRooms[PodRoom] =YES;
+                        else if ([obj.name isEqualToString:@"AirLock"])
+                            activeRooms[AirLock] = YES;
+                        inDoorFrame = YES;
+                        return  NO;
+                    }
+                }
+                else{
+                    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                        headPos = oldHeadPos;
+                        return YES;
+                    }
+                }
             }
         }
     }
+    if(!inRoom){
+        return YES;
+    }*/
     return NO;
 }
 
@@ -161,8 +274,6 @@ static GLKMatrix4 projection;
     else
         return NO;
 }
-
-
 
 - (void) moveForward{
     
@@ -270,6 +381,16 @@ static GLKMatrix4 projection;
 
 - (void) addObjects :(NSMutableArray*) newObjects{
     for(Object *obj in newObjects){
+        for(Object *element in obj){
+            if(element.type == Room){
+                if([element.name isEqualToString:@"PodRoom"])
+                        rooms[PodRoom] = element;
+                else if([element.name isEqualToString:@"AirLock"])
+                    rooms[AirLock] = element;
+                else if ([element.name isEqualToString:@"Hallway"])
+                    rooms[Hallway] = element;
+            }
+        }
         [objects addObject:obj];
     }
     currentRoomObjects = [objects objectAtIndex:PodRoom];
