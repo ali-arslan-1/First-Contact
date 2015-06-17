@@ -441,6 +441,20 @@
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    // render grid
+    glBindVertexArrayOES(_gridVertexArray);
+    glUseProgram(shaderLoader._program);
+    
+    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
+    glDrawArrays(GL_LINES, 0, 44);
+    
+    /*****************************
+     *2nd render pass, use FBO[1], render right view
+     *****************************/
+    
+    
+    glClear(GL_DEPTH_BUFFER_BIT);
     // render loaded geometries
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
@@ -469,21 +483,7 @@
     }
     
     
-    /*****************************
-     *2nd render pass, use FBO[1], render right view
-     *****************************/
-    
-    
-    
-    // render grid
-    glBindVertexArrayOES(_gridVertexArray);
-    glUseProgram(shaderLoader._program);
-    glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _gridModelViewProjectionMatrix[1].m);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
-    glDrawArrays(GL_LINES, 0, 44);
-    
-    glClear(GL_DEPTH_BUFFER_BIT);
-    
+
 
     /*****************************
      * 3rd render pass, use default FBO

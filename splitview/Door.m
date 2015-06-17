@@ -35,9 +35,9 @@
 
     
     if (zAligned) {
-        width = abs(self.maxZ) - abs(self.minZ);
+        width = fabsf(self.maxZ) - fabsf(self.minZ);
     }else{
-        width = abs(self.maxX) - abs(self.minX);
+        width = fabsf(self.maxX) - fabsf(self.minX);
     }
     
     initialWorldCenter = GLKMatrix4MultiplyVector4([self initialModelMatrix], self->center);
@@ -57,7 +57,7 @@
 }
 
 -(void)changeStateIfRequired{
-    if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit  && dotViewDir>4 && dotUpDir>0.80) { //open
+    if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit  && fabsf(dotViewDir)>4 && dotUpDir>0.80) { //open
         GLKMatrix4 translationMatrix;
         if(self->zAligned){
             translationMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, self->speed);
@@ -72,12 +72,12 @@
         GLKVector4 worldCenter =  GLKMatrix4MultiplyVector4(self.modelMatrix, self->center);
         
         if (zAligned) {
-            if((fabsf(worldCenter.z) - fabsf(initialWorldCenter.z))> width*1.9){
+            if((fabsf(worldCenter.z) - fabsf(initialWorldCenter.z))> width*10){
                 closed = false;
                 partialOpen = false;
             }
         }else{
-            if((fabsf(worldCenter.x) - fabsf(initialWorldCenter.x))> width*1.9){
+            if((fabsf(worldCenter.x) - fabsf(initialWorldCenter.x))> width*10){
                 closed = false;
                 partialOpen = false;
             }
