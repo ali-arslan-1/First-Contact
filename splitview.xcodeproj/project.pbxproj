@@ -19,6 +19,9 @@
 		0A15DC7D1AB734D50058C15E /* post.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 0A15DC7B1AB734D50058C15E /* post.vsh */; };
 		0A15DC841AB735730058C15E /* ObjLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A15DC831AB735730058C15E /* ObjLoader.m */; };
 		0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */; };
+		6EF3E4B81B3B0B2C0072936A /* AudioSamplePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3E4B71B3B0B2C0072936A /* AudioSamplePlayer.m */; };
+		6EF3E4BF1B3B0F1F0072936A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF3E4BE1B3B0F1F0072936A /* OpenAL.framework */; };
+		6EF3E4C21B3B0FF90072936A /* AixEllis.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6EF3E4C11B3B0FF90072936A /* AixEllis.caf */; };
 		BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */ = {isa = PBXBuildFile; fileRef = BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */; };
 		BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */ = {isa = PBXBuildFile; fileRef = BB771D061B18EEBD00988B7C /* PodRoom.obj */; };
 		BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD21C931B2CBD0E006056FA /* Renderer.m */; };
@@ -49,6 +52,10 @@
 		0A15DC821AB735730058C15E /* ObjLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjLoader.h; sourceTree = "<group>"; };
 		0A15DC831AB735730058C15E /* ObjLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjLoader.m; sourceTree = "<group>"; };
 		0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = DistortTwoTexture.fsh; path = Shaders/DistortTwoTexture.fsh; sourceTree = "<group>"; };
+		6EF3E4B71B3B0B2C0072936A /* AudioSamplePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSamplePlayer.m; sourceTree = "<group>"; };
+		6EF3E4B91B3B0B390072936A /* AudioSamplePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSamplePlayer.h; sourceTree = "<group>"; };
+		6EF3E4BE1B3B0F1F0072936A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		6EF3E4C11B3B0FF90072936A /* AixEllis.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AixEllis.caf; path = Sound/AixEllis.caf; sourceTree = "<group>"; };
 		BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Atlas_01.png; path = Geometry/T_E_Atlas_01.png; sourceTree = "<group>"; };
 		BB771D061B18EEBD00988B7C /* PodRoom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PodRoom.obj; path = Geometry/PodRoom.obj; sourceTree = "<group>"; };
 		BBD21C911B2C9458006056FA /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -74,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EF3E4BF1B3B0F1F0072936A /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +91,7 @@
 		0A15DC411AB734510058C15E = {
 			isa = PBXGroup;
 			children = (
+				6EF3E4BE1B3B0F1F0072936A /* OpenAL.framework */,
 				0A15DC4C1AB734510058C15E /* splitview */,
 				0A15DC4B1AB734510058C15E /* Products */,
 			);
@@ -99,12 +108,15 @@
 		0A15DC4C1AB734510058C15E /* splitview */ = {
 			isa = PBXGroup;
 			children = (
+				6EF3E4C01B3B0FEE0072936A /* Sound */,
 				BBF0ECA01B2DD64900D44D89 /* Models */,
 				0A15DC791AB734A60058C15E /* Shader */,
 				0A15DC781AB734910058C15E /* Texture */,
 				0A15DC771AB734870058C15E /* Geometry */,
 				0A15DC511AB734510058C15E /* AppDelegate.h */,
 				0A15DC521AB734510058C15E /* AppDelegate.m */,
+				6EF3E4B91B3B0B390072936A /* AudioSamplePlayer.h */,
+				6EF3E4B71B3B0B2C0072936A /* AudioSamplePlayer.m */,
 				0A15DC581AB734510058C15E /* GameViewController.h */,
 				0A15DC591AB734510058C15E /* GameViewController.m */,
 				0A15DC821AB735730058C15E /* ObjLoader.h */,
@@ -162,6 +174,14 @@
 				0A15DC561AB734510058C15E /* Shader.vsh */,
 			);
 			name = Shader;
+			sourceTree = "<group>";
+		};
+		6EF3E4C01B3B0FEE0072936A /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				6EF3E4C11B3B0FF90072936A /* AixEllis.caf */,
+			);
+			name = Sound;
 			sourceTree = "<group>";
 		};
 		BBF0ECA01B2DD64900D44D89 /* Models */ = {
@@ -240,6 +260,7 @@
 				0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */,
 				0A15DC5D1AB734510058C15E /* Main.storyboard in Resources */,
 				BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */,
+				6EF3E4C21B3B0FF90072936A /* AixEllis.caf in Resources */,
 				0A15DC5F1AB734510058C15E /* Images.xcassets in Resources */,
 				0A15DC571AB734510058C15E /* Shader.vsh in Resources */,
 				0A15DC551AB734510058C15E /* Shader.fsh in Resources */,
@@ -260,6 +281,7 @@
 				0A15DC531AB734510058C15E /* AppDelegate.m in Sources */,
 				0A15DC5A1AB734510058C15E /* GameViewController.m in Sources */,
 				BBF0EC9F1B2D916B00D44D89 /* UniformContainer.m in Sources */,
+				6EF3E4B81B3B0B2C0072936A /* AudioSamplePlayer.m in Sources */,
 				BBF0ECA91B2EFDBC00D44D89 /* Light.m in Sources */,
 				BBF0ECA31B2DD91100D44D89 /* Door.m in Sources */,
 				BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */,
