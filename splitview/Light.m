@@ -19,7 +19,7 @@
     if(self = [super init:name Type:Light_]){
         
         self->color = GLKVector3Make(1.0, 1.0, 1.0);
-        self->_position = GLKVector4Make(1.071f, 1.264f, -1.882f,1.0f); //TODO
+        //self->_position = GLKVector4Make(1.071f, 1.264f, -1.882f,1.0f); //TODO
     }
     return self;
 }

@@ -17,7 +17,7 @@ uniform int       isGrid;
 varying mediump vec2 vTexCoord;
 
 uniform vec3 PodRoom_01 ;
-vec3 uLightColor = vec3(1.0, 1.0, 1.0);
+vec3 uLightColor = vec3(1.0, 1.0, 1.2);
 
 mat3 uAmbientMaterial = mat3(
                              4.0, 0.0, 0.0,
@@ -42,6 +42,8 @@ vec3 diffuse() {
     
     lowp vec4 texCol = texture2D(uSampler, vTexCoord);
     
+    
+    
     vec3 pl = normalize(PodRoom_01 - vec3(vPosition));
     float cosAngle = max(dot(pl, normalize(vNormal)), 0.0);
     
@@ -59,8 +61,27 @@ vec3 specular() {
 
 void main()
 {
+    lowp vec4 texCol = texture2D(uSampler, vTexCoord);
+    
     if (isGrid == 1)
         gl_FragData[0] = vec4(0.0, 1.0, 0.0, 1.0);
+    else if(texCol.a < 0.99){
+        
+        int i, j;
+        int sampleSize = 2;
+        float total = float(((sampleSize*2)+1) * (sampleSize*2)+1);
+        vec4 sum = vec4(0);
+        for (i=-sampleSize; i<=sampleSize; i++) {
+            for (j=-sampleSize; j<=sampleSize; j++) {
+                vec2 offset = vec2(i,j) * 0.005;
+                sum = sum + texture2D(uSampler, vTexCoord + offset);
+            }
+        }
+        vec4 avg = vec4(sum.x/total, sum.y/total, sum.z/total,0.0);
+        
+        gl_FragData[0] = texCol + avg; //vec4(1.0, 1.0, 1.0,1.0);
+        
+    }
     else
         gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);;
 }
