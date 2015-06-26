@@ -11,6 +11,7 @@
 #import <OpenGLES/ES3/glext.h>
 #import "UniformContainer.h"
 #import "Door.h"
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
@@ -30,7 +31,7 @@
     GLuint _gridVertexArray;
     GLuint _gridVertexBuffer;
     
-    
+
     
     BOOL init;
     
@@ -107,6 +108,10 @@
  
     //[inputTextField setHidden:YES];
     [inputTextField becomeFirstResponder];
+    
+    audioPlayer = [[AudioSamplePlayer alloc] init];
+    [audioPlayer preloadAudioSample:@"AixEllis"];
+    [audioPlayer playAudioSample:@"AixEllis"];
 }
 
 
