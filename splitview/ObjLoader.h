@@ -11,6 +11,7 @@
 #import "Object.h"
 #import "Door.h"
 #import "Light.h"
+#import "TriggerObject.h"
 
 @interface ObjLoader : NSObject{
 
@@ -22,4 +23,5 @@
 
 //temp solution
 - (NSMutableArray*) getCategorizedObjects;
+-(TriggerObject *) getTriggerForLevel:(int)number;
 @end

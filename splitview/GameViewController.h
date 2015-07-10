@@ -12,7 +12,6 @@
 #import "ShaderLoader.h"
 #import "HeadPosition.h"
 #import "Object.h"
-#import "AudioSamplePlayer.h"
 // Uniform index.
 
 GLfloat gGridVertexData[] =
@@ -78,7 +77,6 @@ GLfloat gQuadVertexData[] =
 @interface GameViewController : GLKViewController <UIAccelerometerDelegate>
 {
     ObjLoader   *objloader;
-    AudioSamplePlayer *audioPlayer;
     ShaderLoader *shaderLoader;
     GLfloat     *mVertexData;
     uint         mByteSizeOfVertexData;

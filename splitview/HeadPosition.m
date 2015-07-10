@@ -122,6 +122,15 @@ static GLKMatrix4 projection;
    lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
 }
+-(BOOL) isTriggered:(Object *)obj{
+    GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
+    GLKVector3 BboxMin = GLKVector3Make(obj.minX-0.3, 0.0f, obj.minZ-0.3);
+    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+        return YES;
+    }
+    else 
+        return NO;
+}
 
 - (BOOL) detectCollision: (GLKVector3) disp{
     GLKVector3 oldHeadPos = headPos;

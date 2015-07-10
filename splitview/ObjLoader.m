@@ -12,6 +12,7 @@
     NSMutableArray *PodRoom;
     NSMutableArray *AirLock;
     NSMutableArray *Hallway;
+    NSMutableArray *Triggers;
     
     //temprorary solution to be quick for the presentation. This will be erased when Object loading implemented for rendering only the current room that we are in.
     NSMutableArray *categorizedObjects;
@@ -29,6 +30,7 @@
     PodRoom = [NSMutableArray array];
     AirLock = [NSMutableArray array];
     Hallway = [NSMutableArray array];
+    Triggers = [NSMutableArray array];
     
     [categorizedObjects addObject:Hallway];
     [categorizedObjects addObject:PodRoom];
@@ -90,6 +92,12 @@
                             name = [comps objectAtIndex:1];
                             //name = [NSString stringWithFormat:@"%@%@%@", [comps objectAtIndex:1], @"_", [comps objectAtIndex:2]];
                             object = [[Light alloc] init:name];
+                        }else if([[comps objectAtIndex:0] isEqualToString:@"Trigger"]){
+                            name = [comps objectAtIndex:1];
+                            int levelNumber = [[comps objectAtIndex:2] integerValue];
+                            object = [[TriggerObject alloc] init:name levelNumber:levelNumber];
+                            [Triggers addObject:object];
+                            
                         }else{
                             [NSException raise:@"Invalid object Type and Name format or Value" format:@"Object name with header %@ is invalid", strInEachLine];
                         }
@@ -268,7 +276,14 @@
     return categorizedObjects;
 }
 
-
+-(TriggerObject *) getTriggerForLevel:(int)number{
+    for(TriggerObject *trigger in Triggers){
+        if(trigger.getLevelNumber == number)
+            return trigger;
+    }
+    return NULL;
+}
 
 
 @end
+

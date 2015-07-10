@@ -11,6 +11,7 @@
 #import <OpenGLES/ES3/glext.h>
 #import "UniformContainer.h"
 #import "Door.h"
+#import "Level.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -31,8 +32,8 @@
     GLuint _gridVertexArray;
     GLuint _gridVertexBuffer;
     
-
-    
+    Level *currentLevel;
+    int levelCounter;
     BOOL init;
     
 }
@@ -48,6 +49,7 @@
 @implementation GameViewController
 
 @synthesize inputTextField;
+
 
 
 
@@ -109,9 +111,9 @@
     //[inputTextField setHidden:YES];
     [inputTextField becomeFirstResponder];
     
-    audioPlayer = [[AudioSamplePlayer alloc] init];
-    [audioPlayer preloadAudioSample:@"AixEllis"];
-    [audioPlayer playAudioSample:@"AixEllis"];
+    levelCounter = 0;
+    currentLevel = [[Level alloc] initWithLevelNumber:levelCounter Trigger:[objloader getTriggerForLevel:levelCounter]];
+    [currentLevel playNarration];
 }
 
 
@@ -542,6 +544,14 @@
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
+    }else if ([input isEqual:@"x"]){
+        if([headPosition isTriggered:[currentLevel getTriggerObject]]){
+            [[currentLevel getTriggerObject] responseWhenItIsTriggered];
+            [currentLevel levelEnds];
+            levelCounter++;
+            currentLevel = [currentLevel initWithLevelNumber:levelCounter Trigger:[objloader getTriggerForLevel:levelCounter]];
+            [currentLevel playNarration];
+        }
     }
 
    //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);

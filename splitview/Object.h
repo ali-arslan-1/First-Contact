@@ -23,7 +23,8 @@ enum ObjectType{
     Prop,
     DoorFrame,
     Door_,
-    Light_
+    Light_,
+    Trigger
 };
 
 enum Eye{

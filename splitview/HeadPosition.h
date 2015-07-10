@@ -25,7 +25,7 @@
 - (void)lookLeft;
 - (void)lookRight;
 - (void)addObjects :(NSMutableArray*) newObjects;
-
+-(BOOL) isTriggered:(Object*) obj;
 + (GLKMatrix4)lView;
 
 + (GLKMatrix4)rView;
