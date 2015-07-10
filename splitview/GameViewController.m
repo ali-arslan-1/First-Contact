@@ -532,15 +532,15 @@
         [headPosition moveForward];
     }else if([input  isEqual: @"s"]){
         [headPosition moveBackward];
-    }else if([input  isEqual: @"e"]){
+    }/*else if([input  isEqual: @"e"]){     //we don't need e and q
         [headPosition moveUp];
     }else if([input  isEqual: @"q"]){
         [headPosition moveDown];
-    }else if([input  isEqual: @"t"]){
+    }else if([input  isEqual: @"t"]){       //t and g are ruining the view.
         [headPosition lookUp];
     }else if([input  isEqual: @"g"]){
         [headPosition lookDown];
-    }else if([input  isEqual: @"f"]){
+    }*/else if([input  isEqual: @"f"]){
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
