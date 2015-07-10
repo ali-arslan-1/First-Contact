@@ -79,8 +79,8 @@
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
   
-    GLKVector3 initialPos = GLKVector3Make(-4, 1.0, 0.0);
-    GLKVector3 initialViewDir = GLKVector3Make(4, 1, 0);
+    GLKVector3 initialPos = GLKVector3Make(-4, 1.45, 0.0);
+    GLKVector3 initialViewDir = GLKVector3Make(4, 1.45, 0);
     
     headPosition = [[HeadPosition alloc] initWithPos:initialPos];
     [headPosition addObjects:objloader.getCategorizedObjects];
