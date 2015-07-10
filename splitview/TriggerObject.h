@@ -14,12 +14,15 @@
 
 
 @interface TriggerObject : Object{
+    BOOL triggered;
     int levelNumber;
+      float speed;
 }
 
 -(void)responseWhenItIsTriggered;
 -(id)init:(NSString *)name levelNumber:(int)number;
 -(int)getLevelNumber;
+-(void) playAnimation;
 @end
 
 #endif

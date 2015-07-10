@@ -12,6 +12,7 @@
 #import "UniformContainer.h"
 #import "Door.h"
 #import "Level.h"
+#import "TriggerObject.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -33,6 +34,7 @@
     GLuint _gridVertexBuffer;
     
     Level *currentLevel;
+    TriggerObject *triggeredObject;
     int levelCounter;
     BOOL init;
     
@@ -374,7 +376,11 @@
             [(Door*)object changeStateIfRequired];
         }
     }
-     
+    
+    if(triggeredObject){
+        [triggeredObject playAnimation];
+    }
+    
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
     
@@ -545,8 +551,10 @@
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
     }else if ([input isEqual:@"x"]){
-        if([headPosition isTriggered:[currentLevel getTriggerObject]]){
-            [[currentLevel getTriggerObject] responseWhenItIsTriggered];
+        TriggerObject *trigger = [currentLevel getTriggerObject];
+        if([headPosition isTriggered:trigger]){
+            [trigger responseWhenItIsTriggered];
+            triggeredObject = trigger;
             [currentLevel levelEnds];
             levelCounter++;
             currentLevel = [currentLevel initWithLevelNumber:levelCounter Trigger:[objloader getTriggerForLevel:levelCounter]];
