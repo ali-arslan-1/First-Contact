@@ -27,7 +27,7 @@ static ALCcontext *openALContext;
 // TODO sources should be divided for non interrupted audio and sound effects, otherwise sound effects overload the sources and interrupts all audio
 static NSMutableArray *audioSampleSources;
 static NSMutableDictionary *audioSampleBuffers;
-static NSMutableDictionary *audioSourcesBinded;
+//static NSMutableDictionary *audioSourcesBinded;
 
 - (id)init
 {
@@ -45,7 +45,7 @@ static NSMutableDictionary *audioSourcesBinded;
         
         audioSampleSources = [[NSMutableArray alloc] init];
         audioSampleBuffers = [[NSMutableDictionary alloc] init];
-        audioSourcesBinded = [[NSMutableDictionary alloc] init];
+ //       audioSourcesBinded = [[NSMutableDictionary alloc] init];
         
         ALuint sourceID;
         for (int i = 0; i < kMaxConcurrentSources; i++) {
@@ -146,10 +146,10 @@ static NSMutableDictionary *audioSourcesBinded;
   
     alSourcePlay(source);
     
-    [audioSourcesBinded setObject:[NSNumber numberWithUnsignedInteger:source] forKey: sampleName];
+//    [audioSourcesBinded setObject:[NSNumber numberWithUnsignedInteger:source] forKey: sampleName];
 }
 
-- (void) stopAudioSample:(NSString *)sampleName
+/*- (void) stopAudioSample:(NSString *)sampleName
 {
     NSNumber *sourceID = [audioSourcesBinded objectForKey:sampleName];
     if(sourceID == NULL)
@@ -158,7 +158,7 @@ static NSMutableDictionary *audioSourcesBinded;
     alSourceStop(source);
     [audioSourcesBinded removeObjectForKey:sampleName];
 }
-
+*/
 - (ALuint) getNextAvailableSource
 {
     ALint sourceState;

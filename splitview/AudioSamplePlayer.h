@@ -15,5 +15,5 @@
 @interface AudioSamplePlayer : NSObject
 - (void) preloadAudioSample:(NSString *)sampleName;
 - (void) playAudioSample:(NSString *)sampleName;
-- (void) stopAudioSample:(NSString *)sampleName;
+//- (void) stopAudioSample:(NSString *)sampleName;
 @end

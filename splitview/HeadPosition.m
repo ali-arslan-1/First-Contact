@@ -173,8 +173,8 @@ static GLKMatrix4 projection;
                 }
             }
             else if(obj.type == DoorFrame){
-                int deltaX = abs( BboxMax.x - BboxMin.x);
-                int deltaZ = abs (BboxMax.z - BboxMin.z);
+                int deltaX = fabsf( BboxMax.x - BboxMin.x);
+                int deltaZ = fabsf (BboxMax.z - BboxMin.z);
                 if(deltaX>deltaZ){
                     BboxMin.z = BboxMin.z - 0.6;
                     BboxMax.z = BboxMax.z + 0.6;
@@ -209,57 +209,7 @@ static GLKMatrix4 projection;
             return YES;
         }
     }
- /*   for(int i = 0; i < 3; i++){
-        if(activeRooms[i]){
-            countOfActives ++;
-            for(Object *obj in [objects objectAtIndex:i]){
-                GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
-                GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
-                
-                if(obj.type == Room){
-                    if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
-                        headPos = oldHeadPos;
-                        if(inDoorFrame){
-                            inRoom = NO;
-                        } else {
-                            [self deactivateRooms];
-                            if([obj.name isEqualToString:@"PodRoom"])
-                                activeRooms[PodRoom] = YES;
-                            else if([obj.name isEqualToString:@"AirLock"])
-                                activeRooms[AirLock] = YES;
-                            else if([obj.name isEqualToString:@"Hallway"])
-                                activeRooms[Hallway] = YES;
-                            return NO;
-                        }
-                    }
-                }else if(obj.type == Door_){
-                    if(![(Door *) obj isClosed] && [self isHeadInside:BboxMin BBoxMax:BboxMax]){
-                        return NO;
-                   }
-                }else if(obj.type == Light_){}
-                else if (obj.type == DoorFrame){
-                    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
-                        activeRooms[Hallway] =YES;
-                        if([obj.name isEqualToString:@"PodRoom"])
-                            activeRooms[PodRoom] =YES;
-                        else if ([obj.name isEqualToString:@"AirLock"])
-                            activeRooms[AirLock] = YES;
-                        inDoorFrame = YES;
-                        return  NO;
-                    }
-                }
-                else{
-                    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
-                        headPos = oldHeadPos;
-                        return YES;
-                    }
-                }
-            }
-        }
-    }
-    if(!inRoom){
-        return YES;
-    }*/
+
     return NO;
 }
 
@@ -386,7 +336,7 @@ static GLKMatrix4 projection;
         for(Object *element in obj){
             if(element.type == Room){
                 if([element.name isEqualToString:@"PodRoom"])
-                        rooms[PodRoom] = element;
+                    rooms[PodRoom] = element;
                 else if([element.name isEqualToString:@"AirLock"])
                     rooms[AirLock] = element;
                 else if ([element.name isEqualToString:@"Hallway"])

@@ -141,7 +141,7 @@
     objects = [NSMutableArray arrayWithArray:Hallway];
     [objects addObjectsFromArray: PodRoom];
     [objects addObjectsFromArray:AirLock];
-
+    
 }
 
 -(void) addObject : (Object*) _object{

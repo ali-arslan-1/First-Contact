@@ -372,7 +372,7 @@
             [(Door*)object changeStateIfRequired];
         }
     }
-    
+     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
     
