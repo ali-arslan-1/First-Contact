@@ -12,6 +12,8 @@
     NSMutableArray *PodRoom;
     NSMutableArray *AirLock;
     NSMutableArray *Hallway;
+    NSMutableArray *DiningHall;
+    NSMutableArray *EngineRoom;
     NSMutableArray *Triggers;
     
     //temprorary solution to be quick for the presentation. This will be erased when Object loading implemented for rendering only the current room that we are in.
@@ -31,10 +33,14 @@
     AirLock = [NSMutableArray array];
     Hallway = [NSMutableArray array];
     Triggers = [NSMutableArray array];
+    DiningHall = [NSMutableArray array];
+    EngineRoom = [NSMutableArray array];
     
     [categorizedObjects addObject:Hallway];
     [categorizedObjects addObject:PodRoom];
     [categorizedObjects addObject:AirLock];
+    [categorizedObjects addObject:DiningHall];
+    [categorizedObjects addObject:EngineRoom];
  
     
     object = NULL;
@@ -149,6 +155,8 @@
     objects = [NSMutableArray arrayWithArray:Hallway];
     [objects addObjectsFromArray: PodRoom];
     [objects addObjectsFromArray:AirLock];
+    [objects addObjectsFromArray:DiningHall];
+    [objects addObjectsFromArray:EngineRoom];
     
 }
 
@@ -165,7 +173,8 @@
     if([_object.name isEqualToString:@"PodRoom"]){[PodRoom addObject:_object];}
     else if([_object.name isEqualToString:@"AirLock"]){[AirLock addObject:_object];}
     else if([_object.name isEqualToString:@"Hallway"]){[Hallway addObject:_object];}
-    
+    else if([_object.name isEqualToString:@"DiningHall"]){[DiningHall addObject:_object];}
+    else if([_object.name isEqualToString:@"EngineRoom"]){[EngineRoom addObject:_object];}
     if(_object.type == DoorFrame){[Hallway addObject:_object];}
 }
 

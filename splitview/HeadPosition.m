@@ -24,13 +24,15 @@
     //when room number is changed, change this also
     BOOL inDoorFrame;
     Object* currentDoor;
-    Object* rooms[3];
+    Object* rooms[5];
 }
 
 enum RoomType{
     Hallway,
     PodRoom,
-    AirLock
+    AirLock,
+    DiningHall,
+    EngineRoom,
 };
 
 GLKVector3 headPos;
@@ -160,6 +162,14 @@ static GLKMatrix4 projection;
             else if([currentDoor.name isEqualToString:@"AirLock"]){
                 type = AirLock;
                 room = rooms[AirLock];
+            }
+            else if ([currentDoor.name isEqualToString:@"DiningHall"]){
+                type = DiningHall;
+                room = rooms[DiningHall];
+            }
+            else if ([currentDoor.name isEqualToString:@"EngineRoom"]){
+                type = EngineRoom;
+                room = rooms[EngineRoom];
             }
              BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
              BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
@@ -350,6 +360,10 @@ static GLKMatrix4 projection;
                     rooms[AirLock] = element;
                 else if ([element.name isEqualToString:@"Hallway"])
                     rooms[Hallway] = element;
+                else if ([element.name isEqualToString:@"DiningHall"])
+                    rooms[DiningHall] = element;
+                else if ([element.name isEqualToString:@"EngineRoom"])
+                    rooms[EngineRoom] = element;
             }
         }
         [objects addObject:obj];
