@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file has been generated manually-->
+<!--ID is based on sequence. Trigger is the name of trigger used to escape this state-->
+<Levels>
+<Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_M50">
+	<NarrationSequence>
+		<narration>0-GoodMorningInitiator</narration>
+		<TriggerActive>true</TriggerActive><!--This represents when to active the trigger-->
+	</NarrationSequence>	
+	<NarrationReminder>
+		<reminder>0-HadMealYet</reminder>
+		<reminder>1-LetUsKnow</reminder>
+		<reminder>2-PleaseTakeMeal</reminder>
+		<reminder>3-EverthingOkay</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="1" Name="PowerLevels" Trigger="Trigger_EngineRoom_M60">
+	<NarrationSequence>
+		<narration>0-IncreaseThePower</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-StatusPowerLevels</reminder>
+		<reminder>1-EverythingOkay</reminder>
+		<reminder>2-PleaseIncrease</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_M65">
+	<NarrationSequence>
+		<narration>0-PowerIncreased</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-SensorAccess</reminder>
+		<reminder>1-EverythingOkay</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="3" Name="PurdgePodRoom" Trigger="Trigger_PodRoom_M70">
+	<NarrationSequence>
+		<narration>0-SensorAccessGranted</narration>
+		<Wait>5</Wait><!--This represents the time to wait. The value is the time in seconds.-->
+		<narration>1-PurdgePodsConvo</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-CannotRiskCraft</reminder>
+		<reminder>1-NoTimeToLoose</reminder>
+		<reminder>2-BreachingProtocol</reminder>
+		<reminder>3-PurdgePodsASAP</reminder>
+	</NarrationReminder>
+</Level>
+</Levels>

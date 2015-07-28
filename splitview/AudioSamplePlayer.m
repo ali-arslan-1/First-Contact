@@ -1,4 +1,6 @@
-//
+
+// Code is heavily influenced by this tutorial: http://ohno789.blogspot.de/2013/08/openal-on-ios.html
+
 //  AudioSamplePlayer.m
 //  sound_test
 //

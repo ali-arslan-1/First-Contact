@@ -10,22 +10,25 @@
 #define splitview_Level_h
 
 #import <Foundation/Foundation.h>
-#import "AudioSamplePlayer.h"
 #import "TriggerObject.h"
 
-@interface Level : NSObject{
-    AudioSamplePlayer *audioPlayer;
-    
-    NSString* narration;
+@interface Level : NSObject{    
     NSString* triggerSound;
+    NSMutableArray* narrations;
     NSMutableArray* reminders;
+    int levelNumber;
     
     TriggerObject *trigger;
     float timeToWait;
 }
--(id) initWithLevelNumber:(int) number Trigger:(TriggerObject*) _trigger;
-
+-(id) initWithLevelNumber:(int) number;
+-(void) setNarrations:(NSMutableArray*) setOfNarrations;
+-(void) setReminders:(NSMutableArray*) setOfReminders;
+-(void) setTriggerObject:(TriggerObject*) triggerObj;
+-(int) getLevelNumber;
+-(void) loadLevel;
 -(void) playNarration;
+-(void) playReminder;
 -(TriggerObject*) getTriggerObject;
 -(void) levelEnds;
 @end

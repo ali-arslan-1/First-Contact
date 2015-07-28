@@ -13,7 +13,7 @@
 #import "Door.h"
 #import "Level.h"
 #import "TriggerObject.h"
-
+#import "LevelController.h"
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 
@@ -35,7 +35,8 @@
     
     Level *currentLevel;
     TriggerObject *triggeredObject;
-    int levelCounter;
+    LevelController *levelController;
+
     BOOL init;
     
 }
@@ -113,10 +114,11 @@
     //[inputTextField setHidden:YES];
     [inputTextField becomeFirstResponder];
     
-    levelCounter = 0;
-    currentLevel = [[Level alloc] initWithLevelNumber:levelCounter Trigger:[objloader getTriggerForLevel:levelCounter]];
-    [currentLevel playNarration];
-}
+    levelController = [[LevelController alloc] initwithLevelXML:@"NarrativeSequence"];
+    [levelController assignTriggersToLevels:objloader];
+    currentLevel = [levelController getNextLevel];
+    [currentLevel loadLevel];
+    [currentLevel playNarration];}
 
 
 - (void)dealloc
@@ -556,10 +558,9 @@
             [trigger responseWhenItIsTriggered];
             triggeredObject = trigger;
             [currentLevel levelEnds];
-            levelCounter++;
-            currentLevel = [currentLevel initWithLevelNumber:levelCounter Trigger:[objloader getTriggerForLevel:levelCounter]];
-            [currentLevel playNarration];
-        }
+            currentLevel = [levelController getNextLevel];
+            [currentLevel loadLevel];
+            [currentLevel playNarration];        }
     }
 
    //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);

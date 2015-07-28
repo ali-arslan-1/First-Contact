@@ -8,39 +8,62 @@
 
 #import <Foundation/Foundation.h>
 #import "Level.h"
+#import <AVFoundation/AVFoundation.h>
 
-@implementation Level
+@implementation Level{
+    int sequenceNumber;
+    NSMutableArray* audioPlayers;
+}
 
--(id) initWithLevelNumber:(int)number Trigger:(TriggerObject *)_trigger{
-    
-    audioPlayer = [[AudioSamplePlayer alloc] init];
-    
-    self -> trigger = _trigger;
-    [self loadLevel:number];
-    
+-(id) initWithLevelNumber:(int)number{
+    audioPlayers =[NSMutableArray array];
+    levelNumber = number;
+    sequenceNumber = 0;
     return self;
 }
--(void) loadLevel:(int)number{
-    //Temprorary loader until xml
-    if (number == 0) {
-        narration = @"1-GoodMorningInitiator";
-        
-    } else if ( number == 1){
-        narration = @"2-IncreaseThePower";
+-(void) loadLevel{
+   AVAudioPlayer *_audioPlayer;
+    for(NSString *name in narrations){
+        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        _audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [audioPlayers addObject:_audioPlayer];
     }
-    [audioPlayer preloadAudioSample: narration];
+  /*  for (NSString *name in reminders) {
+        [audioPlayer preloadAudioSample:name];
+    }*/
 }
-
+-(void) setNarrations:(NSMutableArray *)setOfNarrations{
+    narrations = setOfNarrations;
+}
+-(void) setReminders:(NSMutableArray *)setOfReminders{
+    reminders = setOfReminders;
+}
+-(void) setTriggerObject:(TriggerObject *)triggerObj{
+    trigger = triggerObj;
+}
+-(int) getLevelNumber{
+    return levelNumber;
+}
 -(void) playNarration{
-    [audioPlayer playAudioSample:narration];
+    AVAudioPlayer *_audioPlayer;
+    NSString* narration = [narrations objectAtIndex:sequenceNumber];
+    if(narration != nil){
+        _audioPlayer = [audioPlayers objectAtIndex:sequenceNumber];
+        [_audioPlayer play];
+    //    [audioPlayer playAudioSample:narration];
+        sequenceNumber++;
+    }
 }
-
+-(void) playReminder{
+    //////////////////TODO play random
+}
 -(TriggerObject*) getTriggerObject{
     return trigger;
 }
 
 -(void) levelEnds{
-    [audioPlayer shutdownAudioSamplePlayer];
+   // [audioPlayer shutdownAudioSamplePlayer];
 }
 
 @end
