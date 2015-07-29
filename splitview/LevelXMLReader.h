@@ -9,7 +9,15 @@
 #import "Level.h"
 
 @interface LevelXMLReader : NSObject <NSXMLParserDelegate> {
-    // add any data members that you need here
+    Level* currentLevel;
+    NSMutableArray* levels;
+    NSMutableArray* narrations;
+    NSMutableArray* reminders;
+    NSMutableArray* sequence;
+    BOOL narration;
+    BOOL reminder;
+    BOOL Wait;
+    BOOL TriggerActive;
 }
 
 -(BOOL)parseDocumentWithData:(NSData *)data;

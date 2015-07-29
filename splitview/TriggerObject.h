@@ -15,6 +15,7 @@
 
 @interface TriggerObject : Object{
     BOOL triggered;
+    BOOL active;
     int levelNumber;
       float speed;
 }
@@ -23,6 +24,9 @@
 -(id)init:(NSString *)name levelNumber:(int)number;
 -(int)getLevelNumber;
 -(void) playAnimation;
+-(void) activate;
+-(void) deactivate;
+-(BOOL) isActive;
 @end
 
 #endif

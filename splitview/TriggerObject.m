@@ -15,10 +15,11 @@
 
 -(id) init:(NSString *)name levelNumber:(int)number{
     self = [super init: name Type: Trigger];
-    self -> levelNumber = number;
-    self -> speed = 0.01;
+    levelNumber = number;
+    speed = 0.01;
     triggered = NO;
     animationCounter = 0;
+    active = NO;
     return self;
 }
 -(void) responseWhenItIsTriggered{
@@ -29,7 +30,7 @@
     return levelNumber;
 }
 -(void) playAnimation{
-    if(triggered && animationCounter<10){
+    if(triggered && animationCounter<50){
         //TODO Animation
         GLKMatrix4 translationMatrix;
         
@@ -38,5 +39,14 @@
         
         animationCounter++;
     }
+}
+-(void) activate{
+    active = YES;
+}
+-(void) deactivate{
+    active = NO;
+}
+-(BOOL) isActive{
+    return active;
 }
 @end

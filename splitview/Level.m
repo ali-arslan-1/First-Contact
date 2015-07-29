@@ -8,30 +8,40 @@
 
 #import <Foundation/Foundation.h>
 #import "Level.h"
-#import <AVFoundation/AVFoundation.h>
+#include <stdlib.h>
+
+
 
 @implementation Level{
     int sequenceNumber;
-    NSMutableArray* audioPlayers;
+    NSMutableDictionary* audioPlayers;
+    NSTimer *repeatingTimer;
 }
 
+
 -(id) initWithLevelNumber:(int)number{
-    audioPlayers =[NSMutableArray array];
-    levelNumber = number;
+    audioPlayers =[[NSMutableDictionary alloc] init];
+    levelNumber = number; 
     sequenceNumber = 0;
     return self;
 }
 -(void) loadLevel{
-   AVAudioPlayer *_audioPlayer;
+   
     for(NSString *name in narrations){
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
-        NSData *data = [NSData dataWithContentsOfFile:path];
-        _audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
-        [audioPlayers addObject:_audioPlayer];
+        [self preloadAudio:name];
     }
-  /*  for (NSString *name in reminders) {
-        [audioPlayer preloadAudioSample:name];
-    }*/
+    for (NSString *name in reminders) {
+        [self preloadAudio:name];
+    }
+    [self doNextSequence];
+}
+-(void) preloadAudio:(NSString*) name{
+    AVAudioPlayer *_audioPlayer;
+    NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    _audioPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+    [audioPlayers setObject:_audioPlayer forKey:name];
+
 }
 -(void) setNarrations:(NSMutableArray *)setOfNarrations{
     narrations = setOfNarrations;
@@ -39,31 +49,90 @@
 -(void) setReminders:(NSMutableArray *)setOfReminders{
     reminders = setOfReminders;
 }
+-(void) setSequence:(NSMutableArray *)setOfSequence{
+    sequence = setOfSequence;
+}
 -(void) setTriggerObject:(TriggerObject *)triggerObj{
     trigger = triggerObj;
 }
 -(int) getLevelNumber{
     return levelNumber;
 }
--(void) playNarration{
+-(void) playNarration:(NSString*) name{
     AVAudioPlayer *_audioPlayer;
-    NSString* narration = [narrations objectAtIndex:sequenceNumber];
-    if(narration != nil){
-        _audioPlayer = [audioPlayers objectAtIndex:sequenceNumber];
+    if(name != nil){
+        _audioPlayer = [audioPlayers objectForKey:name];
+        _audioPlayer.delegate = self;
         [_audioPlayer play];
-    //    [audioPlayer playAudioSample:narration];
-        sequenceNumber++;
     }
 }
 -(void) playReminder{
-    //////////////////TODO play random
+    AVAudioPlayer *_audioPlayer;
+    int numberOfReminders = (int)[reminders count];
+    int randomNumber = arc4random_uniform(numberOfReminders);
+    NSString* reminder = [reminders objectAtIndex:randomNumber];
+    if(reminder != nil){
+        _audioPlayer = [audioPlayers objectForKey:reminder];
+        [_audioPlayer play];
+    }
 }
 -(TriggerObject*) getTriggerObject{
     return trigger;
 }
 
+-(void) doNextSequence{
+    if(sequenceNumber < [sequence count]){
+        NSString* currentSequence = [sequence objectAtIndex:sequenceNumber];
+        
+        NSArray* tokens = [currentSequence componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"_"]];
+        NSString* sequenceType = [tokens objectAtIndex:0];
+        NSString* sequenceValue = [tokens objectAtIndex:1];
+        
+        if([sequenceType isEqualToString:@"Narration"]){
+            [self playNarration:sequenceValue];
+        } else if ([sequenceType isEqualToString:@"Wait"]){
+            [self startOneOffTimer:self timeToWait:[sequenceValue doubleValue]];
+            
+        } else if ([sequenceType isEqualToString:@"TriggerActive"]){
+            if([sequenceValue isEqualToString:@"true"]){
+                [trigger activate];
+                [self startRepeatingTimer:self];
+            }else{
+                [trigger deactivate];
+            }
+            sequenceNumber++;
+            [self doNextSequence];
+        }
+        sequenceNumber++;
+    }
+}
+-(void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    [self doNextSequence];
+}
 -(void) levelEnds{
-   // [audioPlayer shutdownAudioSamplePlayer];
+    [repeatingTimer invalidate];
+    repeatingTimer = nil;
+    audioPlayers = nil;
+}
+- (IBAction)startOneOffTimer:sender timeToWait:(NSTimeInterval) time{
+    [NSTimer scheduledTimerWithTimeInterval:time
+                                     target:self
+                                   selector:@selector(doNextSequence)
+                                   userInfo:[self userInfo]
+                                    repeats:NO];
+}
+- (IBAction)startRepeatingTimer:sender {
+    
+    // Cancel a preexisting timer.
+    [repeatingTimer invalidate];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60
+                                                      target:self selector:@selector(playReminder)
+                                                    userInfo:[self userInfo] repeats:YES];
+    repeatingTimer = timer;
+}
+- (NSDictionary *)userInfo {
+    return @{ @"StartDate" : [NSDate date] };
 }
 
 @end

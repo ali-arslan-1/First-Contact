@@ -4,6 +4,7 @@
 <Levels>
 <Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_M50">
 	<NarrationSequence>
+        <Wait>2</Wait>
 		<narration>0-GoodMorningInitiator</narration>
 		<TriggerActive>true</TriggerActive><!--This represents when to active the trigger-->
 	</NarrationSequence>	

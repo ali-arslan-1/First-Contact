@@ -118,7 +118,7 @@
     [levelController assignTriggersToLevels:objloader];
     currentLevel = [levelController getNextLevel];
     [currentLevel loadLevel];
-    [currentLevel playNarration];}
+}
 
 
 - (void)dealloc
@@ -382,6 +382,7 @@
     if(triggeredObject){
         [triggeredObject playAnimation];
     }
+  
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
@@ -554,13 +555,13 @@
         [headPosition lookRight];
     }else if ([input isEqual:@"x"]){
         TriggerObject *trigger = [currentLevel getTriggerObject];
-        if([headPosition isTriggered:trigger]){
+        if([trigger isActive]&&[headPosition isTriggered:trigger]){
             [trigger responseWhenItIsTriggered];
             triggeredObject = trigger;
             [currentLevel levelEnds];
             currentLevel = [levelController getNextLevel];
             [currentLevel loadLevel];
-            [currentLevel playNarration];        }
+        }
     }
 
    //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
