@@ -56,6 +56,7 @@
 		BBF0ECA31B2DD91100D44D89 /* Door.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA21B2DD91100D44D89 /* Door.m */; };
 		BBF0ECA61B2EF92F00D44D89 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA51B2EF92F00D44D89 /* Utils.m */; };
 		BBF0ECA91B2EFDBC00D44D89 /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA81B2EFDBC00D44D89 /* Light.m */; };
+		BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBFE91341B71055D00045E34 /* fxaa.fsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,6 +127,7 @@
 		BBF0ECA51B2EF92F00D44D89 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BBF0ECA71B2EFCA100D44D89 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
 		BBF0ECA81B2EFDBC00D44D89 /* Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Light.m; sourceTree = "<group>"; };
+		BBFE91341B71055D00045E34 /* fxaa.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fxaa.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +230,7 @@
 		0A15DC791AB734A60058C15E /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				BBFE91341B71055D00045E34 /* fxaa.fsh */,
 				0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */,
 				0A15DC7A1AB734D50058C15E /* post.fsh */,
 				0A15DC7B1AB734D50058C15E /* post.vsh */,
@@ -424,6 +427,7 @@
 				0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */,
 				6E90BA4D1B67CB5D00F2A971 /* NarrativeSequence.xml in Resources */,
 				6E90BA6F1B67D3E100F2A971 /* 0-IncreaseThePower.mp3 in Resources */,
+				BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */,
 				6E90BA791B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 in Resources */,
 				6E90BA711B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */,
 				0A15DC5D1AB734510058C15E /* Main.storyboard in Resources */,

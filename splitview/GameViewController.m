@@ -523,6 +523,8 @@
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_L], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_R], 1);
     
+    glUniform2f([ShaderLoader uniforms:UNIFORM_RESOLUTION],mFrameWidth, mFrameHeight );
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
 }

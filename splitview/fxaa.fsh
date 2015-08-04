@@ -1,10 +1,6 @@
 //
-//  post.fsh
-//
-//
-//  Created by Ming Li on 05/03/15.
-//  Copyright (c) 2015 Ming Li. All rights reserved.
-//
+// FXAA Shader based on https://github.com/mattdesl/glsl-fxaa/blob/master/fxaa.glsl
+
 
 #ifndef FXAA_REDUCE_MIN
 #   define FXAA_REDUCE_MIN   (1.0/ 128.0)
@@ -16,26 +12,19 @@
 #   define FXAA_SPAN_MAX     8.0
 #endif
 
-precision mediump float;
-uniform sampler2D uSamplerL;
-uniform sampler2D uSamplerR;
-uniform vec2 resolution;
-varying lowp vec2 vTexCoord;
-
-
 //optimized version for mobile, where dependent
-//texture2D reads can be a bottleneck
+//texture reads can be a bottleneck
 vec4 fxaa(sampler2D tex, vec2 fragCoord, vec2 resolution,
           vec2 v_rgbNW, vec2 v_rgbNE,
           vec2 v_rgbSW, vec2 v_rgbSE,
           vec2 v_rgbM) {
     vec4 color;
-    mediump vec2 inverseVP = vec2(1.0 / resolution.x, 1.0 / resolution.y);
-    vec3 rgbNW = texture2D(tex, v_rgbNW).xyz;
-    vec3 rgbNE = texture2D(tex, v_rgbNE).xyz;
-    vec3 rgbSW = texture2D(tex, v_rgbSW).xyz;
-    vec3 rgbSE = texture2D(tex, v_rgbSE).xyz;
-    vec4 texColor = texture2D(tex, v_rgbM);
+    vec2 inverseVP = vec2(1.0 / resolution.x, 1.0 / resolution.y);
+    vec3 rgbNW = texture(tex, v_rgbNW).xyz;
+    vec3 rgbNE = texture(tex, v_rgbNE).xyz;
+    vec3 rgbSW = texture(tex, v_rgbSW).xyz;
+    vec3 rgbSE = texture(tex, v_rgbSE).xyz;
+    vec4 texColor = texture(tex, v_rgbM);
     vec3 rgbM  = texColor.xyz;
     vec3 luma = vec3(0.299, 0.587, 0.114);
     float lumaNW = dot(rgbNW, luma);
@@ -59,11 +48,11 @@ vec4 fxaa(sampler2D tex, vec2 fragCoord, vec2 resolution,
                   dir * rcpDirMin)) * inverseVP;
     
     vec3 rgbA = 0.5 * (
-                       texture2D(tex, fragCoord * inverseVP + dir * (1.0 / 3.0 - 0.5)).xyz +
-                       texture2D(tex, fragCoord * inverseVP + dir * (2.0 / 3.0 - 0.5)).xyz);
+                       texture(tex, fragCoord * inverseVP + dir * (1.0 / 3.0 - 0.5)).xyz +
+                       texture(tex, fragCoord * inverseVP + dir * (2.0 / 3.0 - 0.5)).xyz);
     vec3 rgbB = rgbA * 0.5 + 0.25 * (
-                                     texture2D(tex, fragCoord * inverseVP + dir * -0.5).xyz +
-                                     texture2D(tex, fragCoord * inverseVP + dir * 0.5).xyz);
+                                     texture(tex, fragCoord * inverseVP + dir * -0.5).xyz +
+                                     texture(tex, fragCoord * inverseVP + dir * 0.5).xyz);
     
     float lumaB = dot(rgbB, luma);
     if ((lumaB < lumaMin) || (lumaB > lumaMax))
@@ -92,31 +81,43 @@ vec4 fxaa_apply(sampler2D tex, vec2 fragCoord, vec2 resolution) {
     mediump vec2 v_rgbSE;
     mediump vec2 v_rgbM;
     
-    //compute the texture2D coords
+    //compute the texture coords
     fxaa_texcoords(fragCoord, resolution, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);
     
     //compute FXAA
     return fxaa(tex, fragCoord, resolution, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);
 }
 
-void main()
-{
-    lowp vec4 texCol;
-    float x = vTexCoord.x;
-    float y = vTexCoord.y;
-    
-    if (vTexCoord.x < 0.5)
-    {
-        float u = x * 2.0;
-        float v = y;
-        texCol = fxaa_apply(uSamplerL , vec2(u, v) * resolution, resolution);//texture2D(uSamplerL, vec2(u, v));
-    }
-    else if (vTexCoord.x > 0.5)
-    {
-        float u = (x - 0.5) * 2.0;
-        float v = y;
-        texCol = fxaa_apply(uSamplerR , vec2(u, v) * resolution, resolution);
-    }
-    
-    gl_FragColor =vec4(texCol.rgba);
-}
+/**
+ Basic FXAA implementation based on the code on geeks3d.com with the
+ modification that the texture2DLod stuff was removed since it's
+ unsupported by WebGL.
+ --
+ From:
+ https://github.com/mitsuhiko/webgl-meincraft
+ Copyright (c) 2011 by Armin Ronacher.
+ Some rights reserved.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are
+ met:
+ * Redistributions of source code must retain the above copyright
+ notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above
+ copyright notice, this list of conditions and the following
+ disclaimer in the documentation and/or other materials provided
+ with the distribution.
+ * The names of the contributors may not be used to endorse or
+ promote products derived from this software without specific
+ prior written permission.
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */

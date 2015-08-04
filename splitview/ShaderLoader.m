@@ -200,7 +200,7 @@ static GLint uniforms[NUM_UNIFORMS];
     // Get uniform locations.
     uniforms[UNIFORM_SAMPLER2D_L] = glGetUniformLocation(_ppProgram, "uSamplerL");
     uniforms[UNIFORM_SAMPLER2D_R] = glGetUniformLocation(_ppProgram, "uSamplerR");
-    
+    uniforms[UNIFORM_RESOLUTION] = glGetUniformLocation(_ppProgram, "resolution");
     return YES;
 }
 

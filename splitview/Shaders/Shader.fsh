@@ -68,7 +68,7 @@ void main()
     else if(texCol.a < 0.99){
         
         int i, j;
-        int sampleSize = 2;
+        int sampleSize = 1;
         float total = float(((sampleSize*2)+1) * (sampleSize*2)+1);
         vec4 sum = vec4(0);
         for (i=-sampleSize; i<=sampleSize; i++) {
