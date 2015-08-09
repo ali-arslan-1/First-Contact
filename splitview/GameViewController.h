@@ -84,9 +84,11 @@ GLfloat gQuadVertexData[] =
     uint         mTextureID;
     
     GLint        mDefaultFBO;
-    GLuint       mFBO[2];
-    GLuint       mColorTextureID[2];
-    GLuint       mDepthRenderBuffer[2];
+    GLuint       mFBO[4];
+    GLuint       mColorTextureID[4];
+    GLuint       mDepthRenderBuffer[4];
+    
+    GLuint      finalColorTextures[2];
     
     GLfloat      mFrameWidth;
     GLfloat      mFrameHeight;

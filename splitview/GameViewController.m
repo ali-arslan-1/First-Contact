@@ -161,11 +161,12 @@
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mDefaultFBO);
     
     // Setup my FBO
-    glGenFramebuffers ( 2, mFBO );
-    glGenTextures ( 2, mColorTextureID );
-    glGenRenderbuffers ( 2, mDepthRenderBuffer );
+    int fboCount = 4;
+    glGenFramebuffers ( fboCount, mFBO );
+    glGenTextures ( fboCount, mColorTextureID );
+    glGenRenderbuffers ( fboCount, mDepthRenderBuffer );
     
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < fboCount; i++) {
         glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[i] );
         
         NSLog(@"defaultFBO: %d, FBO[%d]: %d", mDefaultFBO, i, mFBO[i]);
@@ -220,6 +221,7 @@
     
     [shaderLoader loadShaders];
     [shaderLoader loadMyShaders];
+    [shaderLoader loadBlurShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
@@ -451,6 +453,10 @@
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
     
+    /*****************************
+     *2nd render pass, use FBO[1], render right view
+     *****************************/
+    
     glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[1] );
     glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
     
@@ -465,9 +471,6 @@
     glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 1);
     glDrawArrays(GL_LINES, 0, 44);
     
-    /*****************************
-     *2nd render pass, use FBO[1], render right view
-     *****************************/
     
     
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -499,22 +502,83 @@
     }
     
     
-
-
     /*****************************
-     * 3rd render pass, use default FBO
+     * 3rd render pass, left blur horizontal
      *****************************/
+    
+
+    glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[2] );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[0]);
+    
+
+    // draw full screen quad
+    glBindVertexArrayOES(_quadVertexArray);
+    
+    // Render the object with ES2
+    glUseProgram(shaderLoader._blurProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
+    glUniform2i([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 1.5f / 512.0f, 0.0f);
+
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    
+    
+    /*****************************
+     * 4th render pass, left blur verticle
+     *****************************/
+    
+    glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[3] );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[2]);
+    
+    // draw full screen quad
+    glBindVertexArrayOES(_quadVertexArray);
+    // Render the object with ES2
+    glUseProgram(shaderLoader._blurProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
+    glUniform2i([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 0.0f, 1.5f / 512.0f);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    
+    
+    /*****************************
+     * 6th render pass, use default FBO
+     *****************************/
+    
+    //glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[2] );
     
     [view bindDrawable];
     glViewport(0, 0, mFrameWidth * 2, mFrameHeight * 2);
     
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[0]);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[1]);
     
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[3]);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[1]);
+    
+    
     
     // draw full screen quad
     glBindVertexArrayOES(_quadVertexArray);
@@ -525,7 +589,12 @@
     
     glUniform2f([ShaderLoader uniforms:UNIFORM_RESOLUTION],mFrameWidth, mFrameHeight );
     
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
     
 }
 

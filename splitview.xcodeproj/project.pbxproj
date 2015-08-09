@@ -56,6 +56,8 @@
 		BBF0ECA31B2DD91100D44D89 /* Door.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA21B2DD91100D44D89 /* Door.m */; };
 		BBF0ECA61B2EF92F00D44D89 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA51B2EF92F00D44D89 /* Utils.m */; };
 		BBF0ECA91B2EFDBC00D44D89 /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA81B2EFDBC00D44D89 /* Light.m */; };
+		BBF781A41B726A1700529609 /* blur.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A21B726A1700529609 /* blur.vsh */; };
+		BBF781A51B726A1700529609 /* blur.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A31B726A1700529609 /* blur.fsh */; };
 		BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBFE91341B71055D00045E34 /* fxaa.fsh */; };
 /* End PBXBuildFile section */
 
@@ -127,6 +129,8 @@
 		BBF0ECA51B2EF92F00D44D89 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BBF0ECA71B2EFCA100D44D89 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
 		BBF0ECA81B2EFDBC00D44D89 /* Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Light.m; sourceTree = "<group>"; };
+		BBF781A21B726A1700529609 /* blur.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.vsh; path = Shaders/blur.vsh; sourceTree = "<group>"; };
+		BBF781A31B726A1700529609 /* blur.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.fsh; path = Shaders/blur.fsh; sourceTree = "<group>"; };
 		BBFE91341B71055D00045E34 /* fxaa.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fxaa.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,6 +234,8 @@
 		0A15DC791AB734A60058C15E /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				BBF781A21B726A1700529609 /* blur.vsh */,
+				BBF781A31B726A1700529609 /* blur.fsh */,
 				BBFE91341B71055D00045E34 /* fxaa.fsh */,
 				0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */,
 				0A15DC7A1AB734D50058C15E /* post.fsh */,
@@ -418,6 +424,7 @@
 				0A15DC621AB734510058C15E /* LaunchScreen.xib in Resources */,
 				6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */,
 				6E90BA6C1B67D3E100F2A971 /* 1-LetUsKnow.mp3 in Resources */,
+				BBF781A51B726A1700529609 /* blur.fsh in Resources */,
 				0A15DC7D1AB734D50058C15E /* post.vsh in Resources */,
 				6E90BA701B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 in Resources */,
 				0A15DC7C1AB734D50058C15E /* post.fsh in Resources */,
@@ -442,6 +449,7 @@
 				0A15DC551AB734510058C15E /* Shader.fsh in Resources */,
 				6E90BA771B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 in Resources */,
 				6E90BA761B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 in Resources */,
+				BBF781A41B726A1700529609 /* blur.vsh in Resources */,
 				BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */,
 				6E90BA7A1B67D3E100F2A971 /* 2-BreachingProtocol.mp3 in Resources */,
 				6E90BA6D1B67D3E100F2A971 /* 2-PleaseTakeMeal.mp3 in Resources */,

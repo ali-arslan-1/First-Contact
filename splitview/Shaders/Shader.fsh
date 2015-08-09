@@ -67,7 +67,7 @@ void main()
         gl_FragData[0] = vec4(0.0, 1.0, 0.0, 1.0);
     else if(texCol.a < 0.99){
         
-        int i, j;
+        /*int i, j;
         int sampleSize = 1;
         float total = float(((sampleSize*2)+1) * (sampleSize*2)+1);
         vec4 sum = vec4(0);
@@ -78,8 +78,8 @@ void main()
             }
         }
         vec4 avg = vec4(sum.x/total, sum.y/total, sum.z/total,0.0);
-        
-        gl_FragData[0] = texCol + avg; //vec4(1.0, 1.0, 1.0,1.0);
+        */
+        gl_FragData[0] = texCol; //vec4(1.0, 1.0, 1.0,1.0);
         
     }
     else
