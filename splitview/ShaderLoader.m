@@ -13,6 +13,8 @@
 @synthesize _program;
 @synthesize _ppProgram;
 @synthesize _blurProgram;
+@synthesize _blendProgram;
+
 
 static GLint uniforms[NUM_UNIFORMS];
 
@@ -206,6 +208,7 @@ static GLint uniforms[NUM_UNIFORMS];
     uniforms[UNIFORM_SAMPLER2D_L] = glGetUniformLocation(_ppProgram, "uSamplerL");
     uniforms[UNIFORM_SAMPLER2D_R] = glGetUniformLocation(_ppProgram, "uSamplerR");
     uniforms[UNIFORM_RESOLUTION] = glGetUniformLocation(_ppProgram, "resolution");
+
     return YES;
 }
 
@@ -282,6 +285,77 @@ static GLint uniforms[NUM_UNIFORMS];
     return YES;
 }
 
+- (BOOL)loadBlendShaders
+{
+    GLuint vertShader, fragShader;
+    NSString *vertShaderPathname, *fragShaderPathname;
+    
+    // Create shader program.
+    _blendProgram = glCreateProgram();
+    
+    // Create and compile vertex shader.
+    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"blend" ofType:@"vsh"];
+    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
+        NSLog(@"Failed to compile vertex shader");
+        return NO;
+    }
+    
+    // Create and compile fragment shader.
+    //fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"DistortTwoTexture" ofType:@"fsh"];
+    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"blend" ofType:@"fsh"];
+    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
+        NSLog(@"Failed to compile fragment shader");
+        return NO;
+    }
+    
+    // Attach vertex shader to program.
+    glAttachShader(_blendProgram, vertShader);
+    
+    // Attach fragment shader to program.
+    glAttachShader(_blendProgram, fragShader);
+    
+    // Bind attribute locations.
+    // This needs to be done prior to linking.
+    glBindAttribLocation(_blendProgram, GLKVertexAttribPosition, "position");
+    glBindAttribLocation(_blendProgram, GLKVertexAttribTexCoord0, "texCoord");
+    
+    // Link program.
+    if (![self linkProgram:_blendProgram]) {
+        NSLog(@"Failed to link program: %d", _blendProgram);
+        
+        if (vertShader) {
+            glDeleteShader(vertShader);
+            vertShader = 0;
+        }
+        if (fragShader) {
+            glDeleteShader(fragShader);
+            fragShader = 0;
+        }
+        if (_blendProgram) {
+            glDeleteProgram(_blendProgram);
+            _blendProgram = 0;
+        }
+        
+        return NO;
+    }
+    
+    // Release vertex and fragment shaders.
+    if (vertShader) {
+        glDetachShader(_blendProgram, vertShader);
+        glDeleteShader(vertShader);
+    }
+    if (fragShader) {
+        glDetachShader(_blendProgram, fragShader);
+        glDeleteShader(fragShader);
+    }
+    
+    // Get uniform locations.
+    uniforms[UNIFORM_BLEND_SAMPLER2D_1] = glGetUniformLocation(_blendProgram, "texture1");
+    uniforms[UNIFORM_BLEND_SAMPLER2D_2] = glGetUniformLocation(_blendProgram, "texture2");
+    uniforms[UNIFORM_TIME] = glGetUniformLocation(_blendProgram, "time");
+    
+    return YES;
+}
 
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file
 {

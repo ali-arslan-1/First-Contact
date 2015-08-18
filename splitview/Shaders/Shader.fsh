@@ -79,9 +79,13 @@ void main()
         }
         vec4 avg = vec4(sum.x/total, sum.y/total, sum.z/total,0.0);
         */
+
         gl_FragData[0] = texCol; //vec4(1.0, 1.0, 1.0,1.0);
+        //gl_FragData[0].a = 1.0;
         
     }
-    else
-        gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);;
+    else{
+        gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);
+        //gl_FragData[0].a = 0.0;
+    }
 }

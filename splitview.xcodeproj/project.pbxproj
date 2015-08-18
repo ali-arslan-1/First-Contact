@@ -48,6 +48,8 @@
 		6EF3E4C21B3B0FF90072936A /* AixEllis.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6EF3E4C11B3B0FF90072936A /* AixEllis.caf */; };
 		BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */ = {isa = PBXBuildFile; fileRef = BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */; };
 		BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */ = {isa = PBXBuildFile; fileRef = BB771D061B18EEBD00988B7C /* PodRoom.obj */; };
+		BB80128C1B8213DA00EC7EF3 /* blend.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BB80128B1B8213DA00EC7EF3 /* blend.vsh */; };
+		BB80128E1B8213EF00EC7EF3 /* blend.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BB80128D1B8213EF00EC7EF3 /* blend.fsh */; };
 		BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD21C931B2CBD0E006056FA /* Renderer.m */; };
 		BBD622291B13476100CA1418 /* ShaderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD622281B13476100CA1418 /* ShaderLoader.m */; };
 		BBE9B7E41B04F64100EDF814 /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE9B7E31B04F64100EDF814 /* Object.m */; };
@@ -113,6 +115,8 @@
 		6EF3E4C11B3B0FF90072936A /* AixEllis.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AixEllis.caf; path = Sound/AixEllis.caf; sourceTree = "<group>"; };
 		BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Atlas_01.png; path = Geometry/T_E_Atlas_01.png; sourceTree = "<group>"; };
 		BB771D061B18EEBD00988B7C /* PodRoom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PodRoom.obj; path = Geometry/PodRoom.obj; sourceTree = "<group>"; };
+		BB80128B1B8213DA00EC7EF3 /* blend.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blend.vsh; sourceTree = "<group>"; };
+		BB80128D1B8213EF00EC7EF3 /* blend.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blend.fsh; sourceTree = "<group>"; };
 		BBD21C911B2C9458006056FA /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		BBD21C931B2CBD0E006056FA /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		BBD622271B13460A00CA1418 /* ShaderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderLoader.h; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 				0A15DC7B1AB734D50058C15E /* post.vsh */,
 				0A15DC541AB734510058C15E /* Shader.fsh */,
 				0A15DC561AB734510058C15E /* Shader.vsh */,
+				BB80128B1B8213DA00EC7EF3 /* blend.vsh */,
+				BB80128D1B8213EF00EC7EF3 /* blend.fsh */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -431,12 +437,14 @@
 				6E90BA6E1B67D3E100F2A971 /* 3-EverthingOkay.mp3 in Resources */,
 				6E90BA741B67D3E100F2A971 /* 0-SensorAccess.mp3 in Resources */,
 				6E90BA6A1B67D3E100F2A971 /* 0-GoodMorningInitiator.mp3 in Resources */,
+				BB80128E1B8213EF00EC7EF3 /* blend.fsh in Resources */,
 				0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */,
 				6E90BA4D1B67CB5D00F2A971 /* NarrativeSequence.xml in Resources */,
 				6E90BA6F1B67D3E100F2A971 /* 0-IncreaseThePower.mp3 in Resources */,
 				BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */,
 				6E90BA791B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 in Resources */,
 				6E90BA711B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */,
+				BB80128C1B8213DA00EC7EF3 /* blend.vsh in Resources */,
 				0A15DC5D1AB734510058C15E /* Main.storyboard in Resources */,
 				6E90BA721B67D3E100F2A971 /* 2-PleaseIncrease.mp3 in Resources */,
 				BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */,

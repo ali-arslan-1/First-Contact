@@ -61,6 +61,8 @@
     [super viewDidLoad];
     init = true;
     
+    
+    startTime = [[NSDate date] timeIntervalSince1970];
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!self.context) {
@@ -161,7 +163,7 @@
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mDefaultFBO);
     
     // Setup my FBO
-    int fboCount = 4;
+    int fboCount = 8;
     glGenFramebuffers ( fboCount, mFBO );
     glGenTextures ( fboCount, mColorTextureID );
     glGenRenderbuffers ( fboCount, mDepthRenderBuffer );
@@ -222,6 +224,7 @@
     [shaderLoader loadShaders];
     [shaderLoader loadMyShaders];
     [shaderLoader loadBlurShaders];
+    [shaderLoader loadBlendShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
@@ -502,64 +505,19 @@
     }
     
     
-    /*****************************
-     * 3rd render pass, left blur horizontal
-     *****************************/
+    
+    //left eye
+    
+    [self blur:mFBO[2] otherFbo:mFBO[3] colorTexture: mColorTextureID[2] inputTexture: mColorTextureID[0]];
+    
+    [self blend: mFBO[4]  inputTexture: mColorTextureID[3] otherInput:mColorTextureID[0]];
+    
+    //right eye
+    [self blur:mFBO[5] otherFbo:mFBO[6] colorTexture: mColorTextureID[5] inputTexture: mColorTextureID[1]];
+    
+    [self blend: mFBO[7]  inputTexture: mColorTextureID[6] otherInput:mColorTextureID[1]];
     
 
-    glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[2] );
-    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
-    
-    
-    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[0]);
-    
-
-    // draw full screen quad
-    glBindVertexArrayOES(_quadVertexArray);
-    
-    // Render the object with ES2
-    glUseProgram(shaderLoader._blurProgram);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
-    glUniform2i([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 1.5f / 512.0f, 0.0f);
-
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    
-    
-    
-    /*****************************
-     * 4th render pass, left blur verticle
-     *****************************/
-    
-    glBindFramebuffer ( GL_FRAMEBUFFER, mFBO[3] );
-    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
-    
-    
-    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[2]);
-    
-    // draw full screen quad
-    glBindVertexArrayOES(_quadVertexArray);
-    // Render the object with ES2
-    glUseProgram(shaderLoader._blurProgram);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
-    glUniform1i([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
-    glUniform2i([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 0.0f, 1.5f / 512.0f);
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    
-    
-    
     /*****************************
      * 6th render pass, use default FBO
      *****************************/
@@ -573,29 +531,30 @@
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[3]);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, mColorTextureID[1]);
-    
-    
     
     // draw full screen quad
     glBindVertexArrayOES(_quadVertexArray);
     // Render the object with ES2
     glUseProgram(shaderLoader._ppProgram);
+    
+    
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[4]);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, mColorTextureID[7]);
+    
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_L], 0);
     glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_R], 1);
     
     glUniform2f([ShaderLoader uniforms:UNIFORM_RESOLUTION],mFrameWidth, mFrameHeight );
     
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
     
+
+    //glDisable(GL_BLEND);
 }
 
 -(void)textFieldDidChange:(UITextField *)sender{
@@ -639,5 +598,91 @@
     
 }
 
+-(void) blur: (GLuint) fbo1 otherFbo: (GLuint)fbo2
+colorTexture: (GLuint) colorTextureFbo1 inputTexture:(GLuint)input {
+    
+    
+    // verticle
+    
+    glBindFramebuffer ( GL_FRAMEBUFFER, fbo1 );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, input);
+    
+    
+    // draw full screen quad
+    glBindVertexArrayOES(_quadVertexArray);
+    
+    // Render the object with ES2
+    glUseProgram(shaderLoader._blurProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
+    glUniform1f([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
+    glUniform2f([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 1.5f / 512.0f, 0.0f);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    
+    // horizontal
+    glBindFramebuffer ( GL_FRAMEBUFFER, fbo2 );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, colorTextureFbo1);
+    
+    // draw full screen quad
+    glBindVertexArrayOES(_quadVertexArray);
+    // Render the object with ES2
+    glUseProgram(shaderLoader._blurProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_FINAL], 0);
+    glUniform1f([ShaderLoader uniforms:UNIFORM_ATTENUATION], 1.0f);
+    glUniform2f([ShaderLoader uniforms:UNIFORM_SAMPLE_OFFSET], 0.0f, 1.5f / 512.0f);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+}
+
+
+-(void) blend: (GLuint) fbo
+inputTexture: (GLuint) texture1 otherInput:(GLuint)texture2 {
+    
+    glBindFramebuffer ( GL_FRAMEBUFFER, fbo );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    //glEnable(GL_TEXTURE_2D);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    
+    // draw full screen quad
+    glBindVertexArrayOES(_quadVertexArray);
+    // Render the object with ES2
+    glUseProgram(shaderLoader._blendProgram);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_BLEND_SAMPLER2D_1], 0);
+    glUniform1i([ShaderLoader uniforms:UNIFORM_BLEND_SAMPLER2D_2], 1);
+    
+    
+    float runtime = [[NSDate date] timeIntervalSince1970] - startTime;
+    
+    glUniform1f([ShaderLoader uniforms:UNIFORM_TIME], runtime);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+}
 @end
 

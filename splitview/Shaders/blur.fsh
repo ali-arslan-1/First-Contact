@@ -35,14 +35,13 @@ void main()
         sum += texture2D( tex0, vTexCoord.st +  +9.0 * sample_offset ).rgb * 0.014053461291849008;
         sum += texture2D( tex0, vTexCoord.st + +10.0 * sample_offset ).rgb * 0.009167927656011385;
         
-        //if (sum.r == 0.0 && sum.g == 0.0 && sum.b == 0.0) {
-          //  gl_FragColor.rgb = vec3(1.0,0,0);
-        //}else{
-            gl_FragColor.rgb = 1.5 * sum;  // vec4(1.0,0,0,0);
-            gl_FragColor.a = 0.90;
-        //}
+
+        gl_FragColor.rgb = attenuation * sum;  
+        gl_FragColor.a = texCol.a;
+        
     }else{
-        gl_FragColor =  texture2D(tex0, vTexCoord);//attenuation * sum;
-        //gl_FragColor.a = 1.0;
+        
+        gl_FragColor =  texture2D(tex0, vTexCoord);
+        gl_FragColor.a = texCol.a;
     }
 }

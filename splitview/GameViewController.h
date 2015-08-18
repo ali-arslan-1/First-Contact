@@ -84,15 +84,15 @@ GLfloat gQuadVertexData[] =
     uint         mTextureID;
     
     GLint        mDefaultFBO;
-    GLuint       mFBO[4];
-    GLuint       mColorTextureID[4];
-    GLuint       mDepthRenderBuffer[4];
-    
-    GLuint      finalColorTextures[2];
+    GLuint       mFBO[8];
+    GLuint       mColorTextureID[8];
+    GLuint       mDepthRenderBuffer[8];
+
     
     GLfloat      mFrameWidth;
     GLfloat      mFrameHeight;
     
+    float startTime;
     HeadPosition *headPosition;
     
 }
