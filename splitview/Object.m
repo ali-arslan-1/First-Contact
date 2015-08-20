@@ -196,7 +196,16 @@
     return matrix;
 }
 
-
+-(GLKMatrix4)getLightModelViewProjection:(GLKMatrix4) lightViewMatrix{
+    GLKMatrix4 matrix;
+    
+    GLKMatrix4 modelView = GLKMatrix4Multiply(lightViewMatrix, modelMatrix);
+    
+    matrix = GLKMatrix4Multiply([HeadPosition projection], modelView);
+    
+    
+    return matrix;
+}
 
 -(GLKMatrix4)getModelViewProjection:(enum Eye) eye{
     GLKMatrix4 matrix;

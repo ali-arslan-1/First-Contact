@@ -17,4 +17,8 @@ void main()
         gl_FragColor = texture2D(texture2,vTexCoord);
     }
 
+    /*float Depth = texture2D(texture1, vTexCoord).x;
+    Depth = 1.0 - (1.0 - Depth) * 25.0;
+    gl_FragColor = vec4(Depth);
+    */
 }

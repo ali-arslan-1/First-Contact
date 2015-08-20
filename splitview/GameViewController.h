@@ -85,6 +85,10 @@ GLfloat gQuadVertexData[] =
     
     GLint        mDefaultFBO;
     GLuint       mFBO[8];
+    
+    GLuint       shadowFbo;
+    GLuint       shadowTexture;
+    
     GLuint       mColorTextureID[8];
     GLuint       mDepthRenderBuffer[8];
 

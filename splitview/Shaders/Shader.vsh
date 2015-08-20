@@ -15,10 +15,12 @@ varying lowp vec2 vTexCoord;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 modelViewProjectionMatrix;
+uniform mat4 lightModelViewProjectionMatrix;
 uniform mat4 modelViewInvTransMatrix;
 
 varying vec4 vPosition;
 varying vec3 vNormal;
+varying vec4 lightSpacePos;
 
 
 void main()
@@ -29,5 +31,6 @@ void main()
     vPosition = modelViewMatrix * position;
     vNormal = vec3(modelViewInvTransMatrix * vec4(normal, 0.0));
     
+    lightSpacePos = lightModelViewProjectionMatrix * position;
     gl_Position = modelViewProjectionMatrix * position;
 }

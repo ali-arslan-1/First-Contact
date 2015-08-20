@@ -52,6 +52,7 @@ enum Eye{
 -(GLKMatrix4) getModelView:(enum Eye)eye;
 -(GLKMatrix4) getModelViewProjection:(enum Eye)eye;
 -(GLKMatrix4) getModelViewInverseTranspose:(enum Eye)eye;
+-(GLKMatrix4) getLightModelViewProjection:(GLKMatrix4) lightViewMatrix;
 -(void) calculateCenter;
 
 

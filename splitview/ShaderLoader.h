@@ -26,6 +26,7 @@
 @property( nonatomic ) GLuint _ppProgram;
 @property( nonatomic ) GLuint _blurProgram;
 @property( nonatomic ) GLuint _blendProgram;
+@property( nonatomic ) GLuint _shadowProgram;
 
 #pragma mark -  OpenGL ES 2 shader compilation
 -(id)init:(NSMutableArray*)_objects;
@@ -34,6 +35,7 @@
 - (BOOL)loadMyShaders;
 - (BOOL)loadBlurShaders;
 - (BOOL)loadBlendShaders;
+- (BOOL)loadShadowShaders;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;

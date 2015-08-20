@@ -9,9 +9,12 @@
 precision mediump float;
 
 varying mediump vec4 vPosition;
+varying mediump vec4 lightSpacePos;
+
 varying mediump vec3 vNormal;
 
 uniform sampler2D uSampler;
+uniform sampler2D shadowMap;
 uniform int       isGrid;
 
 varying mediump vec2 vTexCoord;
@@ -59,6 +62,20 @@ vec3 specular() {
     return uLightColor * uSpecularMaterial * pow(cosAngle, uSpecularityExponent);
 }
 
+float CalcShadowFactor(vec4 LightSpacePos)
+{
+    vec3 ProjCoords = LightSpacePos.xyz / LightSpacePos.w;
+    vec2 UVCoords;
+    UVCoords.x = 0.5 * ProjCoords.x + 0.5;
+    UVCoords.y = 0.5 * ProjCoords.y + 0.5;
+    float z = 0.5 * ProjCoords.z + 0.5;
+    float Depth = texture2D(shadowMap, UVCoords).x;
+    if (Depth < (z + 0.00001))
+        return 0.5;
+    else
+        return 1.0;
+}
+
 void main()
 {
     lowp vec4 texCol = texture2D(uSampler, vTexCoord);
@@ -67,25 +84,19 @@ void main()
         gl_FragData[0] = vec4(0.0, 1.0, 0.0, 1.0);
     else if(texCol.a < 0.99){
         
-        /*int i, j;
-        int sampleSize = 1;
-        float total = float(((sampleSize*2)+1) * (sampleSize*2)+1);
-        vec4 sum = vec4(0);
-        for (i=-sampleSize; i<=sampleSize; i++) {
-            for (j=-sampleSize; j<=sampleSize; j++) {
-                vec2 offset = vec2(i,j) * 0.005;
-                sum = sum + texture2D(uSampler, vTexCoord + offset);
-            }
-        }
-        vec4 avg = vec4(sum.x/total, sum.y/total, sum.z/total,0.0);
-        */
 
-        gl_FragData[0] = texCol; //vec4(1.0, 1.0, 1.0,1.0);
-        //gl_FragData[0].a = 1.0;
+        gl_FragData[0] = texCol;
         
     }
     else{
-        gl_FragData[0] = vec4(ambient() + diffuse() + specular(),1.0);
+        
+        float shadowFactor = CalcShadowFactor(lightSpacePos);
+        gl_FragData[0] = vec4(ambient() + (shadowFactor * diffuse()) + (shadowFactor * specular()),1.0);
+        
+        //if(shadowFactor<0.5){
+          //  gl_FragData[0] = vec4(1,0,0,0);
+        //}
+        
         //gl_FragData[0].a = 0.0;
     }
 }

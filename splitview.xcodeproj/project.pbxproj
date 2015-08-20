@@ -58,6 +58,8 @@
 		BBF0ECA31B2DD91100D44D89 /* Door.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA21B2DD91100D44D89 /* Door.m */; };
 		BBF0ECA61B2EF92F00D44D89 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA51B2EF92F00D44D89 /* Utils.m */; };
 		BBF0ECA91B2EFDBC00D44D89 /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA81B2EFDBC00D44D89 /* Light.m */; };
+		BBF6FFCE1B85FB0F0094743D /* shadow.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF6FFCD1B85FB0F0094743D /* shadow.vsh */; };
+		BBF6FFD01B85FB220094743D /* shadow.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF6FFCF1B85FB220094743D /* shadow.fsh */; };
 		BBF781A41B726A1700529609 /* blur.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A21B726A1700529609 /* blur.vsh */; };
 		BBF781A51B726A1700529609 /* blur.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A31B726A1700529609 /* blur.fsh */; };
 		BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBFE91341B71055D00045E34 /* fxaa.fsh */; };
@@ -133,6 +135,8 @@
 		BBF0ECA51B2EF92F00D44D89 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BBF0ECA71B2EFCA100D44D89 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
 		BBF0ECA81B2EFDBC00D44D89 /* Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Light.m; sourceTree = "<group>"; };
+		BBF6FFCD1B85FB0F0094743D /* shadow.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shadow.vsh; sourceTree = "<group>"; };
+		BBF6FFCF1B85FB220094743D /* shadow.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shadow.fsh; sourceTree = "<group>"; };
 		BBF781A21B726A1700529609 /* blur.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.vsh; path = Shaders/blur.vsh; sourceTree = "<group>"; };
 		BBF781A31B726A1700529609 /* blur.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.fsh; path = Shaders/blur.fsh; sourceTree = "<group>"; };
 		BBFE91341B71055D00045E34 /* fxaa.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fxaa.fsh; sourceTree = "<group>"; };
@@ -248,6 +252,8 @@
 				0A15DC561AB734510058C15E /* Shader.vsh */,
 				BB80128B1B8213DA00EC7EF3 /* blend.vsh */,
 				BB80128D1B8213EF00EC7EF3 /* blend.fsh */,
+				BBF6FFCD1B85FB0F0094743D /* shadow.vsh */,
+				BBF6FFCF1B85FB220094743D /* shadow.fsh */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -429,12 +435,14 @@
 				6E90BA781B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 in Resources */,
 				0A15DC621AB734510058C15E /* LaunchScreen.xib in Resources */,
 				6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */,
+				BBF6FFCE1B85FB0F0094743D /* shadow.vsh in Resources */,
 				6E90BA6C1B67D3E100F2A971 /* 1-LetUsKnow.mp3 in Resources */,
 				BBF781A51B726A1700529609 /* blur.fsh in Resources */,
 				0A15DC7D1AB734D50058C15E /* post.vsh in Resources */,
 				6E90BA701B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 in Resources */,
 				0A15DC7C1AB734D50058C15E /* post.fsh in Resources */,
 				6E90BA6E1B67D3E100F2A971 /* 3-EverthingOkay.mp3 in Resources */,
+				BBF6FFD01B85FB220094743D /* shadow.fsh in Resources */,
 				6E90BA741B67D3E100F2A971 /* 0-SensorAccess.mp3 in Resources */,
 				6E90BA6A1B67D3E100F2A971 /* 0-GoodMorningInitiator.mp3 in Resources */,
 				BB80128E1B8213EF00EC7EF3 /* blend.fsh in Resources */,

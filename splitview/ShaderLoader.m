@@ -14,6 +14,7 @@
 @synthesize _ppProgram;
 @synthesize _blurProgram;
 @synthesize _blendProgram;
+@synthesize _shadowProgram;
 
 
 static GLint uniforms[NUM_UNIFORMS];
@@ -111,9 +112,11 @@ static GLint uniforms[NUM_UNIFORMS];
     
     // Get uniform locations.
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "lightModelViewProjectionMatrix");
     uniforms[UNIFORM_MODELVIEW_MATRIX] = glGetUniformLocation(_program, "modelViewMatrix");
     uniforms[UNIFORM_MODELVIEW_INV_TRANS] = glGetUniformLocation(_program, "modelViewInvTransMatrix");
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
+    uniforms[UNIFORM_SAMPLER2D_SHADOW] = glGetUniformLocation(_program, "shadowMap");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
     //uniforms[UNIFORM_LIGHT_POS] = glGetUniformLocation(_program, "uLightPosition");
     
@@ -212,6 +215,76 @@ static GLint uniforms[NUM_UNIFORMS];
     return YES;
 }
 
+
+
+- (BOOL)loadShadowShaders
+{
+    GLuint vertShader, fragShader;
+    NSString *vertShaderPathname, *fragShaderPathname;
+    
+    // Create shader program.
+    _shadowProgram = glCreateProgram();
+    
+    // Create and compile vertex shader.
+    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"shadow" ofType:@"vsh"];
+    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
+        NSLog(@"Failed to compile vertex shader");
+        return NO;
+    }
+    
+    // Create and compile fragment shader.
+    //fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"DistortTwoTexture" ofType:@"fsh"];
+    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"shadow" ofType:@"fsh"];
+    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
+        NSLog(@"Failed to compile fragment shader");
+        return NO;
+    }
+    
+    // Attach vertex shader to program.
+    glAttachShader(_shadowProgram, vertShader);
+    
+    // Attach fragment shader to program.
+    glAttachShader(_shadowProgram, fragShader);
+    
+    // Bind attribute locations.
+    // This needs to be done prior to linking.
+    glBindAttribLocation(_shadowProgram, GLKVertexAttribPosition, "position");
+    
+    // Link program.
+    if (![self linkProgram:_shadowProgram]) {
+        NSLog(@"Failed to link program: %d", _shadowProgram);
+        
+        if (vertShader) {
+            glDeleteShader(vertShader);
+            vertShader = 0;
+        }
+        if (fragShader) {
+            glDeleteShader(fragShader);
+            fragShader = 0;
+        }
+        if (_shadowProgram) {
+            glDeleteProgram(_shadowProgram);
+            _shadowProgram = 0;
+        }
+        
+        return NO;
+    }
+    
+    // Release vertex and fragment shaders.
+    if (vertShader) {
+        glDetachShader(_shadowProgram, vertShader);
+        glDeleteShader(vertShader);
+    }
+    if (fragShader) {
+        glDetachShader(_shadowProgram, fragShader);
+        glDeleteShader(fragShader);
+    }
+    
+    // Get uniform locations.
+    uniforms[UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX1] = glGetUniformLocation(_shadowProgram, "lightModelViewProjectionMatrix");
+    
+    return YES;
+}
 
 - (BOOL)loadBlurShaders
 {

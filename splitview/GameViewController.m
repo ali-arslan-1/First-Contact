@@ -24,7 +24,9 @@
     
     float _rotation;
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
+    GLKMatrix4 _lightModelViewProjectionMatrix;
     GLKMatrix4 _gridModelViewMatrix[2];
+    GLKMatrix4 _lightViewMatrix;
     NSMutableArray * lights;
     
     GLuint _quadVertexArray;
@@ -103,6 +105,9 @@
     
     [HeadPosition setProjection:projectionMatrix];
     
+
+    
+    
     
     // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
     //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
@@ -120,6 +125,12 @@
     [levelController assignTriggersToLevels:objloader];
     currentLevel = [levelController getNextLevel];
     [currentLevel loadLevel];
+    
+    for (Light* light in lights) {
+        
+        _lightViewMatrix = GLKMatrix4MakeLookAt(light.position.x-3, light.position.y-1, light.position.z, initialViewDir.x-0.3, initialViewDir.y, initialViewDir.z+0.3, 0, 1, 0);
+        break;
+    }
 }
 
 
@@ -215,6 +226,67 @@
     return true;
 }
 
+
+- (bool)initShadowFBO {
+    /******************************************************************************************************
+     More documentation about FBO please refer to:
+     https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/WorkingwithEAGLContexts/WorkingwithEAGLContexts.html
+     *******************************************************************************************************/
+    // get default FBO ID
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mDefaultFBO);
+    
+    // Setup my FBO
+    int fboCount = 1;
+    glGenFramebuffers ( fboCount, &shadowFbo );
+    glGenTextures ( fboCount, &shadowTexture );
+    
+    
+    
+    NSLog(@"defaultFBO: %d, : %d", mDefaultFBO, shadowFbo);
+    
+    /*********************************************
+     * Setup color buffer and attach to FBO
+     *********************************************/
+    // texture has same dimension as our screen
+    int textureWidth = (int)floor(mFrameWidth / 2.0);
+    int textureHeight = mFrameHeight;
+    
+    glBindTexture ( GL_TEXTURE_2D, shadowTexture );
+    
+    // Set the filtering mode
+    
+    glTexImage2D ( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, textureWidth, textureHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, NULL );
+    
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glBindFramebuffer ( GL_FRAMEBUFFER, shadowFbo );
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTexture, 0);
+
+    //glDrawBuffers(1, GL_NONE);
+
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
+    if(status != GL_FRAMEBUFFER_COMPLETE) {
+        NSLog(@"FBO : failed to make complete shadow framebuffer object %x", status);
+        return false;
+        }
+    
+    
+    
+    // Restore the original framebuffer
+    glBindFramebuffer ( GL_FRAMEBUFFER, mDefaultFBO );
+    glBindTexture ( GL_TEXTURE_2D, 0 );
+    
+    NSLog(@"FBO created successfully.");
+    return true;
+}
+
+
 - (void)setupGL
 {
     [EAGLContext setCurrentContext:self.context];
@@ -225,6 +297,7 @@
     [shaderLoader loadMyShaders];
     [shaderLoader loadBlurShaders];
     [shaderLoader loadBlendShaders];
+    [shaderLoader loadShadowShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
@@ -244,6 +317,7 @@
     [self initGridGeometry];
     
     [self initFBO];
+    [self initShadowFBO];
 }
 
 - (void)initLoadedGeometry
@@ -389,9 +463,12 @@
     }
   
     
+    
+    
+    
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
-    
+
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply([HeadPosition lView], gridModelMat);
     GLKMatrix4 rightMVMat = GLKMatrix4Multiply([HeadPosition rView], gridModelMat);
     
@@ -407,6 +484,41 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    /*****************************
+     *1st render pass, use shadowFbo, calculate shadow map
+     *****************************/
+
+    glBindFramebuffer ( GL_FRAMEBUFFER, shadowFbo );
+    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
+    
+    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+
+    
+    glClear(GL_DEPTH_BUFFER_BIT);
+    
+    
+    // render loaded geometries
+    for(int i = 0; i< objloader.objects.count; i++){
+        Object *loaded = [objloader.objects objectAtIndex:i];
+        
+        glBindVertexArrayOES(*(loaded.vertexArray));
+
+        // Render the object with ES2
+        glUseProgram(shaderLoader._shadowProgram);
+        
+        GLKMatrix4 lMVP = [loaded getLightModelViewProjection:_lightViewMatrix];
+        
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX1], 1, 0, lMVP.m);
+        
+        glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+
+
+        
+        mNumTriangles = [loaded getNumVertices];
+        glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    }
+    
+    
     /*****************************
      *1st render pass, use FBO[0], render left view
      *****************************/
@@ -436,13 +548,17 @@
         glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTextureID);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, shadowTexture);
         // Render the object with ES2
         glUseProgram(shaderLoader._program);
         
         glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Left].m);
-        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection:Left].m);
-        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection: Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getLightModelViewProjection:_lightViewMatrix].m);
         glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_SHADOW], 1);
         glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
         //1.071f, 3.264f, -1.882f
         for (Light* light in lights) {
