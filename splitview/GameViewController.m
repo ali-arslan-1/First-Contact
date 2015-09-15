@@ -79,7 +79,7 @@
     // load Geometry
     NSLog(@"loading obj file...");
 
-    [objloader initWithPath:@"PodRoom"];
+    [objloader initWithPath:@"Craft"];
 
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
@@ -89,6 +89,7 @@
     
     headPosition = [[HeadPosition alloc] initWithPos:initialPos];
     [headPosition addObjects:objloader.getCategorizedObjects];
+    
 
     
     GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
@@ -115,6 +116,7 @@
  
     //[inputTextField setHidden:YES];
     [inputTextField becomeFirstResponder];
+    
     
     levelController = [[LevelController alloc] initwithLevelXML:@"NarrativeSequence"];
     [levelController assignTriggersToLevels:objloader];
@@ -210,7 +212,7 @@
     // Restore the original framebuffer
     glBindFramebuffer ( GL_FRAMEBUFFER, mDefaultFBO );
     glBindTexture ( GL_TEXTURE_2D, 0 );
-    
+     
     NSLog(@"FBO created successfully.");
     return true;
 }
@@ -232,7 +234,7 @@
     
     glGenTextures(1, &mTextureID);
     // square texture
-    [self loadTextureFromImage:@"T_E_Atlas_01" Type:@"png" TexID:mTextureID];
+    [self loadTextureFromImage:@"T_E_PodRoom" Type:@"png" TexID:mTextureID];
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
     
@@ -374,10 +376,14 @@
     
 }
 
+
+
 #pragma mark - GLKView and GLKViewController delegate methods
 
 - (void)update
 {
+ 
+    
     for (Object *object in objloader.objects) {
         if([object isKindOfClass:[Door class]]){
             [(Door*)object changeStateIfRequired];
@@ -407,6 +413,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    
     /*****************************
      *1st render pass, use FBO[0], render left view
      *****************************/
@@ -569,7 +576,7 @@
         [headPosition moveRight];
     }else if([input  isEqual: @"w"]){
         [headPosition moveForward];
-    }else if([input  isEqual: @"s"]){
+    }else if([input  isEqual: @"x"]){
         [headPosition moveBackward];
     }/*else if([input  isEqual: @"e"]){     //we don't need e and q
         [headPosition moveUp];
@@ -583,7 +590,7 @@
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
-    }else if ([input isEqual:@"x"]){
+    }else if ([input isEqual:@"c"]){
         TriggerObject *trigger = [currentLevel getTriggerObject];
         if([trigger isActive]&&[headPosition isTriggered:trigger]){
             [trigger responseWhenItIsTriggered];
@@ -597,6 +604,7 @@
    //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
+
 
 -(void) blur: (GLuint) fbo1 otherFbo: (GLuint)fbo2
 colorTexture: (GLuint) colorTextureFbo1 inputTexture:(GLuint)input {

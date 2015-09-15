@@ -19,6 +19,40 @@
 		0A15DC7D1AB734D50058C15E /* post.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 0A15DC7B1AB734D50058C15E /* post.vsh */; };
 		0A15DC841AB735730058C15E /* ObjLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A15DC831AB735730058C15E /* ObjLoader.m */; };
 		0A5917B51AB86EB7000E2DD3 /* DistortTwoTexture.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */; };
+		0B5E5B061BA818C2003BBE2A /* 0-AISensorAccessGranted.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B031BA818C2003BBE2A /* 0-AISensorAccessGranted.mp3 */; };
+		0B5E5B071BA818C2003BBE2A /* 1-SensorAccessGranted.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B041BA818C2003BBE2A /* 1-SensorAccessGranted.mp3 */; };
+		0B5E5B081BA818C2003BBE2A /* 2-PurdgePodsConvo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B051BA818C2003BBE2A /* 2-PurdgePodsConvo.mp3 */; };
+		0B5E5B0D1BA818D5003BBE2A /* 0-CannotRiskCraft.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B091BA818D5003BBE2A /* 0-CannotRiskCraft.mp3 */; };
+		0B5E5B0E1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B0A1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 */; };
+		0B5E5B0F1BA818D5003BBE2A /* 2-BreachingProtocol.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B0B1BA818D5003BBE2A /* 2-BreachingProtocol.mp3 */; };
+		0B5E5B101BA818D5003BBE2A /* 3-PurdgePodsASAP.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B0C1BA818D5003BBE2A /* 3-PurdgePodsASAP.mp3 */; };
+		0B5E5B2E1BA81902003BBE2A /* 0-BiologistConvo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B121BA81902003BBE2A /* 0-BiologistConvo.mp3 */; };
+		0B5E5B2F1BA81902003BBE2A /* 0-CannotRiskCraft.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B141BA81902003BBE2A /* 0-CannotRiskCraft.mp3 */; };
+		0B5E5B301BA81902003BBE2A /* 1-NoTimeToLoose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B151BA81902003BBE2A /* 1-NoTimeToLoose.mp3 */; };
+		0B5E5B311BA81902003BBE2A /* 2-BreachingProtocol.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B161BA81902003BBE2A /* 2-BreachingProtocol.mp3 */; };
+		0B5E5B321BA81902003BBE2A /* 3-PurdgePodsASAP.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B171BA81902003BBE2A /* 3-PurdgePodsASAP.mp3 */; };
+		0B5E5B331BA81902003BBE2A /* 0-PurgeInitiated.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B191BA81902003BBE2A /* 0-PurgeInitiated.mp3 */; };
+		0B5E5B341BA81902003BBE2A /* 1-WaitNo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B1A1BA81902003BBE2A /* 1-WaitNo.mp3 */; };
+		0B5E5B351BA81902003BBE2A /* 2-PurgeComplete.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B1B1BA81902003BBE2A /* 2-PurgeComplete.mp3 */; };
+		0B5E5B361BA81902003BBE2A /* 3-HowYouDoin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B1C1BA81902003BBE2A /* 3-HowYouDoin.mp3 */; };
+		0B5E5B371BA81902003BBE2A /* 4-FinalInstruction.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B1D1BA81902003BBE2A /* 4-FinalInstruction.mp3 */; };
+		0B5E5B381BA81902003BBE2A /* 0-EverythingOkay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B1F1BA81902003BBE2A /* 0-EverythingOkay.mp3 */; };
+		0B5E5B391BA81902003BBE2A /* 1-DontDetectChange.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B201BA81902003BBE2A /* 1-DontDetectChange.mp3 */; };
+		0B5E5B3A1BA81902003BBE2A /* 2-PleaseOpen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B211BA81902003BBE2A /* 2-PleaseOpen.mp3 */; };
+		0B5E5B3B1BA81902003BBE2A /* 0-AirlockOpened.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B231BA81902003BBE2A /* 0-AirlockOpened.mp3 */; };
+		0B5E5B3C1BA81902003BBE2A /* 1-LifeFormInAirlock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B241BA81902003BBE2A /* 1-LifeFormInAirlock.mp3 */; };
+		0B5E5B3D1BA81902003BBE2A /* 2-RealControlConvo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B251BA81902003BBE2A /* 2-RealControlConvo.mp3 */; };
+		0B5E5B3E1BA81902003BBE2A /* 0-LockedDown.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B271BA81902003BBE2A /* 0-LockedDown.mp3 */; };
+		0B5E5B3F1BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B291BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */; };
+		0B5E5B401BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B2B1BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */; };
+		0B5E5B411BA81902003BBE2A /* 0-GlobalPurgeCommenced.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B2D1BA81902003BBE2A /* 0-GlobalPurgeCommenced.mp3 */; };
+		0B5E5B491BA81978003BBE2A /* Craft.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B421BA81978003BBE2A /* Craft.obj */; };
+		0B5E5B4A1BA81978003BBE2A /* T_E_AirLock.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B431BA81978003BBE2A /* T_E_AirLock.png */; };
+		0B5E5B4B1BA81978003BBE2A /* T_E_Cockpit.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B441BA81978003BBE2A /* T_E_Cockpit.png */; };
+		0B5E5B4C1BA81978003BBE2A /* T_E_DiningHall.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B451BA81978003BBE2A /* T_E_DiningHall.png */; };
+		0B5E5B4D1BA81978003BBE2A /* T_E_EngineRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B461BA81978003BBE2A /* T_E_EngineRoom.png */; };
+		0B5E5B4E1BA81978003BBE2A /* T_E_Hallway.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B471BA81978003BBE2A /* T_E_Hallway.png */; };
+		0B5E5B4F1BA81978003BBE2A /* T_E_PodRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B481BA81978003BBE2A /* T_E_PodRoom.png */; };
 		6E90BA481B67CB3700F2A971 /* LevelXMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E90BA471B67CB3700F2A971 /* LevelXMLReader.m */; };
 		6E90BA4B1B67CB4500F2A971 /* LevelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E90BA4A1B67CB4500F2A971 /* LevelController.m */; };
 		6E90BA4D1B67CB5D00F2A971 /* NarrativeSequence.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA4C1B67CB5D00F2A971 /* NarrativeSequence.xml */; };
@@ -35,19 +69,11 @@
 		6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA5E1B67D3E100F2A971 /* 0-PowerIncreased.mp3 */; };
 		6E90BA741B67D3E100F2A971 /* 0-SensorAccess.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA601B67D3E100F2A971 /* 0-SensorAccess.mp3 */; };
 		6E90BA751B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA611B67D3E100F2A971 /* 1-EverythingOkay.mp3 */; };
-		6E90BA761B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA631B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 */; };
-		6E90BA771B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA641B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 */; };
-		6E90BA781B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA661B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 */; };
-		6E90BA791B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA671B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 */; };
-		6E90BA7A1B67D3E100F2A971 /* 2-BreachingProtocol.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA681B67D3E100F2A971 /* 2-BreachingProtocol.mp3 */; };
-		6E90BA7B1B67D3E100F2A971 /* 3-PurdgePodsASAP.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA691B67D3E100F2A971 /* 3-PurdgePodsASAP.mp3 */; };
 		6EE03A501B4FDB6300B78398 /* TriggerObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE03A4F1B4FDB6300B78398 /* TriggerObject.m */; };
 		6EE03A531B4FEBCE00B78398 /* Level.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE03A521B4FEBCE00B78398 /* Level.m */; };
 		6EF3E4B81B3B0B2C0072936A /* AudioSamplePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3E4B71B3B0B2C0072936A /* AudioSamplePlayer.m */; };
 		6EF3E4BF1B3B0F1F0072936A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF3E4BE1B3B0F1F0072936A /* OpenAL.framework */; };
 		6EF3E4C21B3B0FF90072936A /* AixEllis.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6EF3E4C11B3B0FF90072936A /* AixEllis.caf */; };
-		BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */ = {isa = PBXBuildFile; fileRef = BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */; };
-		BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */ = {isa = PBXBuildFile; fileRef = BB771D061B18EEBD00988B7C /* PodRoom.obj */; };
 		BB80128C1B8213DA00EC7EF3 /* blend.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BB80128B1B8213DA00EC7EF3 /* blend.vsh */; };
 		BB80128E1B8213EF00EC7EF3 /* blend.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BB80128D1B8213EF00EC7EF3 /* blend.fsh */; };
 		BBD21C941B2CBD0E006056FA /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD21C931B2CBD0E006056FA /* Renderer.m */; };
@@ -81,6 +107,40 @@
 		0A15DC821AB735730058C15E /* ObjLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjLoader.h; sourceTree = "<group>"; };
 		0A15DC831AB735730058C15E /* ObjLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjLoader.m; sourceTree = "<group>"; };
 		0A5917B41AB86EB7000E2DD3 /* DistortTwoTexture.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = DistortTwoTexture.fsh; path = Shaders/DistortTwoTexture.fsh; sourceTree = "<group>"; };
+		0B5E5B031BA818C2003BBE2A /* 0-AISensorAccessGranted.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "0-AISensorAccessGranted.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/0-AISensorAccessGranted.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B041BA818C2003BBE2A /* 1-SensorAccessGranted.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "1-SensorAccessGranted.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/1-SensorAccessGranted.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B051BA818C2003BBE2A /* 2-PurdgePodsConvo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "2-PurdgePodsConvo.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/2-PurdgePodsConvo.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B091BA818D5003BBE2A /* 0-CannotRiskCraft.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "0-CannotRiskCraft.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/Reminders/0-CannotRiskCraft.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B0A1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "1-NoTimeToLoose.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/Reminders/1-NoTimeToLoose.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B0B1BA818D5003BBE2A /* 2-BreachingProtocol.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "2-BreachingProtocol.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/Reminders/2-BreachingProtocol.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B0C1BA818D5003BBE2A /* 3-PurdgePodsASAP.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "3-PurdgePodsASAP.mp3"; path = "splitview/Sound/Narration/3-PurgePodRoom/Reminders/3-PurdgePodsASAP.mp3"; sourceTree = SOURCE_ROOT; };
+		0B5E5B121BA81902003BBE2A /* 0-BiologistConvo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-BiologistConvo.mp3"; sourceTree = "<group>"; };
+		0B5E5B141BA81902003BBE2A /* 0-CannotRiskCraft.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-CannotRiskCraft.mp3"; sourceTree = "<group>"; };
+		0B5E5B151BA81902003BBE2A /* 1-NoTimeToLoose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-NoTimeToLoose.mp3"; sourceTree = "<group>"; };
+		0B5E5B161BA81902003BBE2A /* 2-BreachingProtocol.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-BreachingProtocol.mp3"; sourceTree = "<group>"; };
+		0B5E5B171BA81902003BBE2A /* 3-PurdgePodsASAP.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "3-PurdgePodsASAP.mp3"; sourceTree = "<group>"; };
+		0B5E5B191BA81902003BBE2A /* 0-PurgeInitiated.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-PurgeInitiated.mp3"; sourceTree = "<group>"; };
+		0B5E5B1A1BA81902003BBE2A /* 1-WaitNo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-WaitNo.mp3"; sourceTree = "<group>"; };
+		0B5E5B1B1BA81902003BBE2A /* 2-PurgeComplete.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-PurgeComplete.mp3"; sourceTree = "<group>"; };
+		0B5E5B1C1BA81902003BBE2A /* 3-HowYouDoin.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "3-HowYouDoin.mp3"; sourceTree = "<group>"; };
+		0B5E5B1D1BA81902003BBE2A /* 4-FinalInstruction.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "4-FinalInstruction.mp3"; sourceTree = "<group>"; };
+		0B5E5B1F1BA81902003BBE2A /* 0-EverythingOkay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-EverythingOkay.mp3"; sourceTree = "<group>"; };
+		0B5E5B201BA81902003BBE2A /* 1-DontDetectChange.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-DontDetectChange.mp3"; sourceTree = "<group>"; };
+		0B5E5B211BA81902003BBE2A /* 2-PleaseOpen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-PleaseOpen.mp3"; sourceTree = "<group>"; };
+		0B5E5B231BA81902003BBE2A /* 0-AirlockOpened.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-AirlockOpened.mp3"; sourceTree = "<group>"; };
+		0B5E5B241BA81902003BBE2A /* 1-LifeFormInAirlock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-LifeFormInAirlock.mp3"; sourceTree = "<group>"; };
+		0B5E5B251BA81902003BBE2A /* 2-RealControlConvo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-RealControlConvo.mp3"; sourceTree = "<group>"; };
+		0B5E5B271BA81902003BBE2A /* 0-LockedDown.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-LockedDown.mp3"; sourceTree = "<group>"; };
+		0B5E5B291BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-GlobalPurdgeRequested.mp3"; sourceTree = "<group>"; };
+		0B5E5B2B1BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-GlobalPurdgeRequested.mp3"; sourceTree = "<group>"; };
+		0B5E5B2D1BA81902003BBE2A /* 0-GlobalPurgeCommenced.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-GlobalPurgeCommenced.mp3"; sourceTree = "<group>"; };
+		0B5E5B421BA81978003BBE2A /* Craft.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Craft.obj; path = Geometry/Craft.obj; sourceTree = "<group>"; };
+		0B5E5B431BA81978003BBE2A /* T_E_AirLock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_AirLock.png; path = Geometry/T_E_AirLock.png; sourceTree = "<group>"; };
+		0B5E5B441BA81978003BBE2A /* T_E_Cockpit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Cockpit.png; path = Geometry/T_E_Cockpit.png; sourceTree = "<group>"; };
+		0B5E5B451BA81978003BBE2A /* T_E_DiningHall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_DiningHall.png; path = Geometry/T_E_DiningHall.png; sourceTree = "<group>"; };
+		0B5E5B461BA81978003BBE2A /* T_E_EngineRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_EngineRoom.png; path = Geometry/T_E_EngineRoom.png; sourceTree = "<group>"; };
+		0B5E5B471BA81978003BBE2A /* T_E_Hallway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Hallway.png; path = Geometry/T_E_Hallway.png; sourceTree = "<group>"; };
+		0B5E5B481BA81978003BBE2A /* T_E_PodRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_PodRoom.png; path = Geometry/T_E_PodRoom.png; sourceTree = "<group>"; };
 		6E90BA461B67CB3700F2A971 /* LevelXMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelXMLReader.h; sourceTree = "<group>"; };
 		6E90BA471B67CB3700F2A971 /* LevelXMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelXMLReader.m; sourceTree = "<group>"; };
 		6E90BA491B67CB4500F2A971 /* LevelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelController.h; sourceTree = "<group>"; };
@@ -99,12 +159,6 @@
 		6E90BA5E1B67D3E100F2A971 /* 0-PowerIncreased.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-PowerIncreased.mp3"; sourceTree = "<group>"; };
 		6E90BA601B67D3E100F2A971 /* 0-SensorAccess.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-SensorAccess.mp3"; sourceTree = "<group>"; };
 		6E90BA611B67D3E100F2A971 /* 1-EverythingOkay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-EverythingOkay.mp3"; sourceTree = "<group>"; };
-		6E90BA631B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-SensorAccessGranted.mp3"; sourceTree = "<group>"; };
-		6E90BA641B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-PurdgePodsConvo.mp3"; sourceTree = "<group>"; };
-		6E90BA661B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-CannotRiskCraft.mp3"; sourceTree = "<group>"; };
-		6E90BA671B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-NoTimeToLoose.mp3"; sourceTree = "<group>"; };
-		6E90BA681B67D3E100F2A971 /* 2-BreachingProtocol.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-BreachingProtocol.mp3"; sourceTree = "<group>"; };
-		6E90BA691B67D3E100F2A971 /* 3-PurdgePodsASAP.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "3-PurdgePodsASAP.mp3"; sourceTree = "<group>"; };
 		6EE03A4E1B4FDB5800B78398 /* TriggerObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerObject.h; sourceTree = "<group>"; };
 		6EE03A4F1B4FDB6300B78398 /* TriggerObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TriggerObject.m; sourceTree = "<group>"; };
 		6EE03A511B4FE9CA00B78398 /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Level.h; sourceTree = "<group>"; };
@@ -113,8 +167,6 @@
 		6EF3E4B91B3B0B390072936A /* AudioSamplePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSamplePlayer.h; sourceTree = "<group>"; };
 		6EF3E4BE1B3B0F1F0072936A /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		6EF3E4C11B3B0FF90072936A /* AixEllis.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AixEllis.caf; path = Sound/AixEllis.caf; sourceTree = "<group>"; };
-		BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Atlas_01.png; path = Geometry/T_E_Atlas_01.png; sourceTree = "<group>"; };
-		BB771D061B18EEBD00988B7C /* PodRoom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = PodRoom.obj; path = Geometry/PodRoom.obj; sourceTree = "<group>"; };
 		BB80128B1B8213DA00EC7EF3 /* blend.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blend.vsh; sourceTree = "<group>"; };
 		BB80128D1B8213EF00EC7EF3 /* blend.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = blend.fsh; sourceTree = "<group>"; };
 		BBD21C911B2C9458006056FA /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -222,8 +274,13 @@
 		0A15DC771AB734870058C15E /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				BB771D061B18EEBD00988B7C /* PodRoom.obj */,
-				BB771D041B18EEAF00988B7C /* T_E_Atlas_01.png */,
+				0B5E5B421BA81978003BBE2A /* Craft.obj */,
+				0B5E5B431BA81978003BBE2A /* T_E_AirLock.png */,
+				0B5E5B441BA81978003BBE2A /* T_E_Cockpit.png */,
+				0B5E5B451BA81978003BBE2A /* T_E_DiningHall.png */,
+				0B5E5B461BA81978003BBE2A /* T_E_EngineRoom.png */,
+				0B5E5B471BA81978003BBE2A /* T_E_Hallway.png */,
+				0B5E5B481BA81978003BBE2A /* T_E_PodRoom.png */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -251,6 +308,98 @@
 			);
 			name = Shader;
 			sourceTree = "<group>";
+		};
+		0B5E5B111BA81902003BBE2A /* 4-BiologistConvo */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B121BA81902003BBE2A /* 0-BiologistConvo.mp3 */,
+				0B5E5B131BA81902003BBE2A /* Reminders */,
+			);
+			name = "4-BiologistConvo";
+			path = "splitview/Sound/Narration/4-BiologistConvo";
+			sourceTree = SOURCE_ROOT;
+		};
+		0B5E5B131BA81902003BBE2A /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B141BA81902003BBE2A /* 0-CannotRiskCraft.mp3 */,
+				0B5E5B151BA81902003BBE2A /* 1-NoTimeToLoose.mp3 */,
+				0B5E5B161BA81902003BBE2A /* 2-BreachingProtocol.mp3 */,
+				0B5E5B171BA81902003BBE2A /* 3-PurdgePodsASAP.mp3 */,
+			);
+			path = Reminders;
+			sourceTree = "<group>";
+		};
+		0B5E5B181BA81902003BBE2A /* 5-OpenAirlock */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B191BA81902003BBE2A /* 0-PurgeInitiated.mp3 */,
+				0B5E5B1A1BA81902003BBE2A /* 1-WaitNo.mp3 */,
+				0B5E5B1B1BA81902003BBE2A /* 2-PurgeComplete.mp3 */,
+				0B5E5B1C1BA81902003BBE2A /* 3-HowYouDoin.mp3 */,
+				0B5E5B1D1BA81902003BBE2A /* 4-FinalInstruction.mp3 */,
+				0B5E5B1E1BA81902003BBE2A /* Reminders */,
+			);
+			name = "5-OpenAirlock";
+			path = "splitview/Sound/Narration/5-OpenAirlock";
+			sourceTree = SOURCE_ROOT;
+		};
+		0B5E5B1E1BA81902003BBE2A /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B1F1BA81902003BBE2A /* 0-EverythingOkay.mp3 */,
+				0B5E5B201BA81902003BBE2A /* 1-DontDetectChange.mp3 */,
+				0B5E5B211BA81902003BBE2A /* 2-PleaseOpen.mp3 */,
+			);
+			path = Reminders;
+			sourceTree = "<group>";
+		};
+		0B5E5B221BA81902003BBE2A /* 6-LockDown */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B231BA81902003BBE2A /* 0-AirlockOpened.mp3 */,
+				0B5E5B241BA81902003BBE2A /* 1-LifeFormInAirlock.mp3 */,
+				0B5E5B251BA81902003BBE2A /* 2-RealControlConvo.mp3 */,
+			);
+			name = "6-LockDown";
+			path = "splitview/Sound/Narration/6-LockDown";
+			sourceTree = SOURCE_ROOT;
+		};
+		0B5E5B261BA81902003BBE2A /* 7-PurgeCraft */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B271BA81902003BBE2A /* 0-LockedDown.mp3 */,
+			);
+			name = "7-PurgeCraft";
+			path = "splitview/Sound/Narration/7-PurgeCraft";
+			sourceTree = SOURCE_ROOT;
+		};
+		0B5E5B281BA81902003BBE2A /* 8-PurgeRequested */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B291BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */,
+				0B5E5B2A1BA81902003BBE2A /* Reminders */,
+			);
+			name = "8-PurgeRequested";
+			path = "splitview/Sound/Narration/8-PurgeRequested";
+			sourceTree = SOURCE_ROOT;
+		};
+		0B5E5B2A1BA81902003BBE2A /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B2B1BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 */,
+			);
+			path = Reminders;
+			sourceTree = "<group>";
+		};
+		0B5E5B2C1BA81902003BBE2A /* 9-End */ = {
+			isa = PBXGroup;
+			children = (
+				0B5E5B2D1BA81902003BBE2A /* 0-GlobalPurgeCommenced.mp3 */,
+			);
+			name = "9-End";
+			path = "splitview/Sound/Narration/9-End";
+			sourceTree = SOURCE_ROOT;
 		};
 		6E90BA501B67D3E100F2A971 /* 0-InitiatorWakesUp */ = {
 			isa = PBXGroup;
@@ -315,8 +464,9 @@
 		6E90BA621B67D3E100F2A971 /* 3-PurdgePodRoom */ = {
 			isa = PBXGroup;
 			children = (
-				6E90BA631B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 */,
-				6E90BA641B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 */,
+				0B5E5B031BA818C2003BBE2A /* 0-AISensorAccessGranted.mp3 */,
+				0B5E5B041BA818C2003BBE2A /* 1-SensorAccessGranted.mp3 */,
+				0B5E5B051BA818C2003BBE2A /* 2-PurdgePodsConvo.mp3 */,
 				6E90BA651B67D3E100F2A971 /* Reminders */,
 			);
 			name = "3-PurdgePodRoom";
@@ -326,10 +476,10 @@
 		6E90BA651B67D3E100F2A971 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
-				6E90BA661B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 */,
-				6E90BA671B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 */,
-				6E90BA681B67D3E100F2A971 /* 2-BreachingProtocol.mp3 */,
-				6E90BA691B67D3E100F2A971 /* 3-PurdgePodsASAP.mp3 */,
+				0B5E5B091BA818D5003BBE2A /* 0-CannotRiskCraft.mp3 */,
+				0B5E5B0A1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 */,
+				0B5E5B0B1BA818D5003BBE2A /* 2-BreachingProtocol.mp3 */,
+				0B5E5B0C1BA818D5003BBE2A /* 3-PurdgePodsASAP.mp3 */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -341,6 +491,12 @@
 				6E90BA571B67D3E100F2A971 /* 1-PowerLevels */,
 				6E90BA5D1B67D3E100F2A971 /* 2-Sensors */,
 				6E90BA621B67D3E100F2A971 /* 3-PurdgePodRoom */,
+				0B5E5B111BA81902003BBE2A /* 4-BiologistConvo */,
+				0B5E5B181BA81902003BBE2A /* 5-OpenAirlock */,
+				0B5E5B221BA81902003BBE2A /* 6-LockDown */,
+				0B5E5B261BA81902003BBE2A /* 7-PurgeCraft */,
+				0B5E5B281BA81902003BBE2A /* 8-PurgeRequested */,
+				0B5E5B2C1BA81902003BBE2A /* 9-End */,
 			);
 			name = Narration;
 			sourceTree = "<group>";
@@ -348,8 +504,8 @@
 		6EF3E4C01B3B0FEE0072936A /* Sound */ = {
 			isa = PBXGroup;
 			children = (
-				6EE03A561B4FF73400B78398 /* Narration */,
 				6EF3E4C11B3B0FF90072936A /* AixEllis.caf */,
+				6EE03A561B4FF73400B78398 /* Narration */,
 			);
 			name = Sound;
 			sourceTree = "<group>";
@@ -426,15 +582,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E90BA781B67D3E100F2A971 /* 0-CannotRiskCraft.mp3 in Resources */,
+				0B5E5B3B1BA81902003BBE2A /* 0-AirlockOpened.mp3 in Resources */,
 				0A15DC621AB734510058C15E /* LaunchScreen.xib in Resources */,
+				0B5E5B4C1BA81978003BBE2A /* T_E_DiningHall.png in Resources */,
+				0B5E5B331BA81902003BBE2A /* 0-PurgeInitiated.mp3 in Resources */,
 				6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */,
+				0B5E5B4E1BA81978003BBE2A /* T_E_Hallway.png in Resources */,
 				6E90BA6C1B67D3E100F2A971 /* 1-LetUsKnow.mp3 in Resources */,
+				0B5E5B0E1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 in Resources */,
+				0B5E5B4D1BA81978003BBE2A /* T_E_EngineRoom.png in Resources */,
 				BBF781A51B726A1700529609 /* blur.fsh in Resources */,
+				0B5E5B391BA81902003BBE2A /* 1-DontDetectChange.mp3 in Resources */,
+				0B5E5B401BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 in Resources */,
 				0A15DC7D1AB734D50058C15E /* post.vsh in Resources */,
 				6E90BA701B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 in Resources */,
 				0A15DC7C1AB734D50058C15E /* post.fsh in Resources */,
+				0B5E5B4A1BA81978003BBE2A /* T_E_AirLock.png in Resources */,
+				0B5E5B4F1BA81978003BBE2A /* T_E_PodRoom.png in Resources */,
+				0B5E5B411BA81902003BBE2A /* 0-GlobalPurgeCommenced.mp3 in Resources */,
 				6E90BA6E1B67D3E100F2A971 /* 3-EverthingOkay.mp3 in Resources */,
+				0B5E5B311BA81902003BBE2A /* 2-BreachingProtocol.mp3 in Resources */,
+				0B5E5B321BA81902003BBE2A /* 3-PurdgePodsASAP.mp3 in Resources */,
 				6E90BA741B67D3E100F2A971 /* 0-SensorAccess.mp3 in Resources */,
 				6E90BA6A1B67D3E100F2A971 /* 0-GoodMorningInitiator.mp3 in Resources */,
 				BB80128E1B8213EF00EC7EF3 /* blend.fsh in Resources */,
@@ -442,24 +610,38 @@
 				6E90BA4D1B67CB5D00F2A971 /* NarrativeSequence.xml in Resources */,
 				6E90BA6F1B67D3E100F2A971 /* 0-IncreaseThePower.mp3 in Resources */,
 				BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */,
-				6E90BA791B67D3E100F2A971 /* 1-NoTimeToLoose.mp3 in Resources */,
+				0B5E5B071BA818C2003BBE2A /* 1-SensorAccessGranted.mp3 in Resources */,
 				6E90BA711B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */,
 				BB80128C1B8213DA00EC7EF3 /* blend.vsh in Resources */,
 				0A15DC5D1AB734510058C15E /* Main.storyboard in Resources */,
+				0B5E5B3D1BA81902003BBE2A /* 2-RealControlConvo.mp3 in Resources */,
+				0B5E5B2F1BA81902003BBE2A /* 0-CannotRiskCraft.mp3 in Resources */,
 				6E90BA721B67D3E100F2A971 /* 2-PleaseIncrease.mp3 in Resources */,
-				BB771D071B18EEBD00988B7C /* PodRoom.obj in Resources */,
+				0B5E5B0D1BA818D5003BBE2A /* 0-CannotRiskCraft.mp3 in Resources */,
+				0B5E5B0F1BA818D5003BBE2A /* 2-BreachingProtocol.mp3 in Resources */,
+				0B5E5B3A1BA81902003BBE2A /* 2-PleaseOpen.mp3 in Resources */,
 				6E90BA6B1B67D3E100F2A971 /* 0-HadMealYet.mp3 in Resources */,
-				6E90BA7B1B67D3E100F2A971 /* 3-PurdgePodsASAP.mp3 in Resources */,
 				6EF3E4C21B3B0FF90072936A /* AixEllis.caf in Resources */,
+				0B5E5B2E1BA81902003BBE2A /* 0-BiologistConvo.mp3 in Resources */,
+				0B5E5B491BA81978003BBE2A /* Craft.obj in Resources */,
+				0B5E5B061BA818C2003BBE2A /* 0-AISensorAccessGranted.mp3 in Resources */,
+				0B5E5B351BA81902003BBE2A /* 2-PurgeComplete.mp3 in Resources */,
 				6E90BA751B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */,
+				0B5E5B3E1BA81902003BBE2A /* 0-LockedDown.mp3 in Resources */,
 				0A15DC5F1AB734510058C15E /* Images.xcassets in Resources */,
+				0B5E5B3C1BA81902003BBE2A /* 1-LifeFormInAirlock.mp3 in Resources */,
+				0B5E5B371BA81902003BBE2A /* 4-FinalInstruction.mp3 in Resources */,
 				0A15DC571AB734510058C15E /* Shader.vsh in Resources */,
 				0A15DC551AB734510058C15E /* Shader.fsh in Resources */,
-				6E90BA771B67D3E100F2A971 /* 1-PurdgePodsConvo.mp3 in Resources */,
-				6E90BA761B67D3E100F2A971 /* 0-SensorAccessGranted.mp3 in Resources */,
+				0B5E5B341BA81902003BBE2A /* 1-WaitNo.mp3 in Resources */,
+				0B5E5B381BA81902003BBE2A /* 0-EverythingOkay.mp3 in Resources */,
+				0B5E5B4B1BA81978003BBE2A /* T_E_Cockpit.png in Resources */,
+				0B5E5B081BA818C2003BBE2A /* 2-PurdgePodsConvo.mp3 in Resources */,
 				BBF781A41B726A1700529609 /* blur.vsh in Resources */,
-				BB771D051B18EEAF00988B7C /* T_E_Atlas_01.png in Resources */,
-				6E90BA7A1B67D3E100F2A971 /* 2-BreachingProtocol.mp3 in Resources */,
+				0B5E5B301BA81902003BBE2A /* 1-NoTimeToLoose.mp3 in Resources */,
+				0B5E5B101BA818D5003BBE2A /* 3-PurdgePodsASAP.mp3 in Resources */,
+				0B5E5B361BA81902003BBE2A /* 3-HowYouDoin.mp3 in Resources */,
+				0B5E5B3F1BA81902003BBE2A /* 0-GlobalPurdgeRequested.mp3 in Resources */,
 				6E90BA6D1B67D3E100F2A971 /* 2-PleaseTakeMeal.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -595,6 +777,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = splitview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -605,6 +788,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = splitview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
