@@ -24,6 +24,9 @@
 - (void)lookUp;
 - (void)lookLeft;
 - (void)lookRight;
+
+-(void) rotateHead:(GLKMatrix4) rotation;
+
 - (void)addObjects :(NSMutableArray*) newObjects;
 -(BOOL) isTriggered:(Object*) obj;
 + (GLKMatrix4)lView;

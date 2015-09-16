@@ -115,7 +115,13 @@ static GLKMatrix4 projection;
     
 }
 
+-(void) rotateHead:(GLKMatrix4) rotation{
 
+    lView = GLKMatrix4Multiply(rotation, lView);
+    rView = GLKMatrix4Multiply(rotation, rView);
+}
+
+/*
 - (void) rotate:(GLKVector3) axis factor : (float)factor{
     
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
@@ -124,6 +130,7 @@ static GLKMatrix4 projection;
    lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
 }
+ */
 -(BOOL) isTriggered:(Object *)obj{
     
     GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
@@ -309,7 +316,7 @@ static GLKMatrix4 projection;
     [self move:displacement];
     
 }
-
+/*
 - (void) lookUp{
     
     
@@ -348,7 +355,7 @@ static GLKMatrix4 projection;
     
     [self rotate:axis factor:rotationFactor];
     
-}
+}*/
 
 
 - (void) addObjects :(NSMutableArray*) newObjects{

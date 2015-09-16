@@ -53,6 +53,7 @@
 		0B5E5B4D1BA81978003BBE2A /* T_E_EngineRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B461BA81978003BBE2A /* T_E_EngineRoom.png */; };
 		0B5E5B4E1BA81978003BBE2A /* T_E_Hallway.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B471BA81978003BBE2A /* T_E_Hallway.png */; };
 		0B5E5B4F1BA81978003BBE2A /* T_E_PodRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B5E5B481BA81978003BBE2A /* T_E_PodRoom.png */; };
+		0B5E5B521BA84966003BBE2A /* HeadRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B5E5B511BA84966003BBE2A /* HeadRotation.m */; };
 		6E90BA481B67CB3700F2A971 /* LevelXMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E90BA471B67CB3700F2A971 /* LevelXMLReader.m */; };
 		6E90BA4B1B67CB4500F2A971 /* LevelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E90BA4A1B67CB4500F2A971 /* LevelController.m */; };
 		6E90BA4D1B67CB5D00F2A971 /* NarrativeSequence.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA4C1B67CB5D00F2A971 /* NarrativeSequence.xml */; };
@@ -141,6 +142,8 @@
 		0B5E5B461BA81978003BBE2A /* T_E_EngineRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_EngineRoom.png; path = Geometry/T_E_EngineRoom.png; sourceTree = "<group>"; };
 		0B5E5B471BA81978003BBE2A /* T_E_Hallway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_Hallway.png; path = Geometry/T_E_Hallway.png; sourceTree = "<group>"; };
 		0B5E5B481BA81978003BBE2A /* T_E_PodRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = T_E_PodRoom.png; path = Geometry/T_E_PodRoom.png; sourceTree = "<group>"; };
+		0B5E5B501BA84966003BBE2A /* HeadRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadRotation.h; sourceTree = "<group>"; };
+		0B5E5B511BA84966003BBE2A /* HeadRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadRotation.m; sourceTree = "<group>"; };
 		6E90BA461B67CB3700F2A971 /* LevelXMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelXMLReader.h; sourceTree = "<group>"; };
 		6E90BA471B67CB3700F2A971 /* LevelXMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelXMLReader.m; sourceTree = "<group>"; };
 		6E90BA491B67CB4500F2A971 /* LevelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelController.h; sourceTree = "<group>"; };
@@ -248,6 +251,8 @@
 				BBD622281B13476100CA1418 /* ShaderLoader.m */,
 				BBE9B7E71B04F72500EDF814 /* HeadPosition.h */,
 				BBE9B7E51B04F6DF00EDF814 /* HeadPosition.m */,
+				0B5E5B501BA84966003BBE2A /* HeadRotation.h */,
+				0B5E5B511BA84966003BBE2A /* HeadRotation.m */,
 				0A15DC5B1AB734510058C15E /* Main.storyboard */,
 				0A15DC5E1AB734510058C15E /* Images.xcassets */,
 				0A15DC601AB734510058C15E /* LaunchScreen.xib */,
@@ -658,6 +663,7 @@
 				BBF0ECA61B2EF92F00D44D89 /* Utils.m in Sources */,
 				6EE03A501B4FDB6300B78398 /* TriggerObject.m in Sources */,
 				0A15DC841AB735730058C15E /* ObjLoader.m in Sources */,
+				0B5E5B521BA84966003BBE2A /* HeadRotation.m in Sources */,
 				0A15DC531AB734510058C15E /* AppDelegate.m in Sources */,
 				0A15DC5A1AB734510058C15E /* GameViewController.m in Sources */,
 				6E90BA481B67CB3700F2A971 /* LevelXMLReader.m in Sources */,

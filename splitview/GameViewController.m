@@ -104,6 +104,17 @@
     
     [HeadPosition setProjection:projectionMatrix];
     
+    //==================
+    
+    // Create and start a CMMotionManager, so that e.g. attitude later can be used:
+    // https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMMotionManager_Class/index.html#//apple_ref/occ/instm/CMMotionManager/startDeviceMotionUpdates
+    motionMgr = [[CMMotionManager alloc] init];
+    [motionMgr startDeviceMotionUpdates];
+    
+    // create and init the headRotation-instance from that rotation-matrices then later can be received:
+    headRotation = [[HeadRotation alloc] initWithMotionManager:(motionMgr)];
+    
+    //==================
     
     // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
     //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
@@ -393,13 +404,26 @@
     if(triggeredObject){
         [triggeredObject playAnimation];
     }
-  
+    
+    GLKMatrix4 rotatedLeftViewMatrix;
+    GLKMatrix4 rotatedRightViewMatrix;
+    
+    //==========================================================================================================
+    
+    // Get the rotation-matrix for the current device-attitude and apply it to the view-matrices:
+    
+    GLKMatrix4 rotation = [headRotation getRotationMatrix];
+    rotatedLeftViewMatrix = GLKMatrix4Multiply(rotation, [HeadPosition lView]);
+    rotatedRightViewMatrix = GLKMatrix4Multiply(rotation, [HeadPosition rView]);
+    
+    //==========================================================================================================
+    
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
     
-    GLKMatrix4 leftMVMat = GLKMatrix4Multiply([HeadPosition lView], gridModelMat);
-    GLKMatrix4 rightMVMat = GLKMatrix4Multiply([HeadPosition rView], gridModelMat);
+    GLKMatrix4 leftMVMat = GLKMatrix4Multiply(rotatedLeftViewMatrix, gridModelMat);
+    GLKMatrix4 rightMVMat = GLKMatrix4Multiply(rotatedRightViewMatrix, gridModelMat);
     
     // mvp matrices for left and right view
     _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply([HeadPosition projection], leftMVMat);
