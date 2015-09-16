@@ -393,7 +393,7 @@
 
 - (void)update
 {
- 
+    [headPosition movePlayer];
     
     for (Object *object in objloader.objects) {
         if([object isKindOfClass:[Door class]]){
@@ -602,15 +602,15 @@
         [headPosition moveForward];
     }else if([input  isEqual: @"x"]){
         [headPosition moveBackward];
-    }/*else if([input  isEqual: @"e"]){     //we don't need e and q
-        [headPosition moveUp];
+    }else if([input  isEqual: @"e"]){
+        [headPosition stopMoving];
     }else if([input  isEqual: @"q"]){
-        [headPosition moveDown];
-    }else if([input  isEqual: @"t"]){       //t and g are ruining the view.
-        [headPosition lookUp];
-    }else if([input  isEqual: @"g"]){
-        [headPosition lookDown];
-    }*/else if([input  isEqual: @"f"]){
+        [headPosition stopMoving];
+    }else if([input  isEqual: @"c"]){
+        [headPosition stopMoving];
+    }else if([input  isEqual: @"z"]){
+        [headPosition stopMoving];
+    }else if([input  isEqual: @"f"]){
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];

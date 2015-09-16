@@ -13,6 +13,21 @@
 #import "HeadPosition.h"
 #import <GLKit/GLKit.h>
 #import "Door.h"
+enum RoomType{
+    Hallway,
+    PodRoom,
+    AirLock,
+    DiningHall,
+    EngineRoom,
+};
+
+enum Direction{
+    noDirection,
+    forward,
+    right,
+    backward,
+    left
+};
 
 @implementation HeadPosition{
     NSMutableArray *objects;
@@ -25,15 +40,10 @@
     BOOL inDoorFrame;
     Object* currentDoor;
     Object* rooms[5];
+    enum Direction currentDirection; //to understand if a key is held on
 }
 
-enum RoomType{
-    Hallway,
-    PodRoom,
-    AirLock,
-    DiningHall,
-    EngineRoom,
-};
+
 
 GLKVector3 headPos;
 static GLKMatrix4 lView;
@@ -93,6 +103,7 @@ static GLKMatrix4 projection;
     displacementFactor = 0.1f;
     rotationFactor = 0.1f;
     inDoorFrame = NO;
+    currentDirection = noDirection;
     return self;
 }
 
@@ -111,7 +122,7 @@ static GLKMatrix4 projection;
     if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-  }
+    }
     
 }
 
@@ -121,7 +132,7 @@ static GLKMatrix4 projection;
     rView = GLKMatrix4Multiply(rotation, rView);
 }
 
-/*
+
 - (void) rotate:(GLKVector3) axis factor : (float)factor{
     
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
@@ -130,7 +141,7 @@ static GLKMatrix4 projection;
    lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
 }
- */
+
 -(BOOL) isTriggered:(Object *)obj{
     
     GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
@@ -256,7 +267,7 @@ static GLKMatrix4 projection;
 
 - (void) moveForward{
     
-    
+    currentDirection = forward;
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, displacementFactor);
     
@@ -267,7 +278,7 @@ static GLKMatrix4 projection;
 
 - (void) moveBackward{
     
-    
+    currentDirection = backward;
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, -displacementFactor);
     
@@ -277,7 +288,7 @@ static GLKMatrix4 projection;
 
 - (void) moveLeft{
     
-    
+    currentDirection = left;
     
     GLKVector3 displacement = GLKVector3Make(displacementFactor, 0.0f, 0.0f);
     
@@ -288,7 +299,7 @@ static GLKMatrix4 projection;
 
 - (void) moveRight{
     
-    
+    currentDirection = right;
     
     GLKVector3 displacement = GLKVector3Make(-displacementFactor, 0.0f, 0.0f);
     
@@ -316,6 +327,36 @@ static GLKMatrix4 projection;
     [self move:displacement];
     
 }
+
+- (void) movePlayer{
+    if(currentDirection != noDirection){
+        switch (currentDirection) {
+            case forward:
+                [self moveForward];
+                break;
+                
+            case right:
+                [self moveRight];
+                break;
+                
+            case backward:
+                [self moveBackward];
+                break;
+                
+            case left:
+                [self moveLeft];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (void) stopMoving{
+    currentDirection = noDirection;
+}
+
 /*
 - (void) lookUp{
     
@@ -336,6 +377,7 @@ static GLKMatrix4 projection;
     [self rotate:axis factor:rotationFactor];
     
 }
+ */
 
 - (void) lookLeft{
     
@@ -355,7 +397,7 @@ static GLKMatrix4 projection;
     
     [self rotate:axis factor:rotationFactor];
     
-}*/
+}
 
 
 - (void) addObjects :(NSMutableArray*) newObjects{

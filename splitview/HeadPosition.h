@@ -20,8 +20,13 @@
 -(void)moveRight;
 -(void)moveDown;
 -(void)moveUp;
+
+-(void)movePlayer;
+-(void)stopMoving;
+/*
 - (void)lookDown;
 - (void)lookUp;
+ */
 - (void)lookLeft;
 - (void)lookRight;
 
