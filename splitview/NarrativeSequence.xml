@@ -2,7 +2,7 @@
 <!--This file has been generated manually-->
 <!--ID is based on sequence. Trigger is the name of trigger used to escape this state-->
 <Levels>
-<Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_M50">
+<Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_0_M50">
 	<NarrationSequence>
         <Wait>2</Wait>
 		<narration>0-GoodMorningInitiator</narration>
@@ -15,7 +15,7 @@
 		<reminder>3-EverthingOkay</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="1" Name="PowerLevels" Trigger="Trigger_EngineRoom_M60">
+<Level ID="1" Name="PowerLevels" Trigger="Trigger_EngineRoom_01_M50">
 	<NarrationSequence>		
 		<narration>0-IncreaseThePower</narration>
 		<TriggerActive>true</TriggerActive>
@@ -26,7 +26,7 @@
 		<reminder>2-PleaseIncrease</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="2" Name="Sensors" Trigger="Trigger_Sensors_M65">
+<Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_02_M50">
 	<NarrationSequence>
 		<narration>0-PowerCapacityIncreased</narration>
 		<wait>1</wait>
@@ -38,7 +38,7 @@
 		<reminder>1-EverythingOkay</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="3" Name="PurgePodRoom" Trigger="Trigger_Revive_M70"><!--Initiator grants sensor access-->
+<Level ID="3" Name="PurgePodRoom" Trigger="Trigger_PodRoom_03_M50"><!--Initiator grants sensor access and wakes up biologist-->
 	<NarrationSequence>
 		<narration>0-AISensorAccessGranted</narration>
 		<wait>1</wait>
@@ -54,7 +54,7 @@
 		<reminder>3-PurdgePodsASAP</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="4" Name="BiologistConvo" Trigger="Trigger_PurgePods_M80"><!--Initiator talk with the biologist-->
+<Level ID="4" Name="BiologistConvo" Trigger="Trigger_PodRoom_04_M50"><!--Initiator talk with the biologist and purges pods-->
 	<NarrationSequence>
 		<narration>0-BiologistConvo</narration>
 		<TriggerActive>true</TriggerActive>
@@ -66,7 +66,7 @@
 		<reminder>3-PurdgePodsASAP</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="5" Name="OpenAirlock" Trigger="Trigger_Airlock_M90">
+<Level ID="5" Name="OpenAirlock" Trigger="Trigger_Cockpit_05_M50">
 	<NarrationSequence>
 		<narration>0-PurgeInitiated</narration>
 		<wait>1</wait>
@@ -84,7 +84,7 @@
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 </Level>
-<Level ID="6" Name="LockDown" Trigger="Trigger_LockDown_M100">
+<Level ID="6" Name="LockDown" Trigger="Trigger_Cockpit_06_M50">
 	<NarrationSequence>
 		<narration>0-AirlockOpened</narration>
 		<wait>2</wait>
@@ -94,12 +94,12 @@
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 </Level>
-<Level ID="7" Name="PurgeCraft" Trigger="Trigger_PurdgeCraft_M110">
+<Level ID="7" Name="PurgeCraft" Trigger="Trigger_Cockpit_07_M50">
 	<NarrationSequence>
 		<narration>0-LockedDown</narration>
 	</NarrationSequence>
 </Level>
-<Level ID="8" Name="PurgeRequested" Trigger="Trigger_PurdgeCraft_M110">
+<Level ID="8" Name="PurgeRequested" Trigger="Trigger_Cockpit_08_M50">
 	<NarrationSequence>
 		<narration>0-GlobalPurdgeRequested</narration>
 		<TriggerActive>true</TriggerActive>
