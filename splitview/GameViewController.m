@@ -435,8 +435,8 @@
         
         GLKVector3 headPos = [headPosition getHeadPosition];
         
-        rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, initialLeftView.m32 - headPos.x, headPos.y + initialLeftView.m31, headPos.z + initialLeftView.m30);
-        rotatedRightViewMatrix = GLKMatrix4Translate(rotatedRightViewMatrix, initialRightView.m32 - headPos.x, headPos.y + initialRightView.m31, headPos.z + initialRightView.m30);
+        rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, initialLeftView.m32 - headPos.x, initialLeftView.m31 + headPos.y, initialLeftView.m30 - headPos.z);
+        rotatedRightViewMatrix = GLKMatrix4Translate(rotatedRightViewMatrix, initialRightView.m32 - headPos.x, initialRightView.m31 + headPos.y, initialRightView.m30 - headPos.z  );
         // rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, leftNew.m30-left.m30 , leftNew.m31-left.m31  , leftNew.m33-left.m32 );
         // rotatedLeftViewMatrix = GLKMatrix4Multiply( GLKMatrix4MakeTranslation(left.m30 - leftNew.m30, left.m31 - leftNew.m31, left.m32 - leftNew.m33),rotatedLeftViewMatrix );
         // rotatedRightViewMatrix = GLKMatrix4Multiply(rotatedRightViewMatrix, GLKMatrix4MakeTranslation(right.m30, right.m31, right.m32));
@@ -647,11 +647,11 @@
         [headPosition stopMoving];
     }else if([input  isEqual: @"z"]){
         [headPosition stopMoving];
-    }else if([input  isEqual: @"f"]){
+    }/*else if([input  isEqual: @"f"]){
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
-    }else if ([input isEqual:@"c"]){
+    }*/else if ([input isEqual:@"h"]){
         TriggerObject *trigger = [currentLevel getTriggerObject];
         if([trigger isActive]&&[headPosition isTriggered:trigger]){
             [trigger responseWhenItIsTriggered];

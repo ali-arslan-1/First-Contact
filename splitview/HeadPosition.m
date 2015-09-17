@@ -149,7 +149,7 @@ static GLKMatrix4 projection;
     
     GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
     GLKVector3 BboxMin = GLKVector3Make(obj.minX-0.3, 0.0f, obj.minZ-0.3);
-    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+    if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
         return YES;
     }
     else 
@@ -165,13 +165,13 @@ static GLKMatrix4 projection;
     if(inDoorFrame){
         GLKVector3 BboxMax = GLKVector3Make(currentDoor.maxX, 0.0f, currentDoor.maxZ);
         GLKVector3 BboxMin = GLKVector3Make(currentDoor.minX, 0.0f, currentDoor.minZ);
-        if([self isHeadInside:BboxMin BBoxMax:BboxMax])
+        if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax])
             return NO;
         else{
             Object* room = rooms[Hallway];
             GLKVector3 BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
             GLKVector3 BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
-            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+            if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                 inDoorFrame = NO;
                 currentRoomObjects = [objects objectAtIndex:Hallway];
                 return NO;
@@ -193,9 +193,9 @@ static GLKMatrix4 projection;
                 type = EngineRoom;
                 room = rooms[EngineRoom];
             }
-             BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
-             BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
-            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+            BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
+            BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
+            if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                 inDoorFrame = NO;
                 currentRoomObjects = [objects objectAtIndex:type];
                 return NO;
@@ -208,12 +208,8 @@ static GLKMatrix4 projection;
         for(Object *obj in currentRoomObjects){
             GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
             GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
-            if(obj.type == Room){
-                if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
-                    inRoom = NO;
-                }
-            }
-            else if(obj.type == DoorFrame){
+            
+            if(obj.type == DoorFrame){
                 int deltaX = fabsf( BboxMax.x - BboxMin.x);
                 int deltaZ = fabsf (BboxMax.z - BboxMin.z);
                 if(deltaX>deltaZ){
@@ -224,12 +220,17 @@ static GLKMatrix4 projection;
                     BboxMin.x = BboxMin.x - 0.6;
                     BboxMax.x = BboxMax.x + 0.6;
                 }
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     inDoorFrame = YES;
                     currentDoor = obj;
                 }
+                
+            }else if(obj.type == Room){
+                if([HeadPosition isHeadOutside:BboxMin BBoxMax:BboxMax]){
+                    inRoom = NO;
+                }
             }else if(obj.type == Door_){
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     headPos =oldHeadPos;
                     return  YES;
                 }
@@ -238,29 +239,30 @@ static GLKMatrix4 projection;
             }
             else{
                 //other props here
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     headPos = oldHeadPos;
                     return YES;
                 }
             }
         }
-        
         if(!inRoom && !inDoorFrame){
             headPos = oldHeadPos;
             return YES;
         }
+        
     }
-
+   
+    
     return NO;
 }
 
--(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max{
++(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max{
     if((headPos.x>= min.x && headPos.x <= max.x) && (headPos.z >= min.z && headPos.z <= max.z)){
         return YES;
     } else
         return NO;
 }
--(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
++(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
     if((headPos.x <(min.x+0.5)|| headPos.x > (max.x-0.5)) || (headPos.z <(min.z+0.5)|| headPos.z > (max.z-0.5))){
         return YES;
     }

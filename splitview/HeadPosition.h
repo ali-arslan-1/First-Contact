@@ -34,7 +34,8 @@
 
 - (void)addObjects :(NSMutableArray*) newObjects;
 -(BOOL) isTriggered:(Object*) obj;
-
++(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max;
++(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max;
 -(GLKVector3) getHeadPosition;
 
 + (GLKMatrix4)lView;
