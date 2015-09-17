@@ -19,6 +19,7 @@ enum RoomType{
     AirLock,
     DiningHall,
     EngineRoom,
+    Cockpit
 };
 
 enum Direction{
@@ -39,7 +40,7 @@ enum Direction{
     //when room number is changed, change this also
     BOOL inDoorFrame;
     Object* currentDoor;
-    Object* rooms[5];
+    Object* rooms[6];
     enum Direction currentDirection; //to understand if a key is held on
 }
 
@@ -147,8 +148,8 @@ static GLKMatrix4 projection;
 
 -(BOOL) isTriggered:(Object *)obj{
     
-    GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
-    GLKVector3 BboxMin = GLKVector3Make(obj.minX-0.3, 0.0f, obj.minZ-0.3);
+    GLKVector3 BboxMax = GLKVector3Make(obj.maxX+1, 0.0f, obj.maxZ+1);
+    GLKVector3 BboxMin = GLKVector3Make(obj.minX-1, 0.0f, obj.minZ-1);
     if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
         return YES;
     }
@@ -192,6 +193,10 @@ static GLKMatrix4 projection;
             else if ([currentDoor.name isEqualToString:@"EngineRoom"]){
                 type = EngineRoom;
                 room = rooms[EngineRoom];
+            }
+            else if ([currentDoor.name isEqualToString:@"Cockpit"]){
+                type = Cockpit;
+                room = rooms[Cockpit];
             }
             BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
             BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
@@ -419,6 +424,8 @@ static GLKMatrix4 projection;
                     rooms[DiningHall] = element;
                 else if ([element.name isEqualToString:@"EngineRoom"])
                     rooms[EngineRoom] = element;
+                else if ([element.name isEqualToString:@"Cockpit"])
+                    rooms[Cockpit] = element;
             }
         }
         [objects addObject:obj];

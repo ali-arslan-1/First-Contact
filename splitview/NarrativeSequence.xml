@@ -28,9 +28,9 @@
 </Level>
 <Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_02_M50">
 	<NarrationSequence>
-		<narration>0-PowerCapacityIncreased</narration>
+		<!--<narration>0-PowerCapacityIncreased</narration>-->
 		<wait>1</wait>
-		<narration>1-PowerIncreased</narration>
+		<narration>0-PowerIncreased</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 	<NarrationReminder>

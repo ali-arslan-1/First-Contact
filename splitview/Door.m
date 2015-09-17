@@ -51,19 +51,15 @@
     
     BboxMax = GLKVector3Make(self.maxX+4, 0.0f, self.maxZ+4);
     BboxMin = GLKVector3Make(self.minX-4, 0.0f, self.minZ-4);
-  /*  int deltaX = fabsf( BboxMax.x - BboxMin.x);
+    int deltaX = fabsf( BboxMax.x - BboxMin.x);
     int deltaZ = fabsf (BboxMax.z - BboxMin.z);
     if(deltaX>deltaZ){
-        BboxMin.z = BboxMin.z - 4;
-        BboxMax.z = BboxMax.z + 4;
         zAligned = NO;
     }
     else{
         zAligned = YES;
-        BboxMin.x = BboxMin.x - 4;
-        BboxMax.x = BboxMax.x + 4;
     }
-    */
+    
 }
 
 -(float)distanceFromCamera{

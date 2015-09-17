@@ -14,6 +14,7 @@
     NSMutableArray *Hallway;
     NSMutableArray *DiningHall;
     NSMutableArray *EngineRoom;
+    NSMutableArray *Cockpit;
     NSMutableArray *Triggers;
     
     //temprorary solution to be quick for the presentation. This will be erased when Object loading implemented for rendering only the current room that we are in.
@@ -35,13 +36,14 @@
     Triggers = [NSMutableArray array];
     DiningHall = [NSMutableArray array];
     EngineRoom = [NSMutableArray array];
+    Cockpit = [NSMutableArray array];
     
     [categorizedObjects addObject:Hallway];
     [categorizedObjects addObject:PodRoom];
     [categorizedObjects addObject:AirLock];
     [categorizedObjects addObject:DiningHall];
     [categorizedObjects addObject:EngineRoom];
- 
+    [categorizedObjects addObject:Cockpit];
     
     object = NULL;
     
@@ -157,6 +159,7 @@
     [objects addObjectsFromArray:AirLock];
     [objects addObjectsFromArray:DiningHall];
     [objects addObjectsFromArray:EngineRoom];
+    [objects addObjectsFromArray:Cockpit];
     
 }
 
@@ -175,6 +178,7 @@
     else if([_object.name isEqualToString:@"Hallway"]){[Hallway addObject:_object];}
     else if([_object.name isEqualToString:@"DiningHall"]){[DiningHall addObject:_object];}
     else if([_object.name isEqualToString:@"EngineRoom"]){[EngineRoom addObject:_object];}
+    else if ([_object.name isEqualToString:@"Cockpit"]){[Cockpit addObject:_object];}
     if(_object.type == DoorFrame){[Hallway addObject:_object];}
 }
 
