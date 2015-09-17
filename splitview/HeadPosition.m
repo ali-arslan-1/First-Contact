@@ -112,6 +112,9 @@ static GLKMatrix4 projection;
     //TO DO deallocate the array somehow || is the array allocated?
 }
 
+-(GLKVector3) getHeadPosition{
+    return headPos;
+}
 - (void) move:(GLKVector3) disp{
     
     
@@ -138,7 +141,7 @@ static GLKMatrix4 projection;
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, lView);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, rView);
-   lView = _newLeftViewMatrix;
+    lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
 }
 

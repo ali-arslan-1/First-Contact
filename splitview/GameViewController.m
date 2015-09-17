@@ -36,6 +36,8 @@
     Level *currentLevel;
     TriggerObject *triggeredObject;
     LevelController *levelController;
+    GLKMatrix4 initialLeftView;
+    GLKMatrix4 initialRightView;
 
     BOOL init;
     
@@ -95,9 +97,14 @@
     GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     
     GLKMatrix4 _rightViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+  
+    initialLeftView = _leftViewMatrix;
+    initialRightView = _rightViewMatrix;
     
     [HeadPosition setLView:_leftViewMatrix];
     [HeadPosition setRView:_rightViewMatrix];
+    
+    
     
     float aspect = fabs(mFrameWidth / 2.0 / mFrameHeight);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
@@ -404,27 +411,57 @@
     if(triggeredObject){
         [triggeredObject playAnimation];
     }
-    
+  
     GLKMatrix4 rotatedLeftViewMatrix;
     GLKMatrix4 rotatedRightViewMatrix;
+    
+    BOOL rotate = YES;
     
     //==========================================================================================================
     
     // Get the rotation-matrix for the current device-attitude and apply it to the view-matrices:
+    if(rotate){
     
-    GLKMatrix4 rotation = [headRotation getRotationMatrix];
-    rotatedLeftViewMatrix = GLKMatrix4Multiply(rotation, [HeadPosition lView]);
-    rotatedRightViewMatrix = GLKMatrix4Multiply(rotation, [HeadPosition rView]);
+        GLKMatrix4 rotation = [headRotation getRotationMatrix];
+        GLKMatrix4 left = [HeadPosition lView];
+        GLKMatrix4 right = [HeadPosition rView];
+        
+        GLKMatrix4 leftNew =  initialLeftView;/*GLKMatrix4Make(initialLeftView.m00, initialLeftView.m01, initialLeftView.m02, left.m03, initialLeftView.m10, initialLeftView.m11, initialLeftView.m12, left.m13, initialLeftView.m20, initialLeftView.m21, initialLeftView.m22, left.m23, left.m30, left.m31, left.m32, left.m33);*/
+        GLKMatrix4 rightNew = initialRightView;/*GLKMatrix4Make(initialRightView.m00, initialRightView.m01, initialRightView.m02, right.m03, initialRightView.m10, initialRightView.m11, initialRightView.m12, right.m13, initialRightView.m20, initialRightView.m21, initialRightView.m22, right.m23, right.m30, right.m31, right.m32, right.m33);
+                                             //   */
+        
+        rotatedLeftViewMatrix = GLKMatrix4Multiply(rotation, leftNew);
+        rotatedRightViewMatrix = GLKMatrix4Multiply(rotation, rightNew);
+        
+        GLKVector3 headPos = [headPosition getHeadPosition];
+        
+        rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, headPos.x + initialLeftView.m30, headPos.y + initialLeftView.m31, headPos.z - initialLeftView.m32);
+        rotatedRightViewMatrix = GLKMatrix4Translate(rotatedRightViewMatrix, headPos.x + initialRightView.m30, headPos.y + initialRightView.m31, headPos.z - initialRightView.m32);
+        // rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, leftNew.m30-left.m30 , leftNew.m31-left.m31  , leftNew.m33-left.m32 );
+        // rotatedLeftViewMatrix = GLKMatrix4Multiply( GLKMatrix4MakeTranslation(left.m30 - leftNew.m30, left.m31 - leftNew.m31, left.m32 - leftNew.m33),rotatedLeftViewMatrix );
+        // rotatedRightViewMatrix = GLKMatrix4Multiply(rotatedRightViewMatrix, GLKMatrix4MakeTranslation(right.m30, right.m31, right.m32));
+        
+        [HeadPosition setLView:rotatedLeftViewMatrix];
+        [HeadPosition setRView:rotatedRightViewMatrix];
+    }
+    else{
+        rotatedLeftViewMatrix = [HeadPosition lView];
+        rotatedRightViewMatrix = [HeadPosition rView];
+    }
+ 
+   
+    
+    
     
     //==========================================================================================================
     
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
-    
+
     GLKMatrix4 leftMVMat = GLKMatrix4Multiply(rotatedLeftViewMatrix, gridModelMat);
     GLKMatrix4 rightMVMat = GLKMatrix4Multiply(rotatedRightViewMatrix, gridModelMat);
-    
+  
     // mvp matrices for left and right view
     _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply([HeadPosition projection], leftMVMat);
     _gridModelViewProjectionMatrix[1] = GLKMatrix4Multiply([HeadPosition projection], rightMVMat);
