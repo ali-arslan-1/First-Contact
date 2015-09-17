@@ -521,10 +521,10 @@ enum RoomType{
             // bind a texture
             glEnable(GL_TEXTURE_2D);
             glActiveTexture(GL_TEXTURE0);
-            if(currentRoom == AirLock)
+           /* if(currentRoom == AirLock)
             glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
             else
-               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
+*/               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
             // Render the object with ES2
             glUseProgram(shaderLoader._program);
             

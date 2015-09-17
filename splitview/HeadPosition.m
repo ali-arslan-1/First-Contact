@@ -201,6 +201,10 @@ static GLKMatrix4 projection;
             BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
             BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
             if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if(type == AirLock){
+                    headPos = oldHeadPos;
+                    return YES;
+                }
                 inDoorFrame = NO;
                 currentRoomObjects = [objects objectAtIndex:type];
                 return NO;
