@@ -82,7 +82,7 @@ GLfloat gQuadVertexData[] =
     GLfloat     *mVertexData;
     uint         mByteSizeOfVertexData;
     uint         mNumTriangles;
-    uint         mTextureID;
+    uint         mTextureID[6];
     
     GLint        mDefaultFBO;
     GLuint       mFBO[8];

@@ -154,12 +154,16 @@
         }
         
     }
-    objects = [NSMutableArray arrayWithArray:Hallway];
-    [objects addObjectsFromArray: PodRoom];
-    [objects addObjectsFromArray:AirLock];
-    [objects addObjectsFromArray:DiningHall];
+        /* If we change the order of adding object the texture part will crash */
+    objects = [NSMutableArray arrayWithArray:PodRoom];
+    [objects addObjectsFromArray:Hallway];
     [objects addObjectsFromArray:EngineRoom];
+    [objects addObjectsFromArray:DiningHall];
     [objects addObjectsFromArray:Cockpit];
+    [objects addObjectsFromArray:AirLock];
+    
+
+    
     
 }
 
@@ -173,6 +177,7 @@
     NSLog(@"object.normal counting : %.2f", (float)[_object.normal count] / 3);
     NSLog(@"texcoord counting : %.2f", (float)[_object.texCoord count] / 2);
     
+
     if([_object.name isEqualToString:@"PodRoom"]){[PodRoom addObject:_object];}
     else if([_object.name isEqualToString:@"AirLock"]){[AirLock addObject:_object];}
     else if([_object.name isEqualToString:@"Hallway"]){[Hallway addObject:_object];}

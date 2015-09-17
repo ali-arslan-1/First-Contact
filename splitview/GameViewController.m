@@ -45,6 +45,16 @@
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
 
+enum RoomType{
+    Hallway,
+    PodRoom,
+    AirLock,
+    DiningHall,
+    EngineRoom,
+    Cockpit,
+    
+};
+
 - (void)setupGL;
 - (void)tearDownGL;
 
@@ -250,9 +260,15 @@
     self.effect.light0.enabled = GL_TRUE;
     self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
     
-    glGenTextures(1, &mTextureID);
+    glGenTextures(6, mTextureID);
     // square texture
-    [self loadTextureFromImage:@"T_E_PodRoom" Type:@"png" TexID:mTextureID];
+    [self loadTextureFromImage:@"T_E_PodRoom" Type:@"png" TexID:mTextureID[PodRoom]];
+    [self loadTextureFromImage:@"T_E_Hallway" Type:@"png" TexID:mTextureID[Hallway]];
+    [self loadTextureFromImage:@"T_E_EngineRoom" Type:@"png" TexID:mTextureID[EngineRoom]];
+    [self loadTextureFromImage:@"T_E_DiningHall" Type:@"png" TexID:mTextureID[DiningHall]];
+    [self loadTextureFromImage:@"T_E_Cockpit" Type:@"png" TexID:mTextureID[Cockpit]];
+    [self loadTextureFromImage:@"T_E_Airlock" Type:@"png" TexID:mTextureID[AirLock]];
+    
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
     
@@ -377,7 +393,7 @@
     
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
+    glBindTexture(GL_TEXTURE_2D, tid);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     /* The input frame is not of size power of 2*/
@@ -474,7 +490,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    
+    NSMutableArray* categorizedObjects = [objloader getCategorizedObjects];
     /*****************************
      *1st render pass, use FBO[0], render left view
      *****************************/
@@ -496,14 +512,47 @@
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // render loaded geometries
+    enum RoomType currentRoom = Hallway;
+    for (Object *room in categorizedObjects) {
+        
+        for (Object *element in room) {
+
+            glBindVertexArrayOES(*(element.vertexArray));
+            // bind a texture
+            glEnable(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
+            if(currentRoom == AirLock)
+            glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
+            else
+               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
+            // Render the object with ES2
+            glUseProgram(shaderLoader._program);
+            
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+            //1.071f, 3.264f, -1.882f
+            for (Light* light in lights) {
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+                
+            }
+            
+            mNumTriangles = [element getNumVertices];
+            glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+        }
+        currentRoom++;
+    }
+    currentRoom = Hallway;
+    /*
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
-        
         glBindVertexArrayOES(*(loaded.vertexArray));
         // bind a texture
         glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTextureID);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
         // Render the object with ES2
         glUseProgram(shaderLoader._program);
         
@@ -523,7 +572,7 @@
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
-    
+    */
     /*****************************
      *2nd render pass, use FBO[1], render right view
      *****************************/
@@ -546,13 +595,48 @@
     
     glClear(GL_DEPTH_BUFFER_BIT);
     // render loaded geometries
+
+    for (Object *room in categorizedObjects) {
+        
+        for (Object *element in room) {
+            
+            glBindVertexArrayOES(*(element.vertexArray));
+            // bind a texture
+            glEnable(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
+            
+            if(currentRoom == AirLock)
+                glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
+            else
+                glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
+            // Render the object with ES2
+            glUseProgram(shaderLoader._program);
+            
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+            //1.071f, 3.264f, -1.882f
+            for (Light* light in lights) {
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+                
+            }
+            
+            mNumTriangles = [element getNumVertices];
+            glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+        }
+        currentRoom++;
+    }
+    
+    /*
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
         glBindVertexArrayOES(*(loaded.vertexArray));
         // bind a texture
         glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTextureID);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
         // Render the object with ES2
         glUseProgram(shaderLoader._program);
         
@@ -571,7 +655,7 @@
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
-    
+    */
     
     
     //left eye
