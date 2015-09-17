@@ -34,6 +34,9 @@
 
 - (void)addObjects :(NSMutableArray*) newObjects;
 -(BOOL) isTriggered:(Object*) obj;
+
+-(GLKVector3) getHeadPosition;
+
 + (GLKMatrix4)lView;
 
 + (GLKMatrix4)rView;
