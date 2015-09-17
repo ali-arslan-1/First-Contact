@@ -28,9 +28,9 @@
 </Level>
 <Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_02_M50">
 	<NarrationSequence>
-		<!--<narration>0-PowerCapacityIncreased</narration>-->
+		<narration>0-PowerCapacityIncreased</narration>
 		<wait>1</wait>
-		<narration>0-PowerIncreased</narration>
+		<narration>1-PowerIncreased</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 	<NarrationReminder>
@@ -83,6 +83,11 @@
 		<narration>4-FinalInstruction</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-EverythingOkay</reminder>
+		<reminder>1-DontDetectChange</reminder>
+		<reminder>2-PleaseOpen</reminder>
+	</NarrationReminder>
 </Level>
 <Level ID="6" Name="LockDown" Trigger="Trigger_Cockpit_06_M50">
 	<NarrationSequence>
