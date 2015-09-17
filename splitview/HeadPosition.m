@@ -121,11 +121,11 @@ static GLKMatrix4 projection;
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(lView, disp.x,disp.y,disp.z);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(rView, disp.x,disp.y,disp.z);
     
- 
-    if(![self detectCollision:disp]){
+    [self detectCollision:disp];
+    /*if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-    }
+    }*/
     
 }
 
