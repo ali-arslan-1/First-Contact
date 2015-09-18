@@ -267,7 +267,7 @@ enum RoomType{
     [self loadTextureFromImage:@"T_E_EngineRoom" Type:@"png" TexID:mTextureID[EngineRoom]];
     [self loadTextureFromImage:@"T_E_DiningHall" Type:@"png" TexID:mTextureID[DiningHall]];
     [self loadTextureFromImage:@"T_E_Cockpit" Type:@"png" TexID:mTextureID[Cockpit]];
-    [self loadTextureFromImage:@"T_E_Airlock" Type:@"png" TexID:mTextureID[AirLock]];
+    [self loadTextureFromImage:@"T_E_AirLock" Type:@"png" TexID:mTextureID[AirLock]];
     
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
@@ -394,7 +394,7 @@ enum RoomType{
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tid);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     /* The input frame is not of size power of 2*/
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -402,6 +402,7 @@ enum RoomType{
     
     /* The input frame is in format BGRA */
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)width, (int)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+	glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
     
     CGContextRelease(context0);
@@ -716,13 +717,17 @@ enum RoomType{
     //NSLog( @"text changed: %@", input);
     
     if([input  isEqual: @"a"]){
-        [headPosition moveLeft];
+        //[headPosition moveLeft];
+		[headPosition moveBackward];
     }else if([input  isEqual: @"d"]){
-        [headPosition moveRight];
+        //[headPosition moveRight];
+		[headPosition moveForward];
     }else if([input  isEqual: @"w"]){
-        [headPosition moveForward];
+        //[headPosition moveForward];
+		[headPosition moveLeft];
     }else if([input  isEqual: @"x"]){
-        [headPosition moveBackward];
+        //[headPosition moveBackward];
+		[headPosition moveRight];
     }else if([input  isEqual: @"e"]){
         [headPosition stopMoving];
     }else if([input  isEqual: @"q"]){

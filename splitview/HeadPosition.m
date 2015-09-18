@@ -101,7 +101,7 @@ static GLKMatrix4 projection;
     headPos.y = pos.y;
     headPos.z = -pos.z; //Z coordinates are flipped at the obj file.
     objects = [NSMutableArray array];
-    displacementFactor = 0.1f;
+    displacementFactor = 0.07f;
     rotationFactor = 0.1f;
     inDoorFrame = NO;
     currentDirection = noDirection;
