@@ -35,7 +35,9 @@
 + (void)setRView:(GLKMatrix4) val;
 
 + (GLKMatrix4) projection;
++ (GLKMatrix4) lightProjection;
 
 + (void)setProjection:(GLKMatrix4) val;
++ (void)setLightProjection:(GLKMatrix4) val;
 @end
 

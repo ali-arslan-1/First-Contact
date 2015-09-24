@@ -12,12 +12,13 @@
 @implementation Light
 
 @synthesize color;
+@synthesize id;
 @synthesize uniformLocation;
 
--(id)init:(NSString*)name{
+-(id)init:(NSString*)name Id :(NSString*) _id {
     
     if(self = [super init:name Type:Light_]){
-        
+        self->id = _id;
         self->color = GLKVector3Make(1.0, 1.0, 1.0);
         //self->_position = GLKVector4Make(1.071f, 1.264f, -1.882f,1.0f); //TODO
     }

@@ -39,6 +39,7 @@ GLKVector3 headPos;
 static GLKMatrix4 lView;
 static GLKMatrix4 rView;
 static GLKMatrix4 projection;
+static GLKMatrix4 lightProjection;
 
 + (GLKMatrix4)lView{
     @synchronized(self) {
@@ -53,6 +54,12 @@ static GLKMatrix4 projection;
 }
 
 + (GLKMatrix4)projection{
+    @synchronized(self) {
+        return projection;
+    }
+}
+
++ (GLKMatrix4)lightProjection{
     @synchronized(self) {
         return projection;
     }
@@ -74,6 +81,12 @@ static GLKMatrix4 projection;
 + (void)setProjection:(GLKMatrix4) val{
     @synchronized(self) {
         projection = val;
+    }
+}
+
++ (void)setLightProjection:(GLKMatrix4) val{
+    @synchronized(self) {
+        lightProjection = val;
     }
 }
 

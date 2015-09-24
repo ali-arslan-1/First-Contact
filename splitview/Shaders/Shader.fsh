@@ -70,7 +70,9 @@ float CalcShadowFactor(vec4 LightSpacePos)
     UVCoords.y = 0.5 * ProjCoords.y + 0.5;
     float z = 0.5 * ProjCoords.z + 0.5;
     float Depth = texture2D(shadowMap, UVCoords).x;
-    if (Depth < (z + 0.00001))
+    if(z < 0.0 || z >1.0)
+        return 1.0;
+    else if(Depth < (z - 0.01))
         return 0.5;
     else
         return 1.0;

@@ -103,7 +103,11 @@
     float aspect = fabs(mFrameWidth / 2.0 / mFrameHeight);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
     
+    GLKMatrix4 lightProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(85.0f), aspect, 0.1f, 10000.0f);
+    
     [HeadPosition setProjection:projectionMatrix];
+    
+    [HeadPosition setLightProjection:lightProjectionMatrix];
     
 
     
@@ -128,8 +132,9 @@
     
     for (Light* light in lights) {
         
-        _lightViewMatrix = GLKMatrix4MakeLookAt(light.position.x-3, light.position.y-1, light.position.z, initialViewDir.x-0.3, initialViewDir.y, initialViewDir.z+0.3, 0, 1, 0);
-        break;
+        if([light.name isEqualToString: @"PodRoom"] && [light.id isEqualToString: @"01"] )
+            _lightViewMatrix = GLKMatrix4MakeLookAt(light.position.x, light.position.y, light.position.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+        //break;
     }
 }
 
@@ -496,7 +501,7 @@
     
     glClear(GL_DEPTH_BUFFER_BIT);
     
-    
+    GLKMatrix4 lMVP;
     // render loaded geometries
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
@@ -506,7 +511,7 @@
         // Render the object with ES2
         glUseProgram(shaderLoader._shadowProgram);
         
-        GLKMatrix4 lMVP = [loaded getLightModelViewProjection:_lightViewMatrix];
+        lMVP = [loaded getLightModelViewProjection:_lightViewMatrix];
         
         glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX1], 1, 0, lMVP.m);
         
@@ -554,7 +559,7 @@
         glUseProgram(shaderLoader._program);
         
         glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Left].m);
-        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection: Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, lMVP.m);
         glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
         glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getLightModelViewProjection:_lightViewMatrix].m);
         glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);

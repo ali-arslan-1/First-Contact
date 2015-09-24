@@ -201,7 +201,8 @@
     
     GLKMatrix4 modelView = GLKMatrix4Multiply(lightViewMatrix, modelMatrix);
     
-    matrix = GLKMatrix4Multiply([HeadPosition projection], modelView);
+    
+    matrix = GLKMatrix4Multiply([HeadPosition lightProjection], modelView);
     
     
     return matrix;

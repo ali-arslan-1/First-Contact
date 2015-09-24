@@ -97,7 +97,8 @@
                         }else if ([[comps objectAtIndex:0] isEqualToString:@"Light"]){
                             name = [comps objectAtIndex:1];
                             //name = [NSString stringWithFormat:@"%@%@%@", [comps objectAtIndex:1], @"_", [comps objectAtIndex:2]];
-                            object = [[Light alloc] init:name];
+                            NSString * id = [comps objectAtIndex:2];
+                            object = [[Light alloc] init:name Id:id];
                         }else if([[comps objectAtIndex:0] isEqualToString:@"Trigger"]){
                             name = [comps objectAtIndex:1];
                             int levelNumber = [[comps objectAtIndex:2] integerValue];

@@ -18,9 +18,10 @@
 
 @property ( nonatomic ) GLKVector4 position;
 @property GLKVector3 color;
+@property NSString* id;
 @property (nonatomic) GLint uniformLocation;
 
--(id)init:(NSString*)name;
+-(id)init:(NSString*)name Id : (NSString*)_id;
 -(GLKVector4)position;
 
 @end
