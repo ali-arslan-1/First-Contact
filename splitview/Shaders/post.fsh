@@ -114,8 +114,9 @@ void main()
         float v = y;
         
         //Fxaa works fine on device but lags on simulator. Commented out for simulator.
-        texCol = texture2D(uSamplerL, vec2(u, v));//fxaa_apply(uSamplerL , vec2(u, v) * resolution, resolution);//;
+        texCol = fxaa_apply(uSamplerL , vec2(u, v) * resolution, resolution);//;
         
+        //TODO for displaying shadow texture
         //float Depth = texture2D(uSamplerL, vec2(u, v)).x;
         //Depth = 1.0 - (1.0 - Depth) * 25.0;
         //texCol = vec4(Depth);
@@ -126,7 +127,7 @@ void main()
         float u = (x - 0.5) * 2.0;
         float v = y;
         //Fxaa works fine on device but lags on simulator. Commented out for simulator.
-        texCol = texture2D(uSamplerR, vec2(u, v));//fxaa_apply(uSamplerR , vec2(u, v) * resolution, resolution);
+        texCol = fxaa_apply(uSamplerR , vec2(u, v) * resolution, resolution);
         
         
     }

@@ -51,6 +51,7 @@ static GLKMatrix4 lView;
 static GLKMatrix4 rView;
 static GLKMatrix4 projection;
 static GLKMatrix4 lightProjection;
+static enum RoomType currentRoom;
 
 + (GLKMatrix4)lView{
     @synchronized(self) {
@@ -72,7 +73,30 @@ static GLKMatrix4 lightProjection;
 
 + (GLKMatrix4)lightProjection{
     @synchronized(self) {
-        return projection;
+        return lightProjection;
+    }
+}
+
++ (enum RoomType)currentRoom{
+    @synchronized(self) {
+        GLKVector3 pos = headPos;
+        if(pos.x < 5.60 && pos.z <2.50){
+            currentRoom = PodRoom;
+        }else if(pos.x < 5.60 && pos.z >4.0){
+                currentRoom = AirLock;
+        }else if(pos.x > 9.5 && pos.z <1.40){
+            currentRoom = EngineRoom;
+        }
+        else if(pos.x > 9.5 && pos.z > 4.0){
+            currentRoom = DiningHall;
+        }else if(pos.z > 10.90){
+            currentRoom = Cockpit;
+        }
+        else
+            currentRoom = Hallway;
+        
+        //currentRoom = Cockpit; //TODO hardcoded for testing
+        return currentRoom;
     }
 }
 
@@ -98,6 +122,12 @@ static GLKMatrix4 lightProjection;
 + (void)setLightProjection:(GLKMatrix4) val{
     @synchronized(self) {
         lightProjection = val;
+    }
+}
+
++ (void)setCurrentRoom:(enum RoomType) val{
+    @synchronized(self) {
+        currentRoom = val;
     }
 }
 
@@ -135,12 +165,15 @@ static GLKMatrix4 lightProjection;
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(lView, disp.x,disp.y,disp.z);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(rView, disp.x,disp.y,disp.z);
     
-    [self detectCollision:disp];
-    /*if(![self detectCollision:disp]){
+    //[self detectCollision:disp];
+    if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-    }*/
+    }
     
+    //TODO added to disable collision detection
+    //lView = _newLeftViewMatrix;
+    //rView = _newRightviewMatix;
 }
 
 -(void) rotateHead:(GLKMatrix4) rotation{
@@ -171,6 +204,8 @@ static GLKMatrix4 lightProjection;
 }
 
 - (BOOL) detectCollision: (GLKVector3) disp{
+
+    
     GLKVector3 oldHeadPos = headPos;
     headPos.x = headPos.x - disp.x;
     headPos.z = headPos.z - disp.z;

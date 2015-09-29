@@ -48,7 +48,7 @@
 
 + (GLKMatrix4) projection;
 + (GLKMatrix4) lightProjection;
-
++ (enum RoomType) currentRoom;
 + (void)setProjection:(GLKMatrix4) val;
 + (void)setLightProjection:(GLKMatrix4) val;
 @end

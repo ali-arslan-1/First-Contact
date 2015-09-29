@@ -24,9 +24,7 @@
     
     float _rotation;
     GLKMatrix4 _gridModelViewProjectionMatrix[2];
-    GLKMatrix4 _lightModelViewProjectionMatrix;
     GLKMatrix4 _gridModelViewMatrix[2];
-    GLKMatrix4 _lightViewMatrix[6];
     NSMutableArray * lights;
     
     GLuint _quadVertexArray;
@@ -121,11 +119,9 @@ enum RoomType{
     float aspect = fabs(mFrameWidth / 2.0 / mFrameHeight);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
     
-    GLKMatrix4 lightProjectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(100.0f), aspect, 0.1f, 10000.0f);
-    
     [HeadPosition setProjection:projectionMatrix];
     
-    [HeadPosition setLightProjection:lightProjectionMatrix];
+    //==================
     
     // Create and start a CMMotionManager, so that e.g. attitude later can be used:
     // https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMMotionManager_Class/index.html#//apple_ref/occ/instm/CMMotionManager/startDeviceMotionUpdates
@@ -154,27 +150,6 @@ enum RoomType{
     [levelController assignTriggersToLevels:objloader];
     currentLevel = [levelController getNextLevel];
     [currentLevel loadLevel];
-    
-    for (Light* light in lights) {
-        
-        
-        if([light.name isEqualToString: @"PodRoom"] && [light.id isEqualToString: @"02"] ){
-            initialViewDir = GLKVector3Make(4, 1.45, 0);
-            _lightViewMatrix[1] = GLKMatrix4MakeLookAt(light.position.x, light.position.y, light.position.z, initialViewDir.x-6, initialViewDir.y, initialViewDir.z, 0, 1, 0);
-        }
-        else if([light.name isEqualToString: @"DiningHall"] && [light.id isEqualToString: @"01"] ){
-            initialViewDir = GLKVector3Make(22, -1.45, 7.2);
-            _lightViewMatrix[3] = GLKMatrix4MakeLookAt(light.position.x, light.position.y, light.position.z, initialViewDir.x-6, initialViewDir.y, initialViewDir.z, 0, 1, 0);
-        }
-        else if([light.name isEqualToString: @"EngineRoom"] && [light.id isEqualToString: @"01"] ){
-            initialViewDir = GLKVector3Make(25, -1.45, 0);
-            _lightViewMatrix[4] = GLKMatrix4MakeLookAt(light.position.x, light.position.y, light.position.z, initialViewDir.x-6, initialViewDir.y, initialViewDir.z, 0, 1, 0);
-        }
-        else if([light.name isEqualToString: @"Cockpit"] && [light.id isEqualToString: @"02"] ){
-            initialViewDir = GLKVector3Make(14, -5.45, 8);
-            _lightViewMatrix[5] = GLKMatrix4MakeLookAt(light.position.x, light.position.y, light.position.z, initialViewDir.x-6, initialViewDir.y, initialViewDir.z, 0, 1, 0);
-        }
-    }
 }
 
 
@@ -270,67 +245,6 @@ enum RoomType{
     return true;
 }
 
-
-- (bool)initShadowFBO {
-    /******************************************************************************************************
-     More documentation about FBO please refer to:
-     https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/WorkingwithEAGLContexts/WorkingwithEAGLContexts.html
-     *******************************************************************************************************/
-    // get default FBO ID
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mDefaultFBO);
-    
-    // Setup my FBO
-    int fboCount = 1;
-    glGenFramebuffers ( fboCount, &shadowFbo );
-    glGenTextures ( fboCount, &shadowTexture );
-    
-    
-    
-    NSLog(@"defaultFBO: %d, : %d", mDefaultFBO, shadowFbo);
-    
-    /*********************************************
-     * Setup color buffer and attach to FBO
-     *********************************************/
-    // texture has same dimension as our screen
-    int textureWidth = (int)floor(mFrameWidth / 2.0);
-    int textureHeight = mFrameHeight;
-    
-    glBindTexture ( GL_TEXTURE_2D, shadowTexture );
-    
-    // Set the filtering mode
-    
-    glTexImage2D ( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, textureWidth, textureHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, NULL );
-    
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    
-    glBindFramebuffer ( GL_FRAMEBUFFER, shadowFbo );
-    
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTexture, 0);
-
-    //glDrawBuffers(1, GL_NONE);
-
-
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
-    if(status != GL_FRAMEBUFFER_COMPLETE) {
-        NSLog(@"FBO : failed to make complete shadow framebuffer object %x", status);
-        return false;
-        }
-    
-    
-    
-    // Restore the original framebuffer
-    glBindFramebuffer ( GL_FRAMEBUFFER, mDefaultFBO );
-    glBindTexture ( GL_TEXTURE_2D, 0 );
-    
-    NSLog(@"FBO created successfully.");
-    return true;
-}
-
-
 - (void)setupGL
 {
     [EAGLContext setCurrentContext:self.context];
@@ -341,7 +255,6 @@ enum RoomType{
     [shaderLoader loadMyShaders];
     [shaderLoader loadBlurShaders];
     [shaderLoader loadBlendShaders];
-    [shaderLoader loadShadowShaders];
     
     self.effect = [[GLKBaseEffect alloc] init];
     self.effect.light0.enabled = GL_TRUE;
@@ -367,7 +280,6 @@ enum RoomType{
     [self initGridGeometry];
     
     [self initFBO];
-    [self initShadowFBO];
 }
 
 - (void)initLoadedGeometry
@@ -520,7 +432,7 @@ enum RoomType{
     GLKMatrix4 rotatedLeftViewMatrix;
     GLKMatrix4 rotatedRightViewMatrix;
     
-    BOOL rotate = YES; //TODO for testing on simulator set it to NO
+    BOOL rotate = YES;
     
     //==========================================================================================================
     
@@ -528,8 +440,8 @@ enum RoomType{
     if(rotate){
     
         GLKMatrix4 rotation = [headRotation getRotationMatrix];
-        //GLKMatrix4 left = [HeadPosition lView];
-        //GLKMatrix4 right = [HeadPosition rView];
+        GLKMatrix4 left = [HeadPosition lView];
+        GLKMatrix4 right = [HeadPosition rView];
         
         GLKMatrix4 leftNew =  initialLeftView;/*GLKMatrix4Make(initialLeftView.m00, initialLeftView.m01, initialLeftView.m02, left.m03, initialLeftView.m10, initialLeftView.m11, initialLeftView.m12, left.m13, initialLeftView.m20, initialLeftView.m21, initialLeftView.m22, left.m23, left.m30, left.m31, left.m32, left.m33);*/
         GLKMatrix4 rightNew = initialRightView;/*GLKMatrix4Make(initialRightView.m00, initialRightView.m01, initialRightView.m02, right.m03, initialRightView.m10, initialRightView.m11, initialRightView.m12, right.m13, initialRightView.m20, initialRightView.m21, initialRightView.m22, right.m23, right.m30, right.m31, right.m32, right.m33);
@@ -581,44 +493,6 @@ enum RoomType{
 {
     NSMutableArray* categorizedObjects = [objloader getCategorizedObjects];
     /*****************************
-     *1st render pass, use shadowFbo, calculate shadow map
-     *****************************/
-
-    glBindFramebuffer ( GL_FRAMEBUFFER, shadowFbo );
-    glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
-    
-    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
-
-    
-    glClear(GL_DEPTH_BUFFER_BIT);
-    
-    GLKMatrix4 lMVP;
-    // render loaded geometries
-    for (Object *room in categorizedObjects) {
-        
-        for (Object *element in room) {
-            
-            
-            glBindVertexArrayOES(*(element.vertexArray));
-
-            // Render the object with ES2
-            glUseProgram(shaderLoader._shadowProgram);
-            
-            lMVP = [element getLightModelViewProjection:_lightViewMatrix[[HeadPosition currentRoom]]];
-            
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX1], 1, 0, lMVP.m);
-            
-            glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-
-
-            
-            mNumTriangles = [element getNumVertices];
-            glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
-        }
-    }
-    
-    
-    /*****************************
      *1st render pass, use FBO[0], render left view
      *****************************/
     
@@ -652,26 +526,18 @@ enum RoomType{
             glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
             else
 */               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, shadowTexture);
             // Render the object with ES2
             glUseProgram(shaderLoader._program);
             
             glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
             glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX], 1, 0, lMVP.m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
             glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
-            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_SHADOW], 1);
             glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-            
-            int room = [HeadPosition currentRoom];
-            glUniform1i([ShaderLoader uniforms:UNIFORM_ROOM_NO], room);
             //1.071f, 3.264f, -1.882f
             for (Light* light in lights) {
-
-                GLKVector4 lightPos = GLKMatrix4MultiplyVector4([element getModelView:Left], GLKVector4Make(light.position.x, light.position.y, light.position.z,1.0f));
-                glUniform3f(light.uniformLocation, lightPos.x, lightPos.y, lightPos.z);
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+                
             }
             
             mNumTriangles = [element getNumVertices];
@@ -680,7 +546,34 @@ enum RoomType{
         currentRoom++;
     }
     currentRoom = Hallway;
-
+    /*
+    for(int i = 0; i< objloader.objects.count; i++){
+        Object *loaded = [objloader.objects objectAtIndex:i];
+        glBindVertexArrayOES(*(loaded.vertexArray));
+        // bind a texture
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
+        // Render the object with ES2
+        glUseProgram(shaderLoader._program);
+        
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection:Left].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Left].m);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+        //1.071f, 3.264f, -1.882f
+        for (Light* light in lights) {
+            glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+            
+        }
+        
+        
+        
+        mNumTriangles = [loaded getNumVertices];
+        glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    }
+    */
     /*****************************
      *2nd render pass, use FBO[1], render right view
      *****************************/
@@ -712,30 +605,23 @@ enum RoomType{
             // bind a texture
             glEnable(GL_TEXTURE_2D);
             glActiveTexture(GL_TEXTURE0);
-            /* if(currentRoom == AirLock)
-             glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
-             else
-             */               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, shadowTexture);
+            
+            if(currentRoom == AirLock)
+                glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
+            else
+                glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
             // Render the object with ES2
             glUseProgram(shaderLoader._program);
             
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Right].m);
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Right].m);
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Right].m);
-            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_LIGHTMODELVIEWPROJECTION_MATRIX], 1, 0, lMVP.m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
             glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
-            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D_SHADOW], 1);
             glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
-            
-            int room = [HeadPosition currentRoom];
-            glUniform1i([ShaderLoader uniforms:UNIFORM_ROOM_NO], room);
             //1.071f, 3.264f, -1.882f
             for (Light* light in lights) {
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
                 
-                GLKVector4 lightPos = GLKMatrix4MultiplyVector4([element getModelView:Left], GLKVector4Make(light.position.x, light.position.y, light.position.z,1.0f));
-                glUniform3f(light.uniformLocation, lightPos.x, lightPos.y, lightPos.z);
             }
             
             mNumTriangles = [element getNumVertices];
@@ -744,7 +630,36 @@ enum RoomType{
         currentRoom++;
     }
     
-
+    /*
+    for(int i = 0; i< objloader.objects.count; i++){
+        Object *loaded = [objloader.objects objectAtIndex:i];
+        glBindVertexArrayOES(*(loaded.vertexArray));
+        // bind a texture
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
+        // Render the object with ES2
+        glUseProgram(shaderLoader._program);
+        
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_MATRIX], 1, 0, [loaded getModelView:Right].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [loaded getModelViewProjection:Right].m);
+        glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [loaded getModelViewInverseTranspose:Right].m);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+        glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+        //glUniform3f([ShaderLoader uniforms:UNIFORM_LIGHT_POS], 1.071f, 3.264f, -1.882f);
+        
+        for (Light* light in lights) {
+            glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+            
+        }
+        
+        mNumTriangles = [loaded getNumVertices];
+        glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+    }
+    */
+    
+    
+    //left eye
     
     [self blur:mFBO[2] otherFbo:mFBO[3] colorTexture: mColorTextureID[2] inputTexture: mColorTextureID[0]];
     
@@ -821,11 +736,11 @@ enum RoomType{
         [headPosition stopMoving];
     }else if([input  isEqual: @"z"]){
         [headPosition stopMoving];
-    }else if([input  isEqual: @"f"]){
+    }/*else if([input  isEqual: @"f"]){
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
-    }else if ([input isEqual:@"j"]){
+    }*/else if ([input isEqual:@"h"]){
         TriggerObject *trigger = [currentLevel getTriggerObject];
         if([trigger isActive]&&[headPosition isTriggered:trigger]){
             [trigger responseWhenItIsTriggered];

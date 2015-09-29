@@ -118,13 +118,14 @@ static GLint uniforms[NUM_UNIFORMS];
     uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation(_program, "uSampler");
     uniforms[UNIFORM_SAMPLER2D_SHADOW] = glGetUniformLocation(_program, "shadowMap");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
-    //uniforms[UNIFORM_LIGHT_POS] = glGetUniformLocation(_program, "uLightPosition");
+    uniforms[UNIFORM_ROOM_NO] = glGetUniformLocation(_program, "room");
     
     for (Object *object in objects) {
         if([object isKindOfClass:[Light class]]){
             Light* light = (Light*)object;
-            light.uniformLocation = glGetUniformLocation(_program,[light.name UTF8String]);
-            NSLog(@"light name %s",[light.name UTF8String]);
+            NSString * name = [NSString stringWithFormat:@"%@%@%@", light.name, @"_", light.id];
+            light.uniformLocation = glGetUniformLocation(_program,[name UTF8String]);
+            NSLog(@"light name %s",[name UTF8String]);
         }
     }
     

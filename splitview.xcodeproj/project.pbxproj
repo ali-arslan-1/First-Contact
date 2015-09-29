@@ -67,7 +67,6 @@
 		6E90BA701B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA5A1B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 */; };
 		6E90BA711B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA5B1B67D3E100F2A971 /* 1-EverythingOkay.mp3 */; };
 		6E90BA721B67D3E100F2A971 /* 2-PleaseIncrease.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA5C1B67D3E100F2A971 /* 2-PleaseIncrease.mp3 */; };
-		6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA5E1B67D3E100F2A971 /* 0-PowerIncreased.mp3 */; };
 		6E90BA741B67D3E100F2A971 /* 0-SensorAccess.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA601B67D3E100F2A971 /* 0-SensorAccess.mp3 */; };
 		6E90BA751B67D3E100F2A971 /* 1-EverythingOkay.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6E90BA611B67D3E100F2A971 /* 1-EverythingOkay.mp3 */; };
 		6EE03A501B4FDB6300B78398 /* TriggerObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE03A4F1B4FDB6300B78398 /* TriggerObject.m */; };
@@ -85,6 +84,8 @@
 		BBF0ECA31B2DD91100D44D89 /* Door.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA21B2DD91100D44D89 /* Door.m */; };
 		BBF0ECA61B2EF92F00D44D89 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA51B2EF92F00D44D89 /* Utils.m */; };
 		BBF0ECA91B2EFDBC00D44D89 /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ECA81B2EFDBC00D44D89 /* Light.m */; };
+		BBF29CE01BB41331008921AB /* shadow.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF29CDE1BB41331008921AB /* shadow.fsh */; };
+		BBF29CE11BB41331008921AB /* shadow.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF29CDF1BB41331008921AB /* shadow.vsh */; };
 		BBF781A41B726A1700529609 /* blur.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A21B726A1700529609 /* blur.vsh */; };
 		BBF781A51B726A1700529609 /* blur.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBF781A31B726A1700529609 /* blur.fsh */; };
 		BBFE91351B71055D00045E34 /* fxaa.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BBFE91341B71055D00045E34 /* fxaa.fsh */; };
@@ -159,7 +160,6 @@
 		6E90BA5A1B67D3E100F2A971 /* 0-StatusPowerLevels.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-StatusPowerLevels.mp3"; sourceTree = "<group>"; };
 		6E90BA5B1B67D3E100F2A971 /* 1-EverythingOkay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-EverythingOkay.mp3"; sourceTree = "<group>"; };
 		6E90BA5C1B67D3E100F2A971 /* 2-PleaseIncrease.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "2-PleaseIncrease.mp3"; sourceTree = "<group>"; };
-		6E90BA5E1B67D3E100F2A971 /* 0-PowerIncreased.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-PowerIncreased.mp3"; sourceTree = "<group>"; };
 		6E90BA601B67D3E100F2A971 /* 0-SensorAccess.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "0-SensorAccess.mp3"; sourceTree = "<group>"; };
 		6E90BA611B67D3E100F2A971 /* 1-EverythingOkay.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1-EverythingOkay.mp3"; sourceTree = "<group>"; };
 		6EE03A4E1B4FDB5800B78398 /* TriggerObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerObject.h; sourceTree = "<group>"; };
@@ -188,6 +188,8 @@
 		BBF0ECA51B2EF92F00D44D89 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BBF0ECA71B2EFCA100D44D89 /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
 		BBF0ECA81B2EFDBC00D44D89 /* Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Light.m; sourceTree = "<group>"; };
+		BBF29CDE1BB41331008921AB /* shadow.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shadow.fsh; sourceTree = "<group>"; };
+		BBF29CDF1BB41331008921AB /* shadow.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shadow.vsh; sourceTree = "<group>"; };
 		BBF781A21B726A1700529609 /* blur.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.vsh; path = Shaders/blur.vsh; sourceTree = "<group>"; };
 		BBF781A31B726A1700529609 /* blur.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = blur.fsh; path = Shaders/blur.fsh; sourceTree = "<group>"; };
 		BBFE91341B71055D00045E34 /* fxaa.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fxaa.fsh; sourceTree = "<group>"; };
@@ -300,6 +302,8 @@
 		0A15DC791AB734A60058C15E /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				BBF29CDE1BB41331008921AB /* shadow.fsh */,
+				BBF29CDF1BB41331008921AB /* shadow.vsh */,
 				BBF781A21B726A1700529609 /* blur.vsh */,
 				BBF781A31B726A1700529609 /* blur.fsh */,
 				BBFE91341B71055D00045E34 /* fxaa.fsh */,
@@ -450,7 +454,6 @@
 		6E90BA5D1B67D3E100F2A971 /* 2-Sensors */ = {
 			isa = PBXGroup;
 			children = (
-				6E90BA5E1B67D3E100F2A971 /* 0-PowerIncreased.mp3 */,
 				6E90BA5F1B67D3E100F2A971 /* Reminders */,
 			);
 			name = "2-Sensors";
@@ -588,11 +591,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B5E5B3B1BA81902003BBE2A /* 0-AirlockOpened.mp3 in Resources */,
+				BBF29CE11BB41331008921AB /* shadow.vsh in Resources */,
 				0A15DC621AB734510058C15E /* LaunchScreen.xib in Resources */,
 				0B5E5B4C1BA81978003BBE2A /* T_E_DiningHall.png in Resources */,
 				0B5E5B331BA81902003BBE2A /* 0-PurgeInitiated.mp3 in Resources */,
-				6E90BA731B67D3E100F2A971 /* 0-PowerIncreased.mp3 in Resources */,
 				0B5E5B4E1BA81978003BBE2A /* T_E_Hallway.png in Resources */,
+				BBF29CE01BB41331008921AB /* shadow.fsh in Resources */,
 				6E90BA6C1B67D3E100F2A971 /* 1-LetUsKnow.mp3 in Resources */,
 				0B5E5B0E1BA818D5003BBE2A /* 1-NoTimeToLoose.mp3 in Resources */,
 				0B5E5B4D1BA81978003BBE2A /* T_E_EngineRoom.png in Resources */,
