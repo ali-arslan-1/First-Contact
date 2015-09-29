@@ -19,7 +19,8 @@ enum RoomType{
     AirLock,
     DiningHall,
     EngineRoom,
-    Cockpit
+    Cockpit,
+    Hallway_02
 };
 
 enum Direction{
@@ -92,9 +93,10 @@ static enum RoomType currentRoom;
         }else if(pos.z > 10.90){
             currentRoom = Cockpit;
         }
+        else if(pos.z > 3.50)
+            currentRoom = Hallway_02;
         else
             currentRoom = Hallway;
-        
         //currentRoom = Cockpit; //TODO hardcoded for testing
         return currentRoom;
     }

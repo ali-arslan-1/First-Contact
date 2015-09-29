@@ -115,8 +115,11 @@ void main()
         else if(room==5){
             lightPos = Cockpit_02;
         }
-        else{
+        else if(room==6){
             lightPos = Hallway_02;
+            shadowFactor = 1.0;
+        }else{
+            lightPos = Hallway_01;
             shadowFactor = 1.0;
         }
         
