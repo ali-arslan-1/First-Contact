@@ -38,12 +38,24 @@
     Level *currentLevel;
     TriggerObject *triggeredObject;
     LevelController *levelController;
+    GLKMatrix4 initialLeftView;
+    GLKMatrix4 initialRightView;
 
     BOOL init;
     
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
+
+enum RoomType{
+    Hallway,
+    PodRoom,
+    AirLock,
+    DiningHall,
+    EngineRoom,
+    Cockpit,
+    
+};
 
 - (void)setupGL;
 - (void)tearDownGL;
@@ -81,7 +93,7 @@
     // load Geometry
     NSLog(@"loading obj file...");
 
-    [objloader initWithPath:@"PodRoom"];
+    [objloader initWithPath:@"Craft"];
 
     mFrameWidth = self.view.frame.size.width;
     mFrameHeight = self.view.frame.size.height;
@@ -91,14 +103,20 @@
     
     headPosition = [[HeadPosition alloc] initWithPos:initialPos];
     [headPosition addObjects:objloader.getCategorizedObjects];
+    
 
     
     GLKMatrix4 _leftViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
     
     GLKMatrix4 _rightViewMatrix = GLKMatrix4MakeLookAt(initialPos.x, initialPos.y, initialPos.z, initialViewDir.x, initialViewDir.y, initialViewDir.z, 0, 1, 0);
+  
+    initialLeftView = _leftViewMatrix;
+    initialRightView = _rightViewMatrix;
     
     [HeadPosition setLView:_leftViewMatrix];
     [HeadPosition setRView:_rightViewMatrix];
+    
+    
     
     float aspect = fabs(mFrameWidth / 2.0 / mFrameHeight);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 10000.0f);
@@ -109,9 +127,15 @@
     
     [HeadPosition setLightProjection:lightProjectionMatrix];
     
-
+    // Create and start a CMMotionManager, so that e.g. attitude later can be used:
+    // https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMMotionManager_Class/index.html#//apple_ref/occ/instm/CMMotionManager/startDeviceMotionUpdates
+    motionMgr = [[CMMotionManager alloc] init];
+    [motionMgr startDeviceMotionUpdates];
     
+    // create and init the headRotation-instance from that rotation-matrices then later can be received:
+    headRotation = [[HeadRotation alloc] initWithMotionManager:(motionMgr)];
     
+    //==================
     
     // _leftViewMatrix = GLKMatrix4MakeTranslation(0.5, -1.0, 0.0);
     //_rightViewMatrix = GLKMatrix4MakeTranslation(-0.5, -1.0, 0.0);
@@ -124,6 +148,7 @@
  
     //[inputTextField setHidden:YES];
     [inputTextField becomeFirstResponder];
+    
     
     levelController = [[LevelController alloc] initwithLevelXML:@"NarrativeSequence"];
     [levelController assignTriggersToLevels:objloader];
@@ -226,7 +251,7 @@
     // Restore the original framebuffer
     glBindFramebuffer ( GL_FRAMEBUFFER, mDefaultFBO );
     glBindTexture ( GL_TEXTURE_2D, 0 );
-    
+     
     NSLog(@"FBO created successfully.");
     return true;
 }
@@ -308,9 +333,15 @@
     self.effect.light0.enabled = GL_TRUE;
     self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
     
-    glGenTextures(1, &mTextureID);
+    glGenTextures(6, mTextureID);
     // square texture
-    [self loadTextureFromImage:@"T_E_Atlas_01" Type:@"png" TexID:mTextureID];
+    [self loadTextureFromImage:@"T_E_PodRoom" Type:@"png" TexID:mTextureID[PodRoom]];
+    [self loadTextureFromImage:@"T_E_Hallway" Type:@"png" TexID:mTextureID[Hallway]];
+    [self loadTextureFromImage:@"T_E_EngineRoom" Type:@"png" TexID:mTextureID[EngineRoom]];
+    [self loadTextureFromImage:@"T_E_DiningHall" Type:@"png" TexID:mTextureID[DiningHall]];
+    [self loadTextureFromImage:@"T_E_Cockpit" Type:@"png" TexID:mTextureID[Cockpit]];
+    [self loadTextureFromImage:@"T_E_AirLock" Type:@"png" TexID:mTextureID[AirLock]];
+    
     // non square texture
     //[self loadTextureFromImage:@"BasketballColor" Type:@"jpg" TexID:mTextureID];
     
@@ -436,8 +467,8 @@
     
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, tid);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     /* The input frame is not of size power of 2*/
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -445,6 +476,7 @@
     
     /* The input frame is in format BGRA */
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)width, (int)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+	glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
     
     CGContextRelease(context0);
@@ -453,10 +485,14 @@
     
 }
 
+
+
 #pragma mark - GLKView and GLKViewController delegate methods
 
 - (void)update
 {
+    [headPosition movePlayer];
+    
     for (Object *object in objloader.objects) {
         if([object isKindOfClass:[Door class]]){
             [(Door*)object changeStateIfRequired];
@@ -467,16 +503,56 @@
         [triggeredObject playAnimation];
     }
   
+    GLKMatrix4 rotatedLeftViewMatrix;
+    GLKMatrix4 rotatedRightViewMatrix;
+    
+    BOOL rotate = YES;
+    
+    //==========================================================================================================
+    
+    // Get the rotation-matrix for the current device-attitude and apply it to the view-matrices:
+    if(rotate){
+    
+        GLKMatrix4 rotation = [headRotation getRotationMatrix];
+        GLKMatrix4 left = [HeadPosition lView];
+        GLKMatrix4 right = [HeadPosition rView];
+        
+        GLKMatrix4 leftNew =  initialLeftView;/*GLKMatrix4Make(initialLeftView.m00, initialLeftView.m01, initialLeftView.m02, left.m03, initialLeftView.m10, initialLeftView.m11, initialLeftView.m12, left.m13, initialLeftView.m20, initialLeftView.m21, initialLeftView.m22, left.m23, left.m30, left.m31, left.m32, left.m33);*/
+        GLKMatrix4 rightNew = initialRightView;/*GLKMatrix4Make(initialRightView.m00, initialRightView.m01, initialRightView.m02, right.m03, initialRightView.m10, initialRightView.m11, initialRightView.m12, right.m13, initialRightView.m20, initialRightView.m21, initialRightView.m22, right.m23, right.m30, right.m31, right.m32, right.m33);
+                                             //   */
+        
+        rotatedLeftViewMatrix = GLKMatrix4Multiply(rotation, leftNew);
+        rotatedRightViewMatrix = GLKMatrix4Multiply(rotation, rightNew);
+        
+        GLKVector3 headPos = [headPosition getHeadPosition];
+        
+        rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, initialLeftView.m32 - headPos.x, initialLeftView.m31 + headPos.y, initialLeftView.m30 - headPos.z);
+        rotatedRightViewMatrix = GLKMatrix4Translate(rotatedRightViewMatrix, initialRightView.m32 - headPos.x, initialRightView.m31 + headPos.y, initialRightView.m30 - headPos.z  );
+        // rotatedLeftViewMatrix = GLKMatrix4Translate(rotatedLeftViewMatrix, leftNew.m30-left.m30 , leftNew.m31-left.m31  , leftNew.m33-left.m32 );
+        // rotatedLeftViewMatrix = GLKMatrix4Multiply( GLKMatrix4MakeTranslation(left.m30 - leftNew.m30, left.m31 - leftNew.m31, left.m32 - leftNew.m33),rotatedLeftViewMatrix );
+        // rotatedRightViewMatrix = GLKMatrix4Multiply(rotatedRightViewMatrix, GLKMatrix4MakeTranslation(right.m30, right.m31, right.m32));
+        
+        [HeadPosition setLView:rotatedLeftViewMatrix];
+        [HeadPosition setRView:rotatedRightViewMatrix];
+    }
+    else{
+        rotatedLeftViewMatrix = [HeadPosition lView];
+        rotatedRightViewMatrix = [HeadPosition rView];
+    }
+ 
+   
     
     
+    
+    //==========================================================================================================
     
     
     GLKMatrix4 gridModelMat = GLKMatrix4MakeTranslation(0.0, 0.0, -15.0);
     gridModelMat = GLKMatrix4Scale(gridModelMat, 2.0, 2.0, 2.0);
 
-    GLKMatrix4 leftMVMat = GLKMatrix4Multiply([HeadPosition lView], gridModelMat);
-    GLKMatrix4 rightMVMat = GLKMatrix4Multiply([HeadPosition rView], gridModelMat);
-    
+    GLKMatrix4 leftMVMat = GLKMatrix4Multiply(rotatedLeftViewMatrix, gridModelMat);
+    GLKMatrix4 rightMVMat = GLKMatrix4Multiply(rotatedRightViewMatrix, gridModelMat);
+  
     // mvp matrices for left and right view
     _gridModelViewProjectionMatrix[0] = GLKMatrix4Multiply([HeadPosition projection], leftMVMat);
     _gridModelViewProjectionMatrix[1] = GLKMatrix4Multiply([HeadPosition projection], rightMVMat);
@@ -489,6 +565,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    NSMutableArray* categorizedObjects = [objloader getCategorizedObjects];
     /*****************************
      *1st render pass, use shadowFbo, calculate shadow map
      *****************************/
@@ -545,16 +622,47 @@
     glClear(GL_DEPTH_BUFFER_BIT);
     
     // render loaded geometries
+    enum RoomType currentRoom = Hallway;
+    for (Object *room in categorizedObjects) {
+        
+        for (Object *element in room) {
+
+            glBindVertexArrayOES(*(element.vertexArray));
+            // bind a texture
+            glEnable(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
+           /* if(currentRoom == AirLock)
+            glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
+            else
+*/               glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
+            // Render the object with ES2
+            glUseProgram(shaderLoader._program);
+            
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+            //1.071f, 3.264f, -1.882f
+            for (Light* light in lights) {
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+                
+            }
+            
+            mNumTriangles = [element getNumVertices];
+            glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+        }
+        currentRoom++;
+    }
+    currentRoom = Hallway;
+    /*
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
-        
         glBindVertexArrayOES(*(loaded.vertexArray));
         // bind a texture
         glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTextureID);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, shadowTexture);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
         // Render the object with ES2
         glUseProgram(shaderLoader._program);
         
@@ -576,7 +684,7 @@
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
-    
+    */
     /*****************************
      *2nd render pass, use FBO[1], render right view
      *****************************/
@@ -599,13 +707,48 @@
     
     glClear(GL_DEPTH_BUFFER_BIT);
     // render loaded geometries
+
+    for (Object *room in categorizedObjects) {
+        
+        for (Object *element in room) {
+            
+            glBindVertexArrayOES(*(element.vertexArray));
+            // bind a texture
+            glEnable(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
+            
+            if(currentRoom == AirLock)
+                glBindTexture(GL_TEXTURE_2D, mTextureID[PodRoom]);
+            else
+                glBindTexture(GL_TEXTURE_2D, mTextureID[currentRoom]);
+            // Render the object with ES2
+            glUseProgram(shaderLoader._program);
+            
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEW_MATRIX], 1, 0, [element getModelView:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms: UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [element getModelViewProjection:Left].m);
+            glUniformMatrix4fv([ShaderLoader uniforms:UNIFORM_MODELVIEW_INV_TRANS], 1, 0, [element getModelViewInverseTranspose:Left].m);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_SAMPLER2D], 0);
+            glUniform1i([ShaderLoader uniforms:UNIFORM_ISGRID], 0);
+            //1.071f, 3.264f, -1.882f
+            for (Light* light in lights) {
+                glUniform3f(light.uniformLocation, light.position.x, light.position.y, light.position.z);
+                
+            }
+            
+            mNumTriangles = [element getNumVertices];
+            glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
+        }
+        currentRoom++;
+    }
+    
+    /*
     for(int i = 0; i< objloader.objects.count; i++){
         Object *loaded = [objloader.objects objectAtIndex:i];
         glBindVertexArrayOES(*(loaded.vertexArray));
         // bind a texture
         glEnable(GL_TEXTURE_2D);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTextureID);
+        glBindTexture(GL_TEXTURE_2D, mTextureID[0]);
         // Render the object with ES2
         glUseProgram(shaderLoader._program);
         
@@ -624,7 +767,7 @@
         mNumTriangles = [loaded getNumVertices];
         glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
     }
-    
+    */
     
     
     //left eye
@@ -685,26 +828,30 @@
     //NSLog( @"text changed: %@", input);
     
     if([input  isEqual: @"a"]){
-        [headPosition moveLeft];
+        //[headPosition moveLeft];
+		[headPosition moveBackward];
     }else if([input  isEqual: @"d"]){
-        [headPosition moveRight];
+        //[headPosition moveRight];
+		[headPosition moveForward];
     }else if([input  isEqual: @"w"]){
-        [headPosition moveForward];
-    }else if([input  isEqual: @"s"]){
-        [headPosition moveBackward];
-    }/*else if([input  isEqual: @"e"]){     //we don't need e and q
-        [headPosition moveUp];
+        //[headPosition moveForward];
+		[headPosition moveLeft];
+    }else if([input  isEqual: @"x"]){
+        //[headPosition moveBackward];
+		[headPosition moveRight];
+    }else if([input  isEqual: @"e"]){
+        [headPosition stopMoving];
     }else if([input  isEqual: @"q"]){
-        [headPosition moveDown];
-    }else if([input  isEqual: @"t"]){       //t and g are ruining the view.
-        [headPosition lookUp];
-    }else if([input  isEqual: @"g"]){
-        [headPosition lookDown];
-    }*/else if([input  isEqual: @"f"]){
+        [headPosition stopMoving];
+    }else if([input  isEqual: @"c"]){
+        [headPosition stopMoving];
+    }else if([input  isEqual: @"z"]){
+        [headPosition stopMoving];
+    }/*else if([input  isEqual: @"f"]){
         [headPosition lookLeft];
     }else if([input  isEqual: @"h"]){
         [headPosition lookRight];
-    }else if ([input isEqual:@"x"]){
+    }*/else if ([input isEqual:@"h"]){
         TriggerObject *trigger = [currentLevel getTriggerObject];
         if([trigger isActive]&&[headPosition isTriggered:trigger]){
             [trigger responseWhenItIsTriggered];
@@ -718,6 +865,7 @@
    //NSLog(@"left eye camera position: %f, %f, %f",_leftViewMatrix.m30,_leftViewMatrix.m31,_leftViewMatrix.m32);
     
 }
+
 
 -(void) blur: (GLuint) fbo1 otherFbo: (GLuint)fbo2
 colorTexture: (GLuint) colorTextureFbo1 inputTexture:(GLuint)input {

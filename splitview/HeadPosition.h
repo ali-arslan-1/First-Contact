@@ -20,12 +20,24 @@
 -(void)moveRight;
 -(void)moveDown;
 -(void)moveUp;
+
+-(void)movePlayer;
+-(void)stopMoving;
+/*
 - (void)lookDown;
 - (void)lookUp;
+ */
 - (void)lookLeft;
 - (void)lookRight;
+
+-(void) rotateHead:(GLKMatrix4) rotation;
+
 - (void)addObjects :(NSMutableArray*) newObjects;
 -(BOOL) isTriggered:(Object*) obj;
++(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max;
++(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max;
+-(GLKVector3) getHeadPosition;
+
 + (GLKMatrix4)lView;
 
 + (GLKMatrix4)rView;

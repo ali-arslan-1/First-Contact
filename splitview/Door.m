@@ -15,6 +15,10 @@
     GLKVector4 worldViewCenter;
     float dotViewDir;
     float dotUpDir;
+    GLKVector3 BboxMax;
+    GLKVector3 BboxMin;
+    int animationCounter;
+    bool hasAccess;
 }
 
 -(id)init:(NSString *)name Alignment :(BOOL)_zAligned{
@@ -26,6 +30,9 @@
         self->zAligned = _zAligned;
         self->speed = 0.05;
     }
+    
+   
+    animationCounter=0;
     return self;
 }
 
@@ -43,6 +50,22 @@
     initialWorldCenter = GLKMatrix4MultiplyVector4([self initialModelMatrix], self->center);
     
     
+    BboxMax = GLKVector3Make(self.maxX+4, 0.0f, self.maxZ+4);
+    BboxMin = GLKVector3Make(self.minX-4, 0.0f, self.minZ-4);
+    int deltaX = fabsf( BboxMax.x - BboxMin.x);
+    int deltaZ = fabsf (BboxMax.z - BboxMin.z);
+    if(deltaX>deltaZ){
+        zAligned = NO;
+    }
+    else{
+        zAligned = YES;
+    }
+    
+    if([self.name isEqualToString:@"AirLock"])
+        hasAccess = NO;
+    else
+        hasAccess = YES;
+    
 }
 
 -(float)distanceFromCamera{
@@ -57,6 +80,33 @@
 }
 
 -(void)changeStateIfRequired{
+    if(hasAccess){
+        
+        if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax] && animationCounter < 50){
+            //open the door
+            animationCounter++;
+            if(zAligned){
+                self.modelMatrix = GLKMatrix4Translate(self.modelMatrix, 0.0, 0.0, speed);
+            }else{
+                self.modelMatrix = GLKMatrix4Translate(self.modelMatrix, speed, 0.0, 0.0);
+            }
+        } else if([HeadPosition isHeadOutside:BboxMin BBoxMax:BboxMax] && animationCounter > 0){
+            //close the door
+            animationCounter--;
+            if(zAligned){
+                self.modelMatrix = GLKMatrix4Translate(self.modelMatrix, 0.0, 0.0, -speed);
+            }else{
+                self.modelMatrix = GLKMatrix4Translate(self.modelMatrix, -speed, 0.0, 0.0);
+            }
+            
+        }
+    
+    }
+   
+    
+    
+    
+    /*
     if ((closed || partialOpen) && [self distanceFromCamera] < self->openDoorDistLimit  && fabsf(dotViewDir)>4 && dotUpDir>0.80) { //open
         GLKMatrix4 translationMatrix;
         if(self->zAligned){
@@ -112,7 +162,7 @@
         }
         
         
-    }
+    }*/
     
 }
 -(BOOL) isClosed{

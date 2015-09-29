@@ -13,6 +13,22 @@
 #import "HeadPosition.h"
 #import <GLKit/GLKit.h>
 #import "Door.h"
+enum RoomType{
+    Hallway,
+    PodRoom,
+    AirLock,
+    DiningHall,
+    EngineRoom,
+    Cockpit
+};
+
+enum Direction{
+    noDirection,
+    forward,
+    right,
+    backward,
+    left
+};
 
 @implementation HeadPosition{
     NSMutableArray *objects;
@@ -24,16 +40,11 @@
     //when room number is changed, change this also
     BOOL inDoorFrame;
     Object* currentDoor;
-    Object* rooms[5];
+    Object* rooms[6];
+    enum Direction currentDirection; //to understand if a key is held on
 }
 
-enum RoomType{
-    Hallway,
-    PodRoom,
-    AirLock,
-    DiningHall,
-    EngineRoom,
-};
+
 
 GLKVector3 headPos;
 static GLKMatrix4 lView;
@@ -103,9 +114,10 @@ static GLKMatrix4 lightProjection;
     headPos.y = pos.y;
     headPos.z = -pos.z; //Z coordinates are flipped at the obj file.
     objects = [NSMutableArray array];
-    displacementFactor = 0.1f;
+    displacementFactor = 0.07f;
     rotationFactor = 0.1f;
     inDoorFrame = NO;
+    currentDirection = noDirection;
     return self;
 }
 
@@ -114,18 +126,27 @@ static GLKMatrix4 lightProjection;
     //TO DO deallocate the array somehow || is the array allocated?
 }
 
+-(GLKVector3) getHeadPosition{
+    return headPos;
+}
 - (void) move:(GLKVector3) disp{
     
     
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Translate(lView, disp.x,disp.y,disp.z);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Translate(rView, disp.x,disp.y,disp.z);
     
- 
-    if(![self detectCollision:disp]){
+    [self detectCollision:disp];
+    /*if(![self detectCollision:disp]){
         lView = _newLeftViewMatrix;
         rView = _newRightviewMatix;
-  }
+    }*/
     
+}
+
+-(void) rotateHead:(GLKMatrix4) rotation{
+
+    lView = GLKMatrix4Multiply(rotation, lView);
+    rView = GLKMatrix4Multiply(rotation, rView);
 }
 
 
@@ -134,14 +155,15 @@ static GLKMatrix4 lightProjection;
     GLKMatrix4 rotation = GLKMatrix4MakeRotation(factor, axis.x, axis.y, axis.z);
     GLKMatrix4 _newLeftViewMatrix = GLKMatrix4Multiply(rotation, lView);
     GLKMatrix4 _newRightviewMatix = GLKMatrix4Multiply(rotation, rView);
-   lView = _newLeftViewMatrix;
+    lView = _newLeftViewMatrix;
     rView = _newRightviewMatix;
 }
+
 -(BOOL) isTriggered:(Object *)obj{
     
-    GLKVector3 BboxMax = GLKVector3Make(obj.maxX+0.3, 0.0f, obj.maxZ+0.3);
-    GLKVector3 BboxMin = GLKVector3Make(obj.minX-0.3, 0.0f, obj.minZ-0.3);
-    if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+    GLKVector3 BboxMax = GLKVector3Make(obj.maxX+1, 0.0f, obj.maxZ+1);
+    GLKVector3 BboxMin = GLKVector3Make(obj.minX-1, 0.0f, obj.minZ-1);
+    if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
         return YES;
     }
     else 
@@ -157,13 +179,13 @@ static GLKMatrix4 lightProjection;
     if(inDoorFrame){
         GLKVector3 BboxMax = GLKVector3Make(currentDoor.maxX, 0.0f, currentDoor.maxZ);
         GLKVector3 BboxMin = GLKVector3Make(currentDoor.minX, 0.0f, currentDoor.minZ);
-        if([self isHeadInside:BboxMin BBoxMax:BboxMax])
+        if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax])
             return NO;
         else{
             Object* room = rooms[Hallway];
             GLKVector3 BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
             GLKVector3 BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
-            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+            if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                 inDoorFrame = NO;
                 currentRoomObjects = [objects objectAtIndex:Hallway];
                 return NO;
@@ -185,9 +207,17 @@ static GLKMatrix4 lightProjection;
                 type = EngineRoom;
                 room = rooms[EngineRoom];
             }
-             BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
-             BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
-            if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+            else if ([currentDoor.name isEqualToString:@"Cockpit"]){
+                type = Cockpit;
+                room = rooms[Cockpit];
+            }
+            BboxMax = GLKVector3Make(room.maxX, 0.0f, room.maxZ);
+            BboxMin = GLKVector3Make(room.minX, 0.0f, room.minZ);
+            if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if(type == AirLock){
+                    headPos = oldHeadPos;
+                    return YES;
+                }
                 inDoorFrame = NO;
                 currentRoomObjects = [objects objectAtIndex:type];
                 return NO;
@@ -200,12 +230,8 @@ static GLKMatrix4 lightProjection;
         for(Object *obj in currentRoomObjects){
             GLKVector3 BboxMax = GLKVector3Make(obj.maxX, 0.0f, obj.maxZ);
             GLKVector3 BboxMin = GLKVector3Make(obj.minX, 0.0f, obj.minZ);
-            if(obj.type == Room){
-                if([self isHeadOutside:BboxMin BBoxMax:BboxMax]){
-                    inRoom = NO;
-                }
-            }
-            else if(obj.type == DoorFrame){
+            
+            if(obj.type == DoorFrame){
                 int deltaX = fabsf( BboxMax.x - BboxMin.x);
                 int deltaZ = fabsf (BboxMax.z - BboxMin.z);
                 if(deltaX>deltaZ){
@@ -216,12 +242,17 @@ static GLKMatrix4 lightProjection;
                     BboxMin.x = BboxMin.x - 0.6;
                     BboxMax.x = BboxMax.x + 0.6;
                 }
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     inDoorFrame = YES;
                     currentDoor = obj;
                 }
+                
+            }else if(obj.type == Room){
+                if([HeadPosition isHeadOutside:BboxMin BBoxMax:BboxMax]){
+                    inRoom = NO;
+                }
             }else if(obj.type == Door_){
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     headPos =oldHeadPos;
                     return  YES;
                 }
@@ -230,29 +261,30 @@ static GLKMatrix4 lightProjection;
             }
             else{
                 //other props here
-                if([self isHeadInside:BboxMin BBoxMax:BboxMax]){
+                if([HeadPosition isHeadInside:BboxMin BBoxMax:BboxMax]){
                     headPos = oldHeadPos;
                     return YES;
                 }
             }
         }
-        
         if(!inRoom && !inDoorFrame){
             headPos = oldHeadPos;
             return YES;
         }
+        
     }
-
+   
+    
     return NO;
 }
 
--(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max{
++(BOOL) isHeadInside:(GLKVector3)min BBoxMax :(GLKVector3) max{
     if((headPos.x>= min.x && headPos.x <= max.x) && (headPos.z >= min.z && headPos.z <= max.z)){
         return YES;
     } else
         return NO;
 }
--(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
++(BOOL) isHeadOutside: (GLKVector3)min BBoxMax :(GLKVector3) max{
     if((headPos.x <(min.x+0.5)|| headPos.x > (max.x-0.5)) || (headPos.z <(min.z+0.5)|| headPos.z > (max.z-0.5))){
         return YES;
     }
@@ -262,7 +294,7 @@ static GLKMatrix4 lightProjection;
 
 - (void) moveForward{
     
-    
+    currentDirection = forward;
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, displacementFactor);
     
@@ -273,7 +305,7 @@ static GLKMatrix4 lightProjection;
 
 - (void) moveBackward{
     
-    
+    currentDirection = backward;
     
     GLKVector3 displacement = GLKVector3Make(0.0f, 0.0f, -displacementFactor);
     
@@ -283,7 +315,7 @@ static GLKMatrix4 lightProjection;
 
 - (void) moveLeft{
     
-    
+    currentDirection = left;
     
     GLKVector3 displacement = GLKVector3Make(displacementFactor, 0.0f, 0.0f);
     
@@ -294,7 +326,7 @@ static GLKMatrix4 lightProjection;
 
 - (void) moveRight{
     
-    
+    currentDirection = right;
     
     GLKVector3 displacement = GLKVector3Make(-displacementFactor, 0.0f, 0.0f);
     
@@ -323,6 +355,36 @@ static GLKMatrix4 lightProjection;
     
 }
 
+- (void) movePlayer{
+    if(currentDirection != noDirection){
+        switch (currentDirection) {
+            case forward:
+                [self moveForward];
+                break;
+                
+            case right:
+                [self moveRight];
+                break;
+                
+            case backward:
+                [self moveBackward];
+                break;
+                
+            case left:
+                [self moveLeft];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (void) stopMoving{
+    currentDirection = noDirection;
+}
+
+/*
 - (void) lookUp{
     
     
@@ -342,6 +404,7 @@ static GLKMatrix4 lightProjection;
     [self rotate:axis factor:rotationFactor];
     
 }
+ */
 
 - (void) lookLeft{
     
@@ -378,6 +441,8 @@ static GLKMatrix4 lightProjection;
                     rooms[DiningHall] = element;
                 else if ([element.name isEqualToString:@"EngineRoom"])
                     rooms[EngineRoom] = element;
+                else if ([element.name isEqualToString:@"Cockpit"])
+                    rooms[Cockpit] = element;
             }
         }
         [objects addObject:obj];

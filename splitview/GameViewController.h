@@ -12,6 +12,7 @@
 #import "ShaderLoader.h"
 #import "HeadPosition.h"
 #import "Object.h"
+#import "HeadRotation.h"
 // Uniform index.
 
 GLfloat gGridVertexData[] =
@@ -81,7 +82,7 @@ GLfloat gQuadVertexData[] =
     GLfloat     *mVertexData;
     uint         mByteSizeOfVertexData;
     uint         mNumTriangles;
-    uint         mTextureID;
+    uint         mTextureID[6];
     
     GLint        mDefaultFBO;
     GLuint       mFBO[8];
@@ -98,6 +99,8 @@ GLfloat gQuadVertexData[] =
     
     float startTime;
     HeadPosition *headPosition;
+    CMMotionManager     *motionMgr;
+    HeadRotation        *headRotation;
     
 }
 - (IBAction)textFieldDidChange:(UITextField *)sender;

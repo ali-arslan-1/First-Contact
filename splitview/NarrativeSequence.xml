@@ -2,7 +2,7 @@
 <!--This file has been generated manually-->
 <!--ID is based on sequence. Trigger is the name of trigger used to escape this state-->
 <Levels>
-<Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_M50">
+<Level ID="0" Name="InitiatorWakesUp" Trigger="Trigger_DiningHall_0_M50">
 	<NarrationSequence>
         <Wait>2</Wait>
 		<narration>0-GoodMorningInitiator</narration>
@@ -15,8 +15,8 @@
 		<reminder>3-EverthingOkay</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="1" Name="PowerLevels" Trigger="Trigger_EngineRoom_M60">
-	<NarrationSequence>
+<Level ID="1" Name="PowerLevels" Trigger="Trigger_EngineRoom_01_M50">
+	<NarrationSequence>		
 		<narration>0-IncreaseThePower</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
@@ -26,9 +26,11 @@
 		<reminder>2-PleaseIncrease</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_M65">
+<Level ID="2" Name="Sensors" Trigger="Trigger_Cockpit_02_M50">
 	<NarrationSequence>
-		<narration>0-PowerIncreased</narration>
+		<narration>0-PowerCapacityIncreased</narration>
+		<wait>1</wait>
+		<narration>1-PowerIncreased</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 	<NarrationReminder>
@@ -36,11 +38,13 @@
 		<reminder>1-EverythingOkay</reminder>
 	</NarrationReminder>
 </Level>
-<Level ID="3" Name="PurdgePodRoom" Trigger="Trigger_PodRoom_M70">
+<Level ID="3" Name="PurgePodRoom" Trigger="Trigger_PodRoom_03_M50"><!--Initiator grants sensor access and wakes up biologist-->
 	<NarrationSequence>
-		<narration>0-SensorAccessGranted</narration>
+		<narration>0-AISensorAccessGranted</narration>
+		<wait>1</wait>
+		<narration>1-SensorAccessGranted</narration>
 		<Wait>5</Wait><!--This represents the time to wait. The value is the time in seconds.-->
-		<narration>1-PurdgePodsConvo</narration>
+		<narration>2-PurdgePodsConvo</narration>
 		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 	<NarrationReminder>
@@ -49,5 +53,71 @@
 		<reminder>2-BreachingProtocol</reminder>
 		<reminder>3-PurdgePodsASAP</reminder>
 	</NarrationReminder>
+</Level>
+<Level ID="4" Name="BiologistConvo" Trigger="Trigger_PodRoom_04_M50"><!--Initiator talk with the biologist and purges pods-->
+	<NarrationSequence>
+		<narration>0-BiologistConvo</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-CannotRiskCraft</reminder>
+		<reminder>1-NoTimeToLoose</reminder>
+		<reminder>2-BreachingProtocol</reminder>
+		<reminder>3-PurdgePodsASAP</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="5" Name="OpenAirlock" Trigger="Trigger_Cockpit_05_M50">
+	<NarrationSequence>
+		<narration>0-PurgeInitiated</narration>
+		<wait>1</wait>
+		<narration>0-PurgeInitiated</narration>
+		<wait>1</wait>
+		<narration>1-WaitNo</narration>
+		<wait>1</wait>
+		<narration>2-PurgeComplete</narration>
+		<wait>1</wait>
+		<narration>2-PurgeComplete</narration>
+		<wait>3</wait>
+		<narration>3-HowYouDoin</narration>
+		<wait>5</wait>
+		<narration>4-FinalInstruction</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-EverythingOkay</reminder>
+		<reminder>1-DontDetectChange</reminder>
+		<reminder>2-PleaseOpen</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="6" Name="LockDown" Trigger="Trigger_Cockpit_06_M50">
+	<NarrationSequence>
+		<narration>0-AirlockOpened</narration>
+		<wait>2</wait>
+		<narration>1-LifeFormInAirlock</narration>
+		<wait>1</wait>
+		<narration>2-RealControlConvo</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+</Level>
+<Level ID="7" Name="PurgeCraft" Trigger="Trigger_Cockpit_07_M50">
+	<NarrationSequence>
+		<narration>0-LockedDown</narration>
+	</NarrationSequence>
+</Level>
+<Level ID="8" Name="PurgeRequested" Trigger="Trigger_Cockpit_08_M50">
+	<NarrationSequence>
+		<narration>0-GlobalPurdgeRequested</narration>
+		<TriggerActive>true</TriggerActive>
+	</NarrationSequence>
+	<NarrationReminder>
+		<reminder>0-GlobalPurdgeRequested</reminder>
+	</NarrationReminder>
+</Level>
+<Level ID="9" Name="End" Trigger="">
+	<NarrationSequence>
+		<narration>0-GlobalPurgeCommenced</narration>
+		<wait>1</wait>
+		<narration>0-GlobalPurgeCommenced</narration>
+	</NarrationSequence>
 </Level>
 </Levels>
