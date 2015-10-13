@@ -520,7 +520,7 @@ enum RoomType{
     GLKMatrix4 rotatedLeftViewMatrix;
     GLKMatrix4 rotatedRightViewMatrix;
     
-    BOOL rotate = NO; //TODO for testing on simulator set it to NO
+    BOOL rotate = YES; //TODO for testing on simulator set it to NO
     
     //==========================================================================================================
     

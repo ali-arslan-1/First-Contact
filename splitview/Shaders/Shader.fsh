@@ -140,7 +140,7 @@ void main()
     
     if (glow==1) {
         gl_FragData[0].a = 0.90;
-    }else{
+    }else if(gl_FragData[0].a> 0.90){
         gl_FragData[0].a = 1.00;
     }
 }
