@@ -17,6 +17,7 @@ uniform sampler2D uSampler;
 uniform sampler2D shadowMap;
 uniform int       isGrid;
 uniform int room;
+uniform int glow;
 
 varying mediump vec2 vTexCoord;
 
@@ -93,12 +94,12 @@ void main()
     
     if (isGrid == 1)
         gl_FragData[0] = vec4(0.0, 1.0, 0.0, 1.0);
-   /* else if(texCol.a < 0.99){
+    else if(texCol.a < 0.99){
         
 
         gl_FragData[0] = texCol;
         
-    }*/
+    }
     else{
         
         float shadowFactor = CalcShadowFactor(lightSpacePos);
@@ -135,5 +136,11 @@ void main()
         //}
         
         //gl_FragData[0].a = 0.0;
+    }
+    
+    if (glow==1) {
+        gl_FragData[0].a = 0.90;
+    }else{
+        gl_FragData[0].a = 1.00;
     }
 }

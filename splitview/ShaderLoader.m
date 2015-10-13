@@ -119,6 +119,7 @@ static GLint uniforms[NUM_UNIFORMS];
     uniforms[UNIFORM_SAMPLER2D_SHADOW] = glGetUniformLocation(_program, "shadowMap");
     uniforms[UNIFORM_ISGRID] = glGetUniformLocation(_program, "isGrid");
     uniforms[UNIFORM_ROOM_NO] = glGetUniformLocation(_program, "room");
+    uniforms[UNIFORM_GLOW_ON] = glGetUniformLocation(_program, "glow");
     
     for (Object *object in objects) {
         if([object isKindOfClass:[Light class]]){

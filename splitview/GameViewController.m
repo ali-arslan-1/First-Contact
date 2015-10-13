@@ -520,7 +520,7 @@ enum RoomType{
     GLKMatrix4 rotatedLeftViewMatrix;
     GLKMatrix4 rotatedRightViewMatrix;
     
-    BOOL rotate = YES; //TODO for testing on simulator set it to NO
+    BOOL rotate = NO; //TODO for testing on simulator set it to NO
     
     //==========================================================================================================
     
@@ -643,7 +643,7 @@ enum RoomType{
     for (Object *room in categorizedObjects) {
         
         for (Object *element in room) {
-
+            
             glBindVertexArrayOES(*(element.vertexArray));
             // bind a texture
             glEnable(GL_TEXTURE_2D);
@@ -673,7 +673,14 @@ enum RoomType{
                 GLKVector4 lightPos = GLKMatrix4MultiplyVector4([element getModelView:Left], GLKVector4Make(light.position.x, light.position.y, light.position.z,1.0f));
                 glUniform3f(light.uniformLocation, lightPos.x, lightPos.y, lightPos.z);
             }
-            
+            if(element.type == Trigger){
+                TriggerObject *trigger = [currentLevel getTriggerObject];
+                if([element isEqual:trigger]){
+                    glUniform1i([ShaderLoader uniforms:UNIFORM_GLOW_ON], 1);
+                }
+            }else{
+                glUniform1i([ShaderLoader uniforms:UNIFORM_GLOW_ON], 0);
+            }
             mNumTriangles = [element getNumVertices];
             glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
         }
@@ -737,7 +744,14 @@ enum RoomType{
                 GLKVector4 lightPos = GLKMatrix4MultiplyVector4([element getModelView:Left], GLKVector4Make(light.position.x, light.position.y, light.position.z,1.0f));
                 glUniform3f(light.uniformLocation, lightPos.x, lightPos.y, lightPos.z);
             }
-            
+            if(element.type == Trigger){
+                TriggerObject *trigger = [currentLevel getTriggerObject];
+                if([element isEqual:trigger]){
+                    glUniform1i([ShaderLoader uniforms:UNIFORM_GLOW_ON], 1);
+                }
+            }else{
+                glUniform1i([ShaderLoader uniforms:UNIFORM_GLOW_ON], 0);
+            }
             mNumTriangles = [element getNumVertices];
             glDrawArrays(GL_TRIANGLES, 0, mNumTriangles);
         }
@@ -745,15 +759,16 @@ enum RoomType{
     }
     
 
+    float runtime = [[NSDate date] timeIntervalSince1970] - startTime;
     
     [self blur:mFBO[2] otherFbo:mFBO[3] colorTexture: mColorTextureID[2] inputTexture: mColorTextureID[0]];
     
-    [self blend: mFBO[4]  inputTexture: mColorTextureID[3] otherInput:mColorTextureID[0]];
+    [self blend: mFBO[4]  inputTexture: mColorTextureID[3] otherInput:mColorTextureID[0] Time:runtime];
     
     //right eye
     [self blur:mFBO[5] otherFbo:mFBO[6] colorTexture: mColorTextureID[5] inputTexture: mColorTextureID[1]];
     
-    [self blend: mFBO[7]  inputTexture: mColorTextureID[6] otherInput:mColorTextureID[1]];
+    [self blend: mFBO[7]  inputTexture: mColorTextureID[6] otherInput:mColorTextureID[1] Time:runtime];
     
 
     /*****************************
@@ -896,7 +911,7 @@ colorTexture: (GLuint) colorTextureFbo1 inputTexture:(GLuint)input {
 
 
 -(void) blend: (GLuint) fbo
-inputTexture: (GLuint) texture1 otherInput:(GLuint)texture2 {
+ inputTexture: (GLuint) texture1 otherInput:(GLuint)texture2 Time:(float)time {
     
     glBindFramebuffer ( GL_FRAMEBUFFER, fbo );
     glViewport(0, 0, mFrameWidth / 2.0, mFrameHeight);
@@ -920,9 +935,7 @@ inputTexture: (GLuint) texture1 otherInput:(GLuint)texture2 {
     glUniform1i([ShaderLoader uniforms:UNIFORM_BLEND_SAMPLER2D_2], 1);
     
     
-    float runtime = [[NSDate date] timeIntervalSince1970] - startTime;
-    
-    glUniform1f([ShaderLoader uniforms:UNIFORM_TIME], runtime);
+    glUniform1f([ShaderLoader uniforms:UNIFORM_TIME], time);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
