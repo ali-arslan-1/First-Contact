@@ -102,6 +102,7 @@
 <Level ID="7" Name="PurgeCraft" Trigger="Trigger_Cockpit_07_M50">
 	<NarrationSequence>
 		<narration>0-LockedDown</narration>
+		<TriggerActive>true</TriggerActive>
 	</NarrationSequence>
 </Level>
 <Level ID="8" Name="PurgeRequested" Trigger="Trigger_Cockpit_08_M50">
