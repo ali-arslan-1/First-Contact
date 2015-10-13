@@ -88,7 +88,7 @@ static enum RoomType currentRoom;
         }else if(pos.x > 9.5 && pos.z <1.40){
             currentRoom = EngineRoom;
         }
-        else if(pos.x > 9.5 && pos.z > 4.0){
+        else if(pos.x > 9.5 && pos.z > 4.0 && pos.z<10.90){
             currentRoom = DiningHall;
         }else if(pos.z > 10.90){
             currentRoom = Cockpit;
