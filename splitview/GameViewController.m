@@ -817,17 +817,20 @@ enum RoomType{
     //NSLog( @"text changed: %@", input);
     
     if([input  isEqual: @"a"]){
-        //[headPosition moveLeft];
-		[headPosition moveBackward];
+        //  [headPosition moveLeft];
+        [headPosition moveForward];
     }else if([input  isEqual: @"d"]){
-        //[headPosition moveRight];
-		[headPosition moveForward];
+        // [headPosition moveRight];
+        
+        [headPosition moveBackward];
     }else if([input  isEqual: @"w"]){
-        //[headPosition moveForward];
-		[headPosition moveLeft];
+        //  [headPosition moveForward];
+        [headPosition moveRight];
     }else if([input  isEqual: @"x"]){
-        //[headPosition moveBackward];
-		[headPosition moveRight];
+        //  [headPosition moveBackward];
+        
+        [headPosition moveLeft];
+
     }else if([input  isEqual: @"e"]){
         [headPosition stopMoving];
     }else if([input  isEqual: @"q"]){
